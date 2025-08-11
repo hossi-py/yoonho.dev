@@ -25,11 +25,10 @@ export default function ClientLayout({
           ? "ml-0 w-full"
           : expanded
           ? "ml-[var(--width-expanded-lnb)] w-[calc(100vw-var(--width-expanded-lnb))]"
-          : "ml-[var(--width-collapsed-lnb)] w-[calc(100vw-var(--width-collapsed-lnb))]",
-        "overflow-x-hidden"
+          : "ml-[var(--width-collapsed-lnb)] w-[calc(100vw-var(--width-collapsed-lnb))]"
       )}
     >
-      <div className="min-w-0 break-words">{children}</div>
+      <div className="min-w-0 break-words px-20">{children}</div>
     </main>
   );
 }

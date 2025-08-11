@@ -19,7 +19,7 @@ export default function GNB() {
           : "ml-[var(--width-collapsed-lnb)] w-[calc(100%-var(--width-collapsed-lnb))]"
       )}
     >
-      안녕
+      헤더
     </header>
   );
 }
