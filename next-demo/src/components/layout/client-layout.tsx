@@ -19,7 +19,7 @@ export default function ClientLayout({
     <main
       className={cn(
         "pt-[var(--height-header)]",
-        "h-dvh flex flex-col",
+        "h-dvh flex flex-col overflow-y-auto",
         "transition-all duration-300",
         isMobile
           ? "ml-0 w-full"
@@ -28,7 +28,7 @@ export default function ClientLayout({
           : "ml-[var(--width-collapsed-lnb)] w-[calc(100vw-var(--width-collapsed-lnb))]"
       )}
     >
-      <div className="min-w-0 break-words px-20">{children}</div>
+      <div className="min-w-0 break-words px-20 py-10">{children}</div>
     </main>
   );
 }

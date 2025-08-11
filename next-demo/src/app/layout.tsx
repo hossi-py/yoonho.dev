@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("antialiased")}>
+      <body className={cn("antialiased overflow-hidden")}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
