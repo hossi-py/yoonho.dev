@@ -1,4 +1,4 @@
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { CustomProgress } from "@/components/custom/custom-progress";
 import {
   Card,
   CardAction,
@@ -22,20 +22,22 @@ const allowedRepos = [
 ];
 
 export default async function ProjectsPage() {
-  const user = (await githubFetch("/user")) as any;
   const repos = (await githubFetch("/user/repos")) as any;
   const filteredRepos = repos.filter((repo: any) =>
     allowedRepos.includes(repo.name)
   );
-  // await githubFetch("/repos/hossi-py/hossi-tistory/languages");
   const repoWithLanguages = await Promise.all(
     filteredRepos.map(async (repo: any) => {
-      const languages = await githubFetch(
+      const languages = (await githubFetch(
         `/repos/hossi-py/${repo.name}/languages`
-      );
+      )) as Record<string, string>;
+      const formattedLanguages = Object.keys(languages).map((key) => ({
+        title: key,
+        value: languages[key],
+      }));
       return {
         ...repo,
-        languages,
+        formattedLanguages,
       };
     })
   );
@@ -54,7 +56,9 @@ export default async function ProjectsPage() {
                 </Link>
               </CardAction>
             </CardHeader>
-            <CardContent>{JSON.stringify(repo.languages)}</CardContent>
+            <CardContent>
+              <CustomProgress segments={repo.formattedLanguages} />
+            </CardContent>
             <CardFooter className="flex gap-2"></CardFooter>
           </Card>
           // <div key={repo.id}>
