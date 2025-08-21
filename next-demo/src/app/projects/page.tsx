@@ -21,6 +21,19 @@ const allowedRepos = [
   "wedding",
 ];
 
+const langColor: Record<string, string> = {
+  TypeScript: "#3178c6",
+  JavaScript: "#f1e05a",
+  Vue: "#41b883",
+  CSS: "#663399",
+  HTML: "#e34c26",
+  Python: "#3572A5",
+  Java: "#b07219",
+  GLSL: "#5686a5",
+  SCSS: "#c6538c",
+  Less: "#1d365d",
+};
+
 export default async function ProjectsPage() {
   const repos = (await githubFetch("/user/repos")) as any;
   const filteredRepos = repos.filter((repo: any) =>
@@ -34,6 +47,7 @@ export default async function ProjectsPage() {
       const formattedLanguages = Object.keys(languages).map((key) => ({
         title: key,
         value: languages[key],
+        color: langColor[key] ?? "bg-primary",
       }));
       return {
         ...repo,
