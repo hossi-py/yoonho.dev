@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 type GridItemProps = {
   id: string;
@@ -14,8 +14,9 @@ type GridItemProps = {
 
 /**
  * GridItem: 개별 아이템
- * - 위치(x, y)와 크기(w, h)는 "그리드 단위"로 관리
- * - 드래그해서 움직이는 기능 구현
+ * - 화면 좌표 = "그리드 단위 좌표(x,y) * 칸 크기(px)"
+ * - 드래그 중에는 픽셀 단위 좌표를 따로 관리하여 부드럽게 이동
+ * - 드롭 순간에는 그리드 좌표로 스냅시켜 부모에게 최종 위치 전달
  */
 export function GridItem({
   id,
@@ -30,6 +31,12 @@ export function GridItem({
   const colWidth = 100; // 가로
   const rowHeight = 80; // 세로
 
+  const [pixelPos, setPixelPos] = useState<null | {
+    x: number;
+    y: number;
+  }>(null);
+  const pixelPosRef = useRef<{ x: number; y: number } | null>(null);
+
   // 드래그 상태
   const dragRef = useRef<null | {
     startX: number;
@@ -40,15 +47,22 @@ export function GridItem({
 
   /**
    * 누른 순간 실행
-   * - 현재 마우스 좌표와 Item의 원래 grid 좌표 기억
+   * - 드래그 시작 상태를 저장
    */
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    // 현재 아이템의 px 좌표 계산
+    const startPxX = x * colWidth;
+    const startPxY = y * rowHeight;
+
     dragRef.current = {
       startX: e.clientX,
       startY: e.clientY,
-      baseX: x,
-      baseY: y,
+      baseX: startPxX,
+      baseY: startPxY,
     };
+
+    pixelPosRef.current = { x: startPxX, y: startPxY };
+    setPixelPos({ x: startPxX, y: startPxY });
 
     window.addEventListener("pointermove", handlePointerMove);
     window.addEventListener("pointerup", handlePointerUp);
@@ -56,8 +70,8 @@ export function GridItem({
 
   /**
    * 드래그 중 실행
-   * - dx, dy를 계산해서 몇 칸 이동했는지 구함
-   * - 부모(GridStage)에 업데이트 요청
+   * - 마우스 이동 거리(dx, dy) 계산
+   * - 픽셀 단위 좌표 업데이트 → state에 넣어서 즉시 화면 반영
    */
   const handlePointerMove = (e: PointerEvent) => {
     if (!dragRef.current) return;
@@ -65,22 +79,32 @@ export function GridItem({
     const dx = e.clientX - dragRef.current.startX;
     const dy = e.clientY - dragRef.current.startY;
 
-    // 이동한 칸 단위 계산
-    const dCols = Math.round(dx / colWidth);
-    const dRows = Math.round(dy / rowHeight);
+    const newPos = {
+      x: dragRef.current.baseX + dx,
+      y: dragRef.current.baseY + dy,
+    };
 
-    onUpdate(id, {
-      x: dragRef.current.baseX + dCols,
-      y: dragRef.current.baseY + dRows,
-    });
+    pixelPosRef.current = newPos;
+    setPixelPos(newPos);
   };
 
   /**
    * 드래그 종료
-   * - 상태 초기화
+   * - 드래그 중 임시 좌표(pixelPos)를 grid 단위로 스냅
+   * - 부모(GridStage)에 최종 좌표 전달 (setLayout 갱신)
+   * - 상태 초기화 및 전역 이벤트 해제
    */
   const handlePointerUp = () => {
+    if (pixelPosRef.current) {
+      const snappedX = Math.round(pixelPosRef.current.x / colWidth);
+      const snappedY = Math.round(pixelPosRef.current.y / rowHeight);
+      onUpdate(id, { x: snappedX, y: snappedY });
+    }
+
     dragRef.current = null;
+    pixelPosRef.current = null;
+    setPixelPos(null);
+
     window.removeEventListener("pointermove", handlePointerMove);
     window.removeEventListener("pointerup", handlePointerUp);
   };
@@ -90,7 +114,9 @@ export function GridItem({
       onPointerDown={handlePointerDown}
       style={{
         position: "absolute",
-        transform: `translate(${x * colWidth}px, ${y * rowHeight}px)`,
+        transform: `translate(${pixelPos ? pixelPos.x : x * colWidth}px, ${
+          pixelPos ? pixelPos.y : y * rowHeight
+        }px)`,
         width: w * colWidth,
         height: h * rowHeight,
         borderRadius: 12,
@@ -98,6 +124,7 @@ export function GridItem({
         background: "white",
         cursor: "grab",
         userSelect: "none",
+        transition: pixelPos ? "none" : "transform 0.15s ease",
       }}
     >
       {children}
