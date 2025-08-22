@@ -1,4 +1,6 @@
 import { CustomProgress } from "@/components/custom/custom-progress";
+import { GridItem } from "@/components/custom/grid-item";
+import { GridStage } from "@/components/custom/grid-stage";
 import {
   Card,
   CardAction,
@@ -58,6 +60,7 @@ export default async function ProjectsPage() {
 
   return (
     <div className="flex flex-col">
+      <GridStage />
       <div>
         {repoWithLanguages.map((repo: any) => (
           <Card className="min-w-80" key={repo.id}>
