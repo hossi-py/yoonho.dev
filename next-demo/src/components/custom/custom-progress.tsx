@@ -77,7 +77,7 @@ function CustomProgress({
   );
 
   const multiBar = (
-    <div className="absolute inset-0 flex h-full w-full">
+    <div className="absolute inset-0 flex h-full w-full space-x-[2px]">
       {animatedItems.map((item) => (
         <Tooltip key={item.title}>
           <TooltipTrigger asChild>
