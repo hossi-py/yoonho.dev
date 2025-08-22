@@ -60,7 +60,7 @@ export default async function ProjectsPage() {
     <div className="flex flex-col">
       <div>
         {repoWithLanguages.map((repo: any) => (
-          <Card key={repo.id}>
+          <Card className="min-w-80" key={repo.id}>
             <CardHeader>
               <CardTitle>{repo.name}</CardTitle>
               <CardDescription>{repo.description}</CardDescription>
@@ -71,7 +71,9 @@ export default async function ProjectsPage() {
               </CardAction>
             </CardHeader>
             <CardContent>
-              <CustomProgress segments={repo.formattedLanguages} />
+              <div>
+                <CustomProgress segments={repo.formattedLanguages} />
+              </div>
             </CardContent>
             <CardFooter className="flex gap-2"></CardFooter>
           </Card>
