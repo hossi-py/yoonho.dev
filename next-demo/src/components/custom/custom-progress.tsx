@@ -4,6 +4,7 @@ import * as React from "react";
 import * as ProgressPrimitive from "@radix-ui/react-progress";
 
 import { cn } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 type ProgressRootProps = React.ComponentPropsWithoutRef<
   typeof ProgressPrimitive.Root
@@ -61,19 +62,25 @@ function CustomProgress({
   const multiBar = (
     <div className="absolute inset-0 flex h-full w-full">
       {items.map((item) => (
-        <div
-          key={item.title}
-          className="h-full"
-          style={{
-            width: `${Math.max(0, item.percent)}%`,
-            // 너무 작은 비율이 사라지지 않게 최소 폭(옵션)
-            minWidth: item.percent > 0 && item.percent < 1 ? 1 : undefined,
-            backgroundColor: item.color,
-          }}
-          role="img"
-          aria-label={`${item.title}: ${item.percent.toFixed(1)}%`}
-          title={`${item.title}: ${item.percent.toFixed(1)}%`}
-        />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div
+              key={item.title}
+              className="h-full"
+              style={{
+                width: `${Math.max(0, item.percent)}%`,
+                // 너무 작은 비율이 사라지지 않게 최소 폭(옵션)
+                minWidth: item.percent > 0 && item.percent < 1 ? 1 : undefined,
+                backgroundColor: item.color,
+              }}
+              role="img"
+              aria-label={`${item.title}: ${item.percent.toFixed(1)}%`}
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            {`${item.title}: ${item.percent.toFixed(1)}%`}
+          </TooltipContent>
+        </Tooltip>
       ))}
     </div>
   );
