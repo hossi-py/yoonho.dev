@@ -51,6 +51,23 @@ function CustomProgress({
     return raw;
   }, [segments, total]);
 
+  /** 애니메이션용 상태 */
+  const [animatedItems, setAnimatedItems] = React.useState<typeof items>([]);
+
+  React.useEffect(() => {
+    if (items.length) {
+      // 처음엔 0%로 세팅
+      setAnimatedItems(items.map((s) => ({ ...s, percent: 0 })));
+
+      // 다음 프레임에서 실제 값으로 업데이트
+      const id = requestAnimationFrame(() => {
+        setAnimatedItems(items);
+      });
+
+      return () => cancelAnimationFrame(id);
+    }
+  }, [items]);
+
   const singleBar = (
     <ProgressPrimitive.Indicator
       data-slot="progress-indicator"
@@ -61,12 +78,11 @@ function CustomProgress({
 
   const multiBar = (
     <div className="absolute inset-0 flex h-full w-full">
-      {items.map((item) => (
-        <Tooltip>
+      {animatedItems.map((item) => (
+        <Tooltip key={item.title}>
           <TooltipTrigger asChild>
             <div
-              key={item.title}
-              className="h-full"
+              className="h-full transition-all duration-1000"
               style={{
                 width: `${Math.max(0, item.percent)}%`,
                 // 너무 작은 비율이 사라지지 않게 최소 폭(옵션)
