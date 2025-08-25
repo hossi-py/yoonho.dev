@@ -60,10 +60,9 @@ export default async function ProjectsPage() {
 
   return (
     <div className="flex flex-col">
-      <GridStage />
-      <div>
+      <GridStage>
         {repoWithLanguages.map((repo: any) => (
-          <Card className="min-w-80" key={repo.id}>
+          <Card key={repo.id}>
             <CardHeader>
               <CardTitle>{repo.name}</CardTitle>
               <CardDescription>{repo.description}</CardDescription>
@@ -95,7 +94,7 @@ export default async function ProjectsPage() {
           //   </a>
           // </div>
         ))}
-      </div>
+      </GridStage>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 
 type GridItemProps = {
@@ -112,19 +113,16 @@ export function GridItem({
   return (
     <div
       onPointerDown={handlePointerDown}
+      className={cn(
+        "absolute cursor-grab select-none touch-none",
+        pixelPos ? "" : "transition-transform duration-150 ease-in-out"
+      )}
       style={{
-        position: "absolute",
         transform: `translate(${pixelPos ? pixelPos.x : x * colWidth}px, ${
           pixelPos ? pixelPos.y : y * rowHeight
         }px)`,
         width: w * colWidth,
         height: h * rowHeight,
-        borderRadius: 12,
-        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-        background: "white",
-        cursor: "grab",
-        userSelect: "none",
-        transition: pixelPos ? "none" : "transform 0.15s ease",
       }}
     >
       {children}
