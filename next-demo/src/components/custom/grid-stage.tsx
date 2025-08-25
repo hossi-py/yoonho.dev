@@ -39,7 +39,7 @@ export function GridStage({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-[100vh] overflow-hidden">
       {layout.map((it, i) => (
         <GridItem key={it.id} {...it} onUpdate={handleUpdate}>
           {childArray[i]}

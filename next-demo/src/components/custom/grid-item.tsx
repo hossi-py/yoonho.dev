@@ -29,8 +29,9 @@ export function GridItem({
   children,
 }: GridItemProps) {
   // 한 칸 크기 정의 (px)
-  const colWidth = 100; // 가로
-  const rowHeight = 80; // 세로
+  const colWidth = 300;
+  const rowHeight = 200;
+  const margin = 16;
 
   const [pixelPos, setPixelPos] = useState<null | {
     x: number;
@@ -52,8 +53,8 @@ export function GridItem({
    */
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     // 현재 아이템의 px 좌표 계산
-    const startPxX = x * colWidth;
-    const startPxY = y * rowHeight;
+    const startPxX = x * (colWidth + margin);
+    const startPxY = y * (rowHeight + margin);
 
     dragRef.current = {
       startX: e.clientX,
@@ -97,8 +98,18 @@ export function GridItem({
    */
   const handlePointerUp = () => {
     if (pixelPosRef.current) {
-      const snappedX = Math.round(pixelPosRef.current.x / colWidth);
-      const snappedY = Math.round(pixelPosRef.current.y / rowHeight);
+      const stageWidth = window.innerWidth;
+      const stageHeight = window.innerHeight;
+
+      const maxCols = Math.floor(stageWidth / colWidth);
+      const maxRows = Math.floor(stageHeight / rowHeight);
+
+      let snappedX = Math.round(pixelPosRef.current.x / (colWidth + margin));
+      let snappedY = Math.round(pixelPosRef.current.y / (rowHeight + margin));
+
+      snappedX = Math.max(0, Math.min(snappedX, maxCols - w));
+      snappedY = Math.max(0, Math.min(snappedY, maxRows - h));
+
       onUpdate(id, { x: snappedX, y: snappedY });
     }
 
@@ -118,9 +129,9 @@ export function GridItem({
         pixelPos ? "" : "transition-transform duration-150 ease-in-out"
       )}
       style={{
-        transform: `translate(${pixelPos ? pixelPos.x : x * colWidth}px, ${
-          pixelPos ? pixelPos.y : y * rowHeight
-        }px)`,
+        transform: `translate(${
+          pixelPos ? pixelPos.x : x * (colWidth + margin)
+        }px, ${pixelPos ? pixelPos.y : y * (rowHeight + margin)}px)`,
         width: w * colWidth,
         height: h * rowHeight,
       }}
