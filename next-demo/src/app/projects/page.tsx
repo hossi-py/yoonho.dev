@@ -61,7 +61,7 @@ export default async function ProjectsPage() {
   return (
     <GridStage>
       {repoWithLanguages.map((repo: any) => (
-        <Card key={repo.id}>
+        <Card key={repo.id} className="w-full h-full">
           <CardHeader>
             <CardTitle>{repo.name}</CardTitle>
             <CardDescription>{repo.description}</CardDescription>
