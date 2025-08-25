@@ -59,42 +59,40 @@ export default async function ProjectsPage() {
   );
 
   return (
-    <div className="flex flex-col">
-      <GridStage>
-        {repoWithLanguages.map((repo: any) => (
-          <Card key={repo.id}>
-            <CardHeader>
-              <CardTitle>{repo.name}</CardTitle>
-              <CardDescription>{repo.description}</CardDescription>
-              <CardAction>
-                <Link href={repo.html_url} target="_blank">
-                  <FolderGit2 />
-                </Link>
-              </CardAction>
-            </CardHeader>
-            <CardContent>
-              <div>
-                <CustomProgress segments={repo.formattedLanguages} />
-              </div>
-            </CardContent>
-            <CardFooter className="flex gap-2"></CardFooter>
-          </Card>
+    <GridStage>
+      {repoWithLanguages.map((repo: any) => (
+        <Card key={repo.id}>
+          <CardHeader>
+            <CardTitle>{repo.name}</CardTitle>
+            <CardDescription>{repo.description}</CardDescription>
+            <CardAction>
+              <Link href={repo.html_url} target="_blank">
+                <FolderGit2 />
+              </Link>
+            </CardAction>
+          </CardHeader>
+          <CardContent>
+            <div>
+              <CustomProgress segments={repo.formattedLanguages} />
+            </div>
+          </CardContent>
+          <CardFooter className="flex gap-2"></CardFooter>
+        </Card>
 
-          // <div key={repo.id}>
-          //   <a href={repo.html_url} target="_blank">
-          //     {repo.name}
-          //     {repo.description}
-          //     {repo.topics}
-          //     {repo.created_at}
-          //     {repo.pushed_at}
-          //     {repo.stargazers_count}
-          //     {repo.watchers_count}
-          //     {repo.forks_count}
-          //     {repo.languages}
-          //   </a>
-          // </div>
-        ))}
-      </GridStage>
-    </div>
+        // <div key={repo.id}>
+        //   <a href={repo.html_url} target="_blank">
+        //     {repo.name}
+        //     {repo.description}
+        //     {repo.topics}
+        //     {repo.created_at}
+        //     {repo.pushed_at}
+        //     {repo.stargazers_count}
+        //     {repo.watchers_count}
+        //     {repo.forks_count}
+        //     {repo.languages}
+        //   </a>
+        // </div>
+      ))}
+    </GridStage>
   );
 }
