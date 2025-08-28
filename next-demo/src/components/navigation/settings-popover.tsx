@@ -40,6 +40,7 @@ export default function SettingsPopover({ className }: { className?: string }) {
             </div>
             <div className="flex items-center justify-between">
               실험실
+              {/* TODO, 가상화, 스켈레톤, 인피니티 스크롤 */}
               <Button
                 variant="outline"
                 className="w-[72px]"

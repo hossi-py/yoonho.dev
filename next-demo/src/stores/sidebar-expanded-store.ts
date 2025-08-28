@@ -14,7 +14,7 @@ interface SidebarExpandedState {
 export const useSidebarExpandedStore = create<SidebarExpandedState>()(
   persist(
     immer((set) => ({
-      expanded: true,
+      expanded: false,
       isHydrated: false,
       setExpanded: (value) => {
         set((state) => {

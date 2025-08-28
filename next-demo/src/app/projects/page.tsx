@@ -1,6 +1,7 @@
 import { CustomProgress } from "@/components/custom/custom-progress";
 import { GridItem } from "@/components/custom/grid-item";
 import { GridStage } from "@/components/custom/grid-stage";
+import { GridLayout } from "@/components/layout/grid-layout";
 import {
   Card,
   CardAction,
@@ -59,40 +60,51 @@ export default async function ProjectsPage() {
   );
 
   return (
-    <GridStage>
-      {repoWithLanguages.map((repo: any) => (
-        <Card key={repo.id} className="w-full h-full">
-          <CardHeader>
-            <CardTitle>{repo.name}</CardTitle>
-            <CardDescription>{repo.description}</CardDescription>
-            <CardAction>
-              <Link href={repo.html_url} target="_blank">
-                <FolderGit2 />
-              </Link>
-            </CardAction>
-          </CardHeader>
-          <CardContent>
-            <div>
-              <CustomProgress segments={repo.formattedLanguages} />
-            </div>
-          </CardContent>
-          <CardFooter className="flex gap-2"></CardFooter>
-        </Card>
+    <GridLayout>
+      <div>01</div>
+      <div>02</div>
+      <div>03</div>
+      <div>04</div>
+      <div>05</div>
+      <div>06</div>
+      <div>07</div>
+      <div>08</div>
+      <div>09</div>
+    </GridLayout>
+    // <GridStage>
+    //   {repoWithLanguages.map((repo: any) => (
+    //     <Card key={repo.id} className="w-full h-full">
+    //       <CardHeader>
+    //         <CardTitle>{repo.name}</CardTitle>
+    //         <CardDescription>{repo.description}</CardDescription>
+    //         <CardAction>
+    //           <Link href={repo.html_url} target="_blank">
+    //             <FolderGit2 />
+    //           </Link>
+    //         </CardAction>
+    //       </CardHeader>
+    //       <CardContent>
+    //         <div>
+    //           <CustomProgress segments={repo.formattedLanguages} />
+    //         </div>
+    //       </CardContent>
+    //       <CardFooter className="flex gap-2"></CardFooter>
+    //     </Card>
 
-        // <div key={repo.id}>
-        //   <a href={repo.html_url} target="_blank">
-        //     {repo.name}
-        //     {repo.description}
-        //     {repo.topics}
-        //     {repo.created_at}
-        //     {repo.pushed_at}
-        //     {repo.stargazers_count}
-        //     {repo.watchers_count}
-        //     {repo.forks_count}
-        //     {repo.languages}
-        //   </a>
-        // </div>
-      ))}
-    </GridStage>
+    //     // <div key={repo.id}>
+    //     //   <a href={repo.html_url} target="_blank">
+    //     //     {repo.name}
+    //     //     {repo.description}
+    //     //     {repo.topics}
+    //     //     {repo.created_at}
+    //     //     {repo.pushed_at}
+    //     //     {repo.stargazers_count}
+    //     //     {repo.watchers_count}
+    //     //     {repo.forks_count}
+    //     //     {repo.languages}
+    //     //   </a>
+    //     // </div>
+    //   ))}
+    // </GridStage>
   );
 }
