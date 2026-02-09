@@ -161,7 +161,17 @@ export function AthenaArchitectureDiagram() {
                 fill="freeze"
               />
             </circle>
-            <text x={pos.user.x} y={pos.user.y - 50} textAnchor="middle" className="text-xs font-bold fill-indigo-600 animate-bounce">📊 Results!</text>
+            {/* Result Badge overlapping User at 11 o'clock */}
+            <g transform={`translate(${pos.user.x - 30}, ${pos.user.y - 30})`} className="animate-blink">
+              <rect x="-35" y="-10" width="70" height="20" rx="10" className="fill-indigo-600 dark:fill-indigo-500 shadow-sm" />
+              <text 
+                textAnchor="middle" 
+                dominantBaseline="middle"
+                className="text-[9px] font-bold fill-white"
+              >
+                📊 Results!
+              </text>
+            </g>
           </>
         )}
       </svg>
@@ -223,9 +233,16 @@ export function AthenaArchitectureDiagram() {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
+        @keyframes blink {
+          0%, 100% { opacity: 0; }
+          50% { opacity: 1; }
+        }
         .animate-spin-slow {
           animation: spin-slow 3s linear infinite;
           transform-origin: center;
+        }
+        .animate-blink {
+          animation: blink 1.5s ease-in-out infinite;
         }
       `}</style>
     </div>

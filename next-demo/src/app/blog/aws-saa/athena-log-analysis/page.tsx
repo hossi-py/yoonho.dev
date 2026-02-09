@@ -9,7 +9,7 @@ export default function AthenaLogAnalysisPage() {
     <AwsSaaPostLayout
       meta={{
         tagId: "Data Analytics",
-        date: "2026. 02. 10",
+        date: "2026. 02. 09",
         title: (
           <>
             S3 로그 분석과 <br className="md:hidden" />
