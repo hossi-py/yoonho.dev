@@ -13,6 +13,28 @@ export interface BlogPost {
 
 export const allPosts: BlogPost[] = [
   {
+    id: "efs-shared-storage",
+    category: "aws-saa",
+    number: 5,
+    title: "AWS SAA 합격으로 가는 길 #5: 다중 AZ 환경에서 공유 스토리지 구성하기 (EBS vs EFS)",
+    description:
+      "여러 EC2 인스턴스가 동일한 파일에 접근해야 할 때, EBS가 아닌 EFS를 사용해야 하는 이유를 알아봅니다.",
+    tags: ["EFS", "EBS", "Storage"],
+    date: "2026-02-09",
+    frequency: "High",
+  },
+  {
+    id: "vpc-gateway-endpoint",
+    category: "aws-saa",
+    number: 4,
+    title: "AWS SAA 합격으로 가는 길 #4: 인터넷 없이 S3에 Private 접근하기 (VPC Gateway Endpoint)",
+    description:
+      "VPC 내 EC2 인스턴스가 인터넷 연결 없이 S3 버킷에 접근해야 할 때, VPC Gateway Endpoint가 정답입니다.",
+    tags: ["VPC", "S3", "Networking"],
+    date: "2026-02-09",
+    frequency: "High",
+  },
+  {
     id: "s3-organizations-access",
     category: "aws-saa",
     number: 3,
