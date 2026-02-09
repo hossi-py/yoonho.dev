@@ -18,65 +18,46 @@ import {
   CardTitle 
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-const categories = [
-  {
-    id: "aws-saa",
-    title: "AWS SAA",
-    description: "Solution Architect Associate 자격증 완벽 대비",
-    icon: <Cloud className="w-8 h-8" />,
-    posts: 1,
-    color: "text-orange-500",
-    bgColor: "bg-orange-50 dark:bg-orange-950/30",
-    borderColor: "border-orange-200 dark:border-orange-800",
-  },
-  {
-    id: "frontend",
-    title: "Frontend",
-    description: "React, Vue, Next.js 등 모던 프론트엔드",
-    icon: <Layout className="w-8 h-8" />,
-    posts: 0,
-    color: "text-blue-500",
-    bgColor: "bg-blue-50 dark:bg-blue-950/30",
-    borderColor: "border-blue-200 dark:border-blue-800",
-  },
-  {
-    id: "backend",
-    title: "Backend",
-    description: "NestJS, Spring Boot, System Design",
-    icon: <Server className="w-8 h-8" />,
-    posts: 0,
-    color: "text-green-500",
-    bgColor: "bg-green-50 dark:bg-green-950/30",
-    borderColor: "border-green-200 dark:border-green-800",
-  },
-];
-
-const recentPosts = [
-  {
-    id: "athena-log-analysis",
-    category: "aws-saa",
-    title: "AWS SAA 합격으로 가는 길 #2: S3 로그 분석과 Athena",
-    description:
-      "S3에 저장된 대량의 로그 데이터를 별도 인프라 구축 없이 표준 SQL로 즉시 분석하는 방법을 알아봅니다.",
-    date: "2026-02-09",
-    tags: ["Athena", "S3", "Serverless"],
-  },
-  {
-    id: "s3-transfer-acceleration",
-    category: "aws-saa",
-    title: "AWS SAA 합격으로 가는 길 #1: 글로벌 데이터 수집과 S3 Transfer Acceleration",
-    description:
-      "전 세계 여러 대륙에서 발생하는 대용량 데이터를 빠르게 S3로 집계하는 최적의 솔루션에 대해 알아봅니다.",
-    date: "2026-02-09",
-    tags: ["AWS", "S3", "Network"],
-  },
-];
+import { getCategoryCount, getRecentPosts } from "@/lib/blog-posts";
 
 export default function BlogPage() {
+  const recentPosts = getRecentPosts();
+  
+  const categories = [
+    {
+      id: "aws-saa",
+      title: "AWS SAA",
+      description: "Solution Architect Associate 자격증 완벽 대비",
+      icon: <Cloud className="w-8 h-8" />,
+      posts: getCategoryCount("aws-saa"),
+      color: "text-orange-500",
+      bgColor: "bg-orange-50 dark:bg-orange-950/30",
+      borderColor: "border-orange-200 dark:border-orange-800",
+    },
+    {
+      id: "frontend",
+      title: "Frontend",
+      description: "React, Vue, Next.js 등 모던 프론트엔드",
+      icon: <Layout className="w-8 h-8" />,
+      posts: getCategoryCount("frontend"),
+      color: "text-blue-500",
+      bgColor: "bg-blue-50 dark:bg-blue-950/30",
+      borderColor: "border-blue-200 dark:border-blue-800",
+    },
+    {
+      id: "backend",
+      title: "Backend",
+      description: "NestJS, Spring Boot, System Design",
+      icon: <Server className="w-8 h-8" />,
+      posts: getCategoryCount("backend"),
+      color: "text-green-500",
+      bgColor: "bg-green-50 dark:bg-green-950/30",
+      borderColor: "border-green-200 dark:border-green-800",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      {/* Hero Section */}
       {/* Hero Section */}
       <section className="relative overflow-hidden py-16 md:py-24 px-3 md:px-6 mb-8 md:mb-12">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30" />
@@ -137,9 +118,6 @@ export default function BlogPage() {
               <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-yellow-500" />
               Recent Posts
             </h2>
-            <Link href="/blog/all" className="text-sm font-medium text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1 transition-colors">
-              View all <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
           
           <div className="grid gap-6">

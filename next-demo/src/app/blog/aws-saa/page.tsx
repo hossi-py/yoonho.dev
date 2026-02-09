@@ -5,28 +5,9 @@ import { ChevronLeft, Cloud, Calendar, Clock, Tag, ArrowRight } from "lucide-rea
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 
-const posts = [
-  {
-    id: "athena-log-analysis",
-    number: 2,
-    title: "S3 로그 분석과 Amazon Athena",
-    description:
-      "S3에 저장된 JSON 로그 데이터를 별도 인프라 구축이나 데이터 로딩 없이 표준 SQL로 즉시 분석하는 서버리스 아키텍처를 알아봅니다.",
-    tags: ["AWS", "S3", "Analytics", "Serverless"],
-    date: "2026-02-09",
-    frequency: "Medium",
-  },
-  {
-    id: "s3-transfer-acceleration",
-    number: 1,
-    title: "글로벌 데이터 수집과 S3 Transfer Acceleration",
-    description:
-      "여러 대륙에서 발생하는 대용량 데이터를 빠르게 단일 S3 버킷으로 집계하는 최적의 아키텍처를 알아봅니다. Multipart Upload와 Edge Location의 시너지를 확인하세요.",
-    tags: ["AWS", "S3", "Network", "Architecture"],
-    date: "2026-02-09",
-    frequency: "High", // High, Medium, Low
-  },
-];
+import { getPostsByCategory } from "@/lib/blog-posts";
+
+const posts = getPostsByCategory("aws-saa");
 
 export default function AwsSaaPage() {
   return (
