@@ -82,8 +82,8 @@ export default function BlogPage() {
             <span className="text-slate-800 dark:text-slate-100">Log</span>
           </h1>
           <p className="text-lg md:text-2xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed px-4">
-            똑똑하게 개발하고 싶은
-            <br className="md:hidden" /> FE개발자의 기록소입니다 🚀
+            코딩 파트너 AI와 함께하는
+            <br className="md:hidden" /> FE 개발자의 블로그
           </p>
         </div>
       </section>
@@ -136,11 +136,11 @@ export default function BlogPage() {
           <div className="grid gap-6">
             {recentPosts.map((post) => (
               <Link key={post.id} href={`/blog/${post.category}/${post.id}`}>
-                <Card className="hover:shadow-lg transition-all duration-300 border-slate-200 dark:border-slate-800 group overflow-hidden">
+                <Card className="hover:shadow-lg transition-all duration-300 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 group overflow-hidden">
                   <div className="flex flex-col md:flex-row">
                     {/* Thumbnail Placeholder */}
-                    <div className="w-full md:w-64 h-40 md:h-auto bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 flex items-center justify-center shrink-0 border-b md:border-b-0 md:border-r border-slate-100 dark:border-slate-800">
-                       <span className="text-4xl group-hover:scale-125 transition-transform duration-500">
+                    <div className="w-full md:w-64 h-40 md:h-auto bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900/50 flex items-center justify-center shrink-0 border-b md:border-b-0 md:border-r border-slate-100 dark:border-slate-700">
+                       <span className="text-4xl group-hover:scale-125 transition-transform duration-500 select-none grayscale group-hover:grayscale-0">
                          {post.category === 'aws-saa' ? '☁️' : '📝'}
                        </span>
                     </div>
@@ -162,13 +162,13 @@ export default function BlogPage() {
                         {post.title}
                       </h3>
                       
-                      <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-4 md:mb-6 line-clamp-2 md:line-clamp-2">
+                      <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed mb-4 md:mb-6 line-clamp-2 md:line-clamp-2">
                         {post.description}
                       </p>
 
                       <div className="flex flex-wrap gap-2">
                         {post.tags.map(tag => (
-                          <span key={tag} className="text-xs font-medium px-2 py-0.5 md:px-2.5 md:py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                          <span key={tag} className="text-xs font-medium px-2 py-0.5 md:px-2.5 md:py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                             #{tag}
                           </span>
                         ))}

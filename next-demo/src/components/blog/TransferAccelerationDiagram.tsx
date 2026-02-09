@@ -196,7 +196,7 @@ export function TransferAccelerationDiagram() {
           x="400"
           y="52"
           textAnchor="middle"
-          className="fill-slate-500"
+          className="fill-slate-500 dark:fill-slate-400"
           style={{ fontSize: "10px" }}
         >
           각 서비스를 클릭하면 상세 정보를 볼 수 있습니다
@@ -243,7 +243,7 @@ export function TransferAccelerationDiagram() {
           x="200"
           y="120"
           textAnchor="middle"
-          className="fill-slate-500"
+          className="fill-slate-500 dark:fill-slate-300"
           style={{ fontSize: "9px" }}
         >
           Upload
@@ -252,7 +252,7 @@ export function TransferAccelerationDiagram() {
           x="400"
           y="120"
           textAnchor="middle"
-          className="fill-slate-500"
+          className="fill-slate-500 dark:fill-slate-300"
           style={{ fontSize: "9px" }}
         >
           AWS Network
@@ -261,7 +261,7 @@ export function TransferAccelerationDiagram() {
           x="600"
           y="120"
           textAnchor="middle"
-          className="fill-slate-500"
+          className="fill-slate-500 dark:fill-slate-300"
           style={{ fontSize: "9px" }}
         >
           Store
@@ -332,7 +332,7 @@ export function TransferAccelerationDiagram() {
                   {selectedService?.details.map((detail, idx) => (
                     <li
                       key={idx}
-                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                      className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300"
                     >
                       <span className="text-blue-500 mt-0.5">•</span>
                       {detail}
@@ -349,7 +349,7 @@ export function TransferAccelerationDiagram() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
                   {selectedService?.useCase}
                 </p>
               </CardContent>

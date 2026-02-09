@@ -32,8 +32,10 @@ function ChoiceCard({
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <Card
         className={`cursor-pointer transition-all ${
-          isCorrect
-            ? "border-green-500 bg-green-50 dark:bg-green-900/20"
+          isOpen
+            ? isCorrect
+              ? "border-green-500 bg-green-50 dark:bg-green-900/20"
+              : "border-red-200 bg-red-50 dark:bg-red-900/10"
             : "hover:border-slate-400"
         }`}
       >
@@ -42,8 +44,10 @@ function ChoiceCard({
             <div className="flex items-start gap-3">
               <span
                 className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                  isCorrect
-                    ? "bg-green-500 text-white"
+                  isOpen
+                    ? isCorrect
+                      ? "bg-green-500 text-white"
+                      : "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
                     : "bg-slate-200 dark:bg-slate-700"
                 }`}
               >
@@ -65,7 +69,13 @@ function ChoiceCard({
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                {isCorrect && <Check className="text-green-500 w-5 h-5" />}
+                {isOpen && (
+                  isCorrect ? (
+                    <Check className="text-green-500 w-5 h-5" />
+                  ) : (
+                    <span className="text-red-500 font-bold text-lg">X</span>
+                  )
+                )}
                 <ChevronDown
                   className={`w-4 h-4 text-muted-foreground transition-transform ${
                     isOpen ? "rotate-180" : ""
@@ -82,7 +92,7 @@ function ChoiceCard({
                 className={`text-sm ${
                   isCorrect
                     ? "text-green-700 dark:text-green-300"
-                    : "text-slate-600 dark:text-slate-400"
+                    : "text-slate-600 dark:text-slate-300"
                 }`}
               >
                 <strong>
@@ -97,6 +107,44 @@ function ChoiceCard({
     </Collapsible>
   );
 }
+
+const choices = [
+  {
+    letter: "A",
+    title: "S3 Transfer Acceleration을 켜고 Multipart Upload로 직접 업로드",
+    services: ["S3 Transfer Acceleration", "Multipart Upload"],
+    isCorrect: true,
+    reason:
+      "가장 간단하면서도 빠른 솔루션입니다! Transfer Acceleration은 글로벌 엣지 로케이션과 AWS 백본 네트워크를 활용해 업로드 속도를 크게 향상시킵니다. Multipart Upload는 대용량 파일(500GB)을 효율적으로 처리합니다. 버킷 설정만 바꾸면 되므로 운영 복잡성이 최소입니다.",
+  },
+  {
+    letter: "B",
+    title:
+      "각 사이트에서 가장 가까운 리전의 S3에 업로드 → Cross-Region Replication → 원본 삭제",
+    services: ["S3", "Cross-Region Replication"],
+    isCorrect: false,
+    reason:
+      "여러 S3 버킷을 관리해야 하고, 복제 후 원본을 삭제하는 추가 작업이 필요합니다. 이는 '운영 복잡성 최소화' 요구사항에 맞지 않습니다.",
+  },
+  {
+    letter: "C",
+    title:
+      "매일 Snowball Edge로 데이터 전송 → 가까운 리전에 저장 → Cross-Region Replication",
+    services: ["Snowball Edge", "Cross-Region Replication"],
+    isCorrect: false,
+    reason:
+      "500GB는 고속 인터넷으로 충분히 전송 가능한 양입니다. 매일 Snowball 장비를 배송/회수하는 것은 운영 복잡성을 크게 높입니다.",
+  },
+  {
+    letter: "D",
+    title:
+      "EC2에 업로드 → EBS에 저장 → 스냅샷 복사 → 다른 리전에서 EBS 복원",
+    services: ["EC2", "EBS", "EBS Snapshot"],
+    isCorrect: false,
+    reason:
+      "S3로 직접 전송하는 것이 아닌 EC2/EBS를 거치는 불필요하게 복잡한 경로입니다. 전혀 적합하지 않은 아키텍처입니다.",
+  },
+];
 
 export default function S3TransferAccelerationPage() {
   return (
@@ -154,8 +202,8 @@ export default function S3TransferAccelerationPage() {
               <TabsTrigger value="services" className="text-xs md:text-sm">
                 2️⃣ AWS 서비스
               </TabsTrigger>
-              <TabsTrigger value="choices" className="text-xs md:text-sm">
-                3️⃣ 선택지 분석
+              <TabsTrigger value="deep-dive" className="text-xs md:text-sm">
+                3️⃣ 심화 학습
               </TabsTrigger>
             </TabsList>
 
@@ -167,8 +215,8 @@ export default function S3TransferAccelerationPage() {
                     korean="한 회사가 여러 대륙의 도시에서 온도, 습도, 기압 데이터를 수집합니다. 각 사이트에서 매일 평균 500GB의 데이터가 발생하며, 모든 사이트에 고속 인터넷이 연결되어 있습니다. 회사는 모든 글로벌 사이트의 데이터를 최대한 빠르게 단일 S3 버킷으로 집계하려고 합니다. 솔루션은 운영 복잡성을 최소화해야 합니다."
                   />
 
-                  <h3 className="text-lg md:text-xl font-bold">
-                    🎯 핵심 요구사항 4가지
+                  <h3 className="text-lg md:text-xl font-bold mt-8 mb-4">
+                    🎯 핵심 요구사항 4가지 (힌트 💡)
                   </h3>
 
                   <div className="grid gap-3">
@@ -212,7 +260,7 @@ export default function S3TransferAccelerationPage() {
                                 {req.keyword}
                               </span>
                             </div>
-                            <p className="text-xs md:text-sm text-muted-foreground mt-1">
+                            <p className="text-xs md:text-sm text-slate-500 dark:text-slate-300 mt-1">
                               → {req.desc}
                             </p>
                           </div>
@@ -232,10 +280,28 @@ export default function S3TransferAccelerationPage() {
                       </p>
                     </CardContent>
                   </Card>
+
+                  <div className="py-6 border-t border-slate-200 dark:border-slate-800 mt-6">
+                    <h3 className="text-lg md:text-xl font-bold mb-4">
+                      🤔 정답을 골라보세요
+                    </h3>
+                    <div className="grid gap-3">
+                      {choices.map((choice) => (
+                        <ChoiceCard
+                          key={choice.letter}
+                          letter={choice.letter}
+                          title={choice.title}
+                          services={choice.services}
+                          isCorrect={choice.isCorrect}
+                          reason={choice.reason}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="services" className="mt-0 space-y-6">
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-slate-600 dark:text-slate-300 text-sm">
                     이 문제와 관련된 핵심 AWS 서비스들을 알아볼게요.
                   </p>
 
@@ -324,55 +390,79 @@ export default function S3TransferAccelerationPage() {
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="choices" className="mt-0 space-y-4">
-                  <p className="text-muted-foreground text-sm">
-                    각 선택지를 클릭하면 왜 정답인지, 오답인지 이유를 확인할 수
-                    있어요.
-                  </p>
-
-                  <div className="grid gap-3">
-                    <ChoiceCard
-                      letter="A"
-                      title="S3 Transfer Acceleration을 켜고 Multipart Upload로 직접 업로드"
-                      services={["S3 Transfer Acceleration", "Multipart Upload"]}
-                      isCorrect={true}
-                      reason="가장 간단하면서도 빠른 솔루션입니다! Transfer Acceleration은 글로벌 엣지 로케이션과 AWS 백본 네트워크를 활용해 업로드 속도를 크게 향상시킵니다. Multipart Upload는 대용량 파일(500GB)을 효율적으로 처리합니다. 버킷 설정만 바꾸면 되므로 운영 복잡성이 최소입니다."
-                    />
-                    <ChoiceCard
-                      letter="B"
-                      title="각 사이트에서 가장 가까운 리전의 S3에 업로드 → Cross-Region Replication → 원본 삭제"
-                      services={["S3", "Cross-Region Replication"]}
-                      isCorrect={false}
-                      reason="여러 S3 버킷을 관리해야 하고, 복제 후 원본을 삭제하는 추가 작업이 필요합니다. 이는 '운영 복잡성 최소화' 요구사항에 맞지 않습니다."
-                    />
-                    <ChoiceCard
-                      letter="C"
-                      title="매일 Snowball Edge로 데이터 전송 → 가까운 리전에 저장 → Cross-Region Replication"
-                      services={["Snowball Edge", "Cross-Region Replication"]}
-                      isCorrect={false}
-                      reason="500GB는 고속 인터넷으로 충분히 전송 가능한 양입니다. 매일 Snowball 장비를 배송/회수하는 것은 운영 복잡성을 크게 높입니다."
-                    />
-                    <ChoiceCard
-                      letter="D"
-                      title="EC2에 업로드 → EBS에 저장 → 스냅샷 복사 → 다른 리전에서 EBS 복원"
-                      services={["EC2", "EBS", "EBS Snapshot"]}
-                      isCorrect={false}
-                      reason="S3로 직접 전송하는 것이 아닌 EC2/EBS를 거치는 불필요하게 복잡한 경로입니다. 전혀 적합하지 않은 아키텍처입니다."
-                    />
+                <TabsContent value="deep-dive" className="mt-0 space-y-8">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-bold flex items-center gap-2">
+                      <span className="text-2xl">🆚</span> 서비스 비교 정리
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                      비슷해 보이지만 다른 가속화 서비스들, 확실하게 구분해봅시다!
+                    </p>
+                    
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm text-left border-collapse">
+                        <thead>
+                          <tr className="bg-slate-100 dark:bg-slate-800 border-b dark:border-slate-700">
+                            <th className="p-3 font-bold whitespace-nowrap">Service</th>
+                            <th className="p-3 font-bold whitespace-nowrap">Use Case</th>
+                            <th className="p-3 font-bold whitespace-nowrap">Protocol</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                          <tr className="bg-green-50/50 dark:bg-green-900/10">
+                            <td className="p-3 font-bold text-green-700 dark:text-green-400">S3 Transfer Acceleration</td>
+                            <td className="p-3">S3로의 <strong>업로드 속도</strong> 향상 (장거리)</td>
+                            <td className="p-3">HTTPS (Over UDP possibility)</td>
+                          </tr>
+                          <tr>
+                            <td className="p-3 font-bold">CloudFront</td>
+                            <td className="p-3">S3 등에서의 <strong>다운로드(캐싱)</strong> 속도 향상</td>
+                            <td className="p-3">HTTP/HTTPS</td>
+                          </tr>
+                          <tr>
+                            <td className="p-3 font-bold">Global Accelerator</td>
+                            <td className="p-3">TCP/UDP 기반 애플리케이션의 <strong>글로벌 성능</strong> 향상 (IP 고정)</td>
+                            <td className="p-3">TCP/UDP</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
 
-                  <Card className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800">
-                    <CardContent className="p-4 md:p-6">
-                      <h3 className="font-bold text-green-700 dark:text-green-300 mb-2">
-                        🎉 정답: A
-                      </h3>
-                      <p className="text-xs md:text-sm text-green-600 dark:text-green-400">
-                        S3 Transfer Acceleration + Multipart Upload 조합은 글로벌
-                        데이터 수집의 정석입니다. 버킷에서 Transfer Acceleration만
-                        켜면 끝!
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-bold flex items-center gap-2">
+                       <span className="text-2xl">📝</span> 시험장 치트키 (Cheat Sheet)
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                       문제에서 이 단어가 나오면 바로 정답을 떠올리세요.
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Card className="border-l-4 border-l-green-500">
+                         <CardContent className="p-4">
+                            <h4 className="font-bold text-green-700 dark:text-green-400 mb-2">S3 Transfer Acceleration</h4>
+                            <ul className="text-sm space-y-2 list-disc pl-4 text-slate-600 dark:text-slate-300">
+                               <li>Gloabl (글로벌 사용자/지점)</li>
+                               <li>Upload Speed (업로드 속도)</li>
+                               <li>Long Distance (장거리 전송)</li>
+                               <li>S3 Bucket Destination</li>
+                            </ul>
+                         </CardContent>
+                      </Card>
+
+                      <Card className="border-l-4 border-l-blue-500">
+                         <CardContent className="p-4">
+                            <h4 className="font-bold text-blue-700 dark:text-blue-400 mb-2">Multipart Upload</h4>
+                            <ul className="text-sm space-y-2 list-disc pl-4 text-slate-600 dark:text-slate-300">
+                               <li>Large Objects (대용량 파일)</li>
+                               <li>Parallel Upload (병렬 업로드)</li>
+                               <li>Pause/Resume needed</li>
+                               <li>High Bandwidth Utilization</li>
+                            </ul>
+                         </CardContent>
+                      </Card>
+                    </div>
+                  </div>
                 </TabsContent>
               </CardContent>
             </Card>
