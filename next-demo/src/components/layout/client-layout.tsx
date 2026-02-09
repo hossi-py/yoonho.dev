@@ -28,7 +28,7 @@ export default function ClientLayout({
           : "ml-[var(--width-collapsed-lnb)] w-[calc(100vw-var(--width-collapsed-lnb))]"
       )}
     >
-      <div className="min-w-0 break-words px-20 py-10">{children}</div>
+      <div className="min-w-0 break-words px-0 md:px-20 md:py-10">{children}</div>
     </main>
   );
 }

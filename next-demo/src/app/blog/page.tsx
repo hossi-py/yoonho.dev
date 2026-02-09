@@ -68,7 +68,8 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-16 md:py-24 px-4 md:px-6 mb-8 md:mb-12">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden py-16 md:py-24 px-3 md:px-6 mb-8 md:mb-12">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30" />
         <div className="relative max-w-5xl mx-auto text-center">
           <Badge variant="secondary" className="mb-4 md:mb-6 px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm rounded-full bg-white/80 backdrop-blur-sm border border-indigo-100 dark:bg-white/10 dark:border-white/20">
@@ -81,14 +82,13 @@ export default function BlogPage() {
             </span>
             <span className="text-slate-800 dark:text-slate-100">Log</span>
           </h1>
-          <p className="text-lg md:text-2xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed px-4">
-            코딩 파트너 AI와 함께하는
-            <br className="md:hidden" /> FE 개발자의 블로그
+          <p className="text-lg md:text-2xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed">
+            코딩 파트너 AI와 함께하는 FE 개발자의 블로그
           </p>
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-4 md:px-6 pb-20 md:pb-24">
+      <div className="max-w-6xl mx-auto px-3 md:px-6 pb-20 md:pb-24">
         {/* Categories */}
         <section className="mb-16 md:mb-20">
           <div className="flex items-center justify-between mb-6 md:mb-8">
@@ -145,7 +145,7 @@ export default function BlogPage() {
                        </span>
                     </div>
                     
-                    <CardContent className="p-5 md:p-8 flex-1">
+                    <CardContent className="p-4 md:p-8 flex-1">
                       <div className="flex flex-wrap items-center gap-2 mb-3 md:mb-4">
                         <Badge className={`text-xs ${
                           post.category === 'aws-saa' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-indigo-500 hover:bg-indigo-600'
