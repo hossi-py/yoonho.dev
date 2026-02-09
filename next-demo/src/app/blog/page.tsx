@@ -54,6 +54,15 @@ const categories = [
 
 const recentPosts = [
   {
+    id: "athena-log-analysis",
+    category: "aws-saa",
+    title: "AWS SAA 합격으로 가는 길 #2: S3 로그 분석과 Athena",
+    description:
+      "S3에 저장된 대량의 로그 데이터를 별도 인프라 구축 없이 표준 SQL로 즉시 분석하는 방법을 알아봅니다.",
+    date: "2026-02-09",
+    tags: ["Athena", "S3", "Serverless"],
+  },
+  {
     id: "s3-transfer-acceleration",
     category: "aws-saa",
     title: "AWS SAA 합격으로 가는 길 #1: 글로벌 데이터 수집과 S3 Transfer Acceleration",
