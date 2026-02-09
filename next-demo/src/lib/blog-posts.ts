@@ -13,6 +13,17 @@ export interface BlogPost {
 
 export const allPosts: BlogPost[] = [
   {
+    id: "s3-organizations-access",
+    category: "aws-saa",
+    number: 3,
+    title: "AWS SAA 합격으로 가는 길 #3: 조직 내 S3 버킷 액세스 제한 (PrincipalOrgID)",
+    description:
+      "AWS Organizations를 활용하여 특정 조직(Organization) 내의 계정들만 S3 버킷에 접근할 수 있도록 제한하는 가장 효율적인 방법을 알아봅니다.",
+    tags: ["S3", "AWS Organizations", "IAM"],
+    date: "2026-02-09",
+    frequency: "Medium",
+  },
+  {
     id: "athena-log-analysis",
     category: "aws-saa",
     number: 2,

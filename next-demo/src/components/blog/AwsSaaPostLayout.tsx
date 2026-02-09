@@ -129,7 +129,7 @@ export function AwsSaaPostLayout({
                   />
 
                   <h3 className="text-lg md:text-xl font-bold mt-8 mb-4">
-                    🎯 핵심 요구사항 4가지
+                    🎯 핵심 요구사항
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {analyze.requirements.map((req) => (
