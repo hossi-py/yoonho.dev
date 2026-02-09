@@ -13,6 +13,17 @@ export interface BlogPost {
 
 export const allPosts: BlogPost[] = [
   {
+    id: "snowball-migration",
+    category: "aws-saa",
+    number: 6,
+    title: "AWS SAA 합격으로 가는 길 #6: 70TB 대용량 데이터를 최소 대역폭으로 마이그레이션 (Snowball Edge)",
+    description:
+      "대용량 데이터를 AWS로 마이그레이션할 때, 네트워크 대역폭을 사용하지 않는 AWS Snowball Edge 활용법을 알아봅니다.",
+    tags: ["Snowball", "Migration", "S3"],
+    date: "2026-02-09",
+    frequency: "High",
+  },
+  {
     id: "efs-shared-storage",
     category: "aws-saa",
     number: 5,
