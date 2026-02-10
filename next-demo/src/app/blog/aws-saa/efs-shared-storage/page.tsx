@@ -1,15 +1,23 @@
-"use client";
-
+import type { Metadata } from "next";
 import { EfsSharedStorageDiagram } from "@/components/blog/EfsSharedStorageDiagram";
 import { AwsSaaPostLayout } from "@/components/blog/AwsSaaPostLayout";
 import { Card, CardContent } from "@/components/ui/card";
+import { getAdjacentPosts } from "@/lib/blog-posts";
+
+export const metadata: Metadata = {
+  title: "다중 AZ 환경에서 공유 스토리지 구성하기 (EBS vs EFS)",
+  description:
+    "여러 EC2 인스턴스가 동일한 파일에 접근해야 할 때, EBS가 아닌 EFS를 사용해야 하는 이유를 알아봅니다.",
+};
 
 export default function EfsSharedStoragePage() {
+  const { prev, next } = getAdjacentPosts("aws-saa", "efs-shared-storage");
   return (
     <AwsSaaPostLayout
       meta={{
         tagId: "Storage",
         date: "2026. 02. 09",
+        postId: "efs-shared-storage",
         title: (
           <>
             다중 AZ 환경에서 <br className="md:hidden" />
@@ -202,6 +210,14 @@ export default function EfsSharedStoragePage() {
           </div>
         </>
       }
+      navigation={{
+        prev: prev
+          ? { id: prev.id, title: prev.title, category: prev.category }
+          : null,
+        next: next
+          ? { id: next.id, title: next.title, category: next.category }
+          : null,
+      }}
     />
   );
 }

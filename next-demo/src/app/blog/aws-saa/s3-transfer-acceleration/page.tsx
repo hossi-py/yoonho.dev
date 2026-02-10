@@ -1,15 +1,23 @@
-"use client";
-
+import type { Metadata } from "next";
 import { TransferAccelerationDiagram } from "@/components/blog/TransferAccelerationDiagram";
 import { AwsSaaPostLayout } from "@/components/blog/AwsSaaPostLayout";
 import { Card, CardContent } from "@/components/ui/card";
+import { getAdjacentPosts } from "@/lib/blog-posts";
+
+export const metadata: Metadata = {
+  title: "글로벌 데이터 수집과 S3 Transfer Acceleration",
+  description:
+    "전 세계 여러 대륙에서 발생하는 대용량 데이터를 빠르게 S3로 집계하는 최적의 솔루션을 알아봅니다.",
+};
 
 export default function S3TransferAccelerationPage() {
+  const { prev, next } = getAdjacentPosts("aws-saa", "s3-transfer-acceleration");
   return (
     <AwsSaaPostLayout
       meta={{
         tagId: "TAG #1",
         date: "2026. 02. 09",
+        postId: "s3-transfer-acceleration",
         title: (
           <>
             AWS SAA 합격으로 가는 길 #1 <br />
@@ -222,6 +230,14 @@ export default function S3TransferAccelerationPage() {
           </div>
         </>
       }
+      navigation={{
+        prev: prev
+          ? { id: prev.id, title: prev.title, category: prev.category }
+          : null,
+        next: next
+          ? { id: next.id, title: next.title, category: next.category }
+          : null,
+      }}
     />
   );
 }

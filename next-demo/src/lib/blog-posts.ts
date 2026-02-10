@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 export interface BlogPost {
   id: string; // slug
   category: "aws-saa" | "frontend" | "backend";
@@ -16,7 +14,8 @@ export const allPosts: BlogPost[] = [
     id: "snowball-migration",
     category: "aws-saa",
     number: 6,
-    title: "AWS SAA 합격으로 가는 길 #6: 70TB 대용량 데이터를 최소 대역폭으로 마이그레이션 (Snowball Edge)",
+    title:
+      "AWS SAA 합격으로 가는 길 #6: 70TB 대용량 데이터를 최소 대역폭으로 마이그레이션 (Snowball Edge)",
     description:
       "대용량 데이터를 AWS로 마이그레이션할 때, 네트워크 대역폭을 사용하지 않는 AWS Snowball Edge 활용법을 알아봅니다.",
     tags: ["Snowball", "Migration", "S3"],
@@ -27,7 +26,8 @@ export const allPosts: BlogPost[] = [
     id: "efs-shared-storage",
     category: "aws-saa",
     number: 5,
-    title: "AWS SAA 합격으로 가는 길 #5: 다중 AZ 환경에서 공유 스토리지 구성하기 (EBS vs EFS)",
+    title:
+      "AWS SAA 합격으로 가는 길 #5: 다중 AZ 환경에서 공유 스토리지 구성하기 (EBS vs EFS)",
     description:
       "여러 EC2 인스턴스가 동일한 파일에 접근해야 할 때, EBS가 아닌 EFS를 사용해야 하는 이유를 알아봅니다.",
     tags: ["EFS", "EBS", "Storage"],
@@ -38,7 +38,8 @@ export const allPosts: BlogPost[] = [
     id: "vpc-gateway-endpoint",
     category: "aws-saa",
     number: 4,
-    title: "AWS SAA 합격으로 가는 길 #4: 인터넷 없이 S3에 Private 접근하기 (VPC Gateway Endpoint)",
+    title:
+      "AWS SAA 합격으로 가는 길 #4: 인터넷 없이 S3에 Private 접근하기 (VPC Gateway Endpoint)",
     description:
       "VPC 내 EC2 인스턴스가 인터넷 연결 없이 S3 버킷에 접근해야 할 때, VPC Gateway Endpoint가 정답입니다.",
     tags: ["VPC", "S3", "Networking"],
@@ -49,7 +50,8 @@ export const allPosts: BlogPost[] = [
     id: "s3-organizations-access",
     category: "aws-saa",
     number: 3,
-    title: "AWS SAA 합격으로 가는 길 #3: 조직 내 S3 버킷 액세스 제한 (PrincipalOrgID)",
+    title:
+      "AWS SAA 합격으로 가는 길 #3: 조직 내 S3 버킷 액세스 제한 (PrincipalOrgID)",
     description:
       "AWS Organizations를 활용하여 특정 조직(Organization) 내의 계정들만 S3 버킷에 접근할 수 있도록 제한하는 가장 효율적인 방법을 알아봅니다.",
     tags: ["S3", "AWS Organizations", "IAM"],
@@ -71,7 +73,8 @@ export const allPosts: BlogPost[] = [
     id: "s3-transfer-acceleration",
     category: "aws-saa",
     number: 1,
-    title: "AWS SAA 합격으로 가는 길 #1: 글로벌 데이터 수집과 S3 Transfer Acceleration",
+    title:
+      "AWS SAA 합격으로 가는 길 #1: 글로벌 데이터 수집과 S3 Transfer Acceleration",
     description:
       "전 세계 여러 대륙에서 발생하는 대용량 데이터를 빠르게 S3로 집계하는 최적의 솔루션을 알아봅니다.",
     tags: ["AWS", "S3", "Network"],
@@ -80,28 +83,12 @@ export const allPosts: BlogPost[] = [
   },
 ];
 
+/** 최근 게시물. 7일 제한 없이 최신순 N개 반환 (fallback 포함) */
 export function getRecentPosts(limit: number = 5): BlogPost[] {
-  // Sort by date desc
   const sorted = [...allPosts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
-  
-  // Filter by last 7 days (User Requirement 2-1)
-  // But wait, user said "If no criteria, use within 7 days".
-  // However, for a blog, showing the absolute latest posts is usually better than showing nothing if no posts in 7 days.
-  // I will implement "Last 7 days" OR "Latest 5 posts" if none in last 7 days? 
-  // User asked: "Recent Posts 노출 기준이 있니? 없다면 등록일 기준 일주일 내로 부탁"
-  // STRICT INTERPRETATION: Filter posts within 7 days.
-  
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  
-  const recent = sorted.filter(post => new Date(post.date) >= sevenDaysAgo);
-  
-  // Fallback: If no posts in 7 days, maybe show at least the latest one?
-  // Use user's preference strictly: "Register date within 1 week".
-  
-  return recent.slice(0, limit);
+  return sorted.slice(0, limit);
 }
 
 export function getPostsByCategory(category: string): BlogPost[] {
@@ -112,4 +99,23 @@ export function getPostsByCategory(category: string): BlogPost[] {
 
 export function getCategoryCount(category: string): number {
   return allPosts.filter((post) => post.category === category).length;
+}
+
+/** 현재 게시물 기준 이전/다음 게시물 반환 (날짜 내림차순 기준) */
+export function getAdjacentPosts(category: string, currentId: string) {
+  const posts = getPostsByCategory(category);
+  const currentIndex = posts.findIndex((p) => p.id === currentId);
+
+  return {
+    prev: currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null,
+    next: currentIndex > 0 ? posts[currentIndex - 1] : null,
+  };
+}
+
+/** 카테고리 내 모든 고유 태그 반환 */
+export function getTagsByCategory(category: string): string[] {
+  const posts = getPostsByCategory(category);
+  const tagSet = new Set<string>();
+  posts.forEach((p) => p.tags.forEach((t) => tagSet.add(t)));
+  return Array.from(tagSet);
 }

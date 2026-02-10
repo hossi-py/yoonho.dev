@@ -1,15 +1,23 @@
-"use client";
-
+import type { Metadata } from "next";
 import { S3OrganizationsAccessDiagram } from "@/components/blog/S3OrganizationsAccessDiagram";
 import { AwsSaaPostLayout } from "@/components/blog/AwsSaaPostLayout";
 import { Card, CardContent } from "@/components/ui/card";
+import { getAdjacentPosts } from "@/lib/blog-posts";
+
+export const metadata: Metadata = {
+  title: "조직 내 S3 버킷 접근 제한 (PrincipalOrgID)",
+  description:
+    "수십 개의 부서 계정이 있는 기업 환경에서, 우리 조직 외부의 접근을 한 방에 차단하는 가장 깔끔한 방법을 소개합니다.",
+};
 
 export default function S3OrganizationsAccessPage() {
+  const { prev, next } = getAdjacentPosts("aws-saa", "s3-organizations-access");
   return (
     <AwsSaaPostLayout
       meta={{
         tagId: "Security & IAM",
         date: "2026. 02. 09",
+        postId: "s3-organizations-access",
         title: (
           <>
             조직(Organization) 내 계정만 <br className="md:hidden" />
@@ -181,6 +189,14 @@ export default function S3OrganizationsAccessPage() {
           </div>
         </>
       }
+      navigation={{
+        prev: prev
+          ? { id: prev.id, title: prev.title, category: prev.category }
+          : null,
+        next: next
+          ? { id: next.id, title: next.title, category: next.category }
+          : null,
+      }}
     />
   );
 }

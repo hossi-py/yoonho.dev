@@ -1,15 +1,23 @@
-"use client";
-
+import type { Metadata } from "next";
 import { AthenaArchitectureDiagram } from "@/components/blog/AthenaArchitectureDiagram";
 import { AwsSaaPostLayout } from "@/components/blog/AwsSaaPostLayout";
 import { Card, CardContent } from "@/components/ui/card";
+import { getAdjacentPosts } from "@/lib/blog-posts";
+
+export const metadata: Metadata = {
+  title: "S3 로그 분석과 Amazon Athena",
+  description:
+    "수테라바이트의 로그 파일이 S3에 쌓여있습니다. 별도의 DB 구축 없이 지금 당장 SQL로 분석하려면 어떻게 해야 할까요?",
+};
 
 export default function AthenaLogAnalysisPage() {
+  const { prev, next } = getAdjacentPosts("aws-saa", "athena-log-analysis");
   return (
     <AwsSaaPostLayout
       meta={{
         tagId: "Data Analytics",
         date: "2026. 02. 09",
+        postId: "athena-log-analysis",
         title: (
           <>
             S3 로그 분석과 <br className="md:hidden" />
@@ -232,6 +240,14 @@ export default function AthenaLogAnalysisPage() {
           </div>
         </>
       }
+      navigation={{
+        prev: prev
+          ? { id: prev.id, title: prev.title, category: prev.category }
+          : null,
+        next: next
+          ? { id: next.id, title: next.title, category: next.category }
+          : null,
+      }}
     />
   );
 }

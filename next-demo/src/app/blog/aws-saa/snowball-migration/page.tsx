@@ -1,15 +1,23 @@
-"use client";
-
+import type { Metadata } from "next";
 import { SnowballMigrationDiagram } from "@/components/blog/SnowballMigrationDiagram";
 import { AwsSaaPostLayout } from "@/components/blog/AwsSaaPostLayout";
 import { Card, CardContent } from "@/components/ui/card";
+import { getAdjacentPosts } from "@/lib/blog-posts";
+
+export const metadata: Metadata = {
+  title: "70TB 대용량 데이터 마이그레이션 (Snowball Edge)",
+  description:
+    "대용량 데이터를 AWS로 마이그레이션할 때, 네트워크 대역폭을 사용하지 않는 AWS Snowball Edge 활용법을 알아봅니다.",
+};
 
 export default function SnowballMigrationPage() {
+  const { prev, next } = getAdjacentPosts("aws-saa", "snowball-migration");
   return (
     <AwsSaaPostLayout
       meta={{
         tagId: "Migration & Transfer",
         date: "2026. 02. 09",
+        postId: "snowball-migration",
         title: (
           <>
             70TB 대용량 데이터를 <br className="md:hidden" />
@@ -204,6 +212,14 @@ export default function SnowballMigrationPage() {
           </div>
         </>
       }
+      navigation={{
+        prev: prev
+          ? { id: prev.id, title: prev.title, category: prev.category }
+          : null,
+        next: next
+          ? { id: next.id, title: next.title, category: next.category }
+          : null,
+      }}
     />
   );
 }

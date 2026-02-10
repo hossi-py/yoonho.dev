@@ -1,15 +1,23 @@
-"use client";
-
+import type { Metadata } from "next";
 import { VpcEndpointDiagram } from "@/components/blog/VpcEndpointDiagram";
 import { AwsSaaPostLayout } from "@/components/blog/AwsSaaPostLayout";
 import { Card, CardContent } from "@/components/ui/card";
+import { getAdjacentPosts } from "@/lib/blog-posts";
+
+export const metadata: Metadata = {
+  title: "인터넷 없이 S3에 Private 접근하기 (VPC Gateway Endpoint)",
+  description:
+    "VPC 내 EC2 인스턴스가 인터넷 연결 없이 S3 버킷에 접근해야 할 때, VPC Gateway Endpoint가 정답입니다.",
+};
 
 export default function VpcGatewayEndpointPage() {
+  const { prev, next } = getAdjacentPosts("aws-saa", "vpc-gateway-endpoint");
   return (
     <AwsSaaPostLayout
       meta={{
         tagId: "Networking",
         date: "2026. 02. 09",
+        postId: "vpc-gateway-endpoint",
         title: (
           <>
             인터넷 없이 <br className="md:hidden" />
@@ -197,6 +205,14 @@ export default function VpcGatewayEndpointPage() {
           </div>
         </>
       }
+      navigation={{
+        prev: prev
+          ? { id: prev.id, title: prev.title, category: prev.category }
+          : null,
+        next: next
+          ? { id: next.id, title: next.title, category: next.category }
+          : null,
+      }}
     />
   );
 }
