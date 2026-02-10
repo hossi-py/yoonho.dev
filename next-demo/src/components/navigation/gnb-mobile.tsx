@@ -13,11 +13,11 @@ export default function GNBMobile() {
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 flex h-14 items-center justify-between px-4 transition-all duration-300',
-        'bg-white/72 dark:bg-zinc-950/75',
+        'bg-white/40 dark:bg-zinc-950/50',
         'backdrop-blur-2xl',
-        'backdrop-saturate-180',
-        'border-b border-white/40 dark:border-white/10',
-        'shadow-[0_1px_0_0_rgb(255,255,255,0.6)] dark:shadow-[0_1px_0_0_rgb(255,255,255,0.08)]'
+        'backdrop-saturate-200',
+        'border-b border-white/30 dark:border-white/10',
+        'shadow-[0_1px_0_0_rgb(255,255,255,0.5)] dark:shadow-[0_1px_0_0_rgb(255,255,255,0.06)]'
       )}
     >
       <div className="flex items-center gap-2">

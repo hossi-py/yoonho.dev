@@ -18,8 +18,6 @@ export default function GNB() {
           ? 'ml-[var(--width-expanded-lnb)] w-[calc(100%-var(--width-expanded-lnb))]'
           : 'ml-[var(--width-collapsed-lnb)] w-[calc(100%-var(--width-collapsed-lnb))]'
       )}
-    >
-      헤더
-    </header>
+    ></header>
   );
 }
