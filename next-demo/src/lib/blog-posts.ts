@@ -11,6 +11,18 @@ export interface BlogPost {
 
 export const allPosts: BlogPost[] = [
   {
+    id: "sns-sqs-fanout",
+    category: "aws-saa",
+    number: 7,
+    title:
+      "AWS SAA 합격으로 가는 길 #7: 100,000 msg/s를 처리하는 SNS + SQS Fan-out 패턴",
+    description:
+      "수십 개의 마이크로서비스가 메시지를 동시에 소비해야 할 때, SNS + SQS Fan-out 패턴으로 완전한 디커플링과 무한 확장성을 달성하는 방법을 알아봅니다.",
+    tags: ["SNS", "SQS", "Decoupling", "Messaging"],
+    date: "2026-02-10",
+    frequency: "High",
+  },
+  {
     id: "snowball-migration",
     category: "aws-saa",
     number: 6,
