@@ -260,7 +260,7 @@ export function S3OrganizationsAccessDiagram() {
         
         {/* Left Area: Diagram (flex 비율 조정) */}
         <div className="flex-[1.8] relative bg-slate-50/50 dark:bg-slate-900/50 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 min-h-[400px]">
-          <div className="absolute top-4 left-5 z-10">
+          <div className="absolute top-4 left-5">
             <h3 className="text-sm font-bold text-slate-500 dark:text-slate-400 flex items-center gap-2 uppercase tracking-wider">
               <Database className="w-4 h-4" />
               Simulation View
@@ -281,7 +281,7 @@ export function S3OrganizationsAccessDiagram() {
         </div>
 
         {/* Right Area: Controls (Compact하게 조정) */}
-        <div className="flex-1 p-6 md:p-8 flex flex-col bg-white dark:bg-slate-950 relative z-20">
+        <div className="flex-1 p-6 md:p-8 flex flex-col bg-white dark:bg-slate-950">
           <div className="mb-6">
             <h2 className="text-xl font-black text-slate-900 dark:text-white mb-2">접근 제어 테스트</h2>
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">

@@ -271,8 +271,8 @@ export function SnsSqsFanoutDiagram() {
       <div className="w-full max-w-5xl bg-white dark:bg-slate-950 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xl flex flex-col md:flex-row">
         {/* Left: Diagram */}
         <div className="flex-[1.8] relative bg-slate-50/50 dark:bg-slate-900/50 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 min-h-[420px]">
-          <div className="absolute top-4 left-5 z-10">
-            <h3 className="text-sm font-bold text-slate-500 dark:text-slate-400 flex items-center gap-2 uppercase tracking-wider">
+          <div className="absolute top-4 left-5 text-slate-500 dark:text-slate-400">
+            <h3 className="text-sm font-bold flex items-center gap-2 uppercase tracking-wider">
               <Mail className="w-4 h-4" />
               메시지 아키텍처
             </h3>
@@ -292,7 +292,7 @@ export function SnsSqsFanoutDiagram() {
         </div>
 
         {/* Right: Controls */}
-        <div className="flex-1 p-6 md:p-8 flex flex-col bg-white dark:bg-slate-950 relative z-20">
+        <div className="flex-1 p-6 md:p-8 flex flex-col bg-white dark:bg-slate-950">
           <div className="mb-6">
             <h2 className="text-xl font-black text-slate-900 dark:text-white mb-2">메시지 브로커 패턴</h2>
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
