@@ -85,8 +85,8 @@ body {
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --color-navigation-border: #0d0d0d0d;
-  --width-expanded-lnb: 15rem;
-  --width-collapsed-lnb: 3.25rem;
+  --width-expanded-lnb: 16.25rem;
+  --width-collapsed-lnb: 4.25rem;
   --height-header: 3.5rem;
 }
 

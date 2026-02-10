@@ -20,8 +20,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         isMobile
           ? 'ml-0 w-full'
           : expanded
-            ? 'ml-[var(--width-expanded-lnb)] w-[calc(100vw-var(--width-expanded-lnb))]'
-            : 'ml-[var(--width-collapsed-lnb)] w-[calc(100vw-var(--width-collapsed-lnb))]'
+            ? 'ml-[var(--width-expanded-lnb)] w-[calc(100%-var(--width-expanded-lnb))]'
+            : 'ml-[var(--width-collapsed-lnb)] w-[calc(100%-var(--width-collapsed-lnb))]'
       )}
     >
       <div className="min-w-0 break-words">{children}</div>
