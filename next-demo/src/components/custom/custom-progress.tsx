@@ -1,14 +1,13 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import * as ProgressPrimitive from "@radix-ui/react-progress";
+import * as ProgressPrimitive from '@radix-ui/react-progress';
+import * as React from 'react';
 
-import { cn } from "@/lib/utils";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { cn } from '@/lib/utils';
 
-type ProgressRootProps = React.ComponentPropsWithoutRef<
-  typeof ProgressPrimitive.Root
->;
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
+
+type ProgressRootProps = React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>;
 
 type Segment = {
   value: number;
@@ -17,22 +16,15 @@ type Segment = {
   color?: string;
 };
 
-interface CustomProgressProps extends Omit<ProgressRootProps, "value"> {
+interface CustomProgressProps extends Omit<ProgressRootProps, 'value'> {
   segments?: Segment[];
   value?: number;
 }
 
-function CustomProgress({
-  className,
-  value,
-  segments,
-  ...props
-}: CustomProgressProps) {
-  const total =
-    React.useMemo(
-      () => segments?.reduce((acc, curr) => acc + Number(curr.value), 0),
-      [segments]
-    ) || 0;
+function CustomProgress({ className, value, segments, ...props }: CustomProgressProps) {
+  const total = React.useMemo(() => {
+    return segments?.reduce((acc, curr) => acc + Number(curr.value), 0) || 0;
+  }, [segments]);
 
   /** Progress 하단에 간소화 */
   const items = React.useMemo(() => {
@@ -93,9 +85,7 @@ function CustomProgress({
               aria-label={`${item.title}: ${item.percent.toFixed(1)}%`}
             />
           </TooltipTrigger>
-          <TooltipContent>
-            {`${item.title}: ${item.percent.toFixed(1)}%`}
-          </TooltipContent>
+          <TooltipContent>{`${item.title}: ${item.percent.toFixed(1)}%`}</TooltipContent>
         </Tooltip>
       ))}
     </div>
@@ -105,10 +95,7 @@ function CustomProgress({
     <div className="w-full">
       <ProgressPrimitive.Root
         data-slot="progress"
-        className={cn(
-          "bg-primary/20 relative h-2 overflow-hidden rounded-full",
-          className
-        )}
+        className={cn('bg-primary/20 relative h-2 overflow-hidden rounded-full', className)}
         value={segments?.length ? 100 : value}
         max={100}
         {...props}

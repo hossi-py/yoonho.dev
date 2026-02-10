@@ -1,11 +1,12 @@
-"use client";
+'use client';
 
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
-import * as React from "react";
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import * as React from 'react';
 
-import { Button } from "@/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import { Button } from '@/components/ui/button';
+
+import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 
 export function ModeToggle() {
   const { theme, setTheme } = useTheme();
@@ -13,7 +14,7 @@ export function ModeToggle() {
   return (
     <ToggleGroup
       value={theme}
-      onValueChange={(value: "light" | "dark") => setTheme(value)}
+      onValueChange={(value: 'light' | 'dark') => setTheme(value)}
       variant="outline"
       type="single"
     >

@@ -1,12 +1,12 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
 
-interface SettingsState {
+export interface SettingsState {
   bgAnimation: boolean;
   customCursor: boolean;
   scrollAnimation: boolean;
-  toggle: (key: keyof Omit<SettingsState, "toggle">) => void;
+  toggle: (key: keyof Omit<SettingsState, 'toggle'>) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -18,7 +18,7 @@ export const useSettingsStore = create<SettingsState>()(
       toggle: (key) => set((state) => ({ [key]: !state[key] })),
     })),
     {
-      name: "settings",
+      name: 'settings',
     }
   )
 );

@@ -1,13 +1,6 @@
-"use client";
+'use client';
 
-import {
-  CSSProperties,
-  PointerEvent,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { CSSProperties, PointerEvent, useCallback, useMemo, useRef, useState } from 'react';
 
 type GridItemProps = {
   id: string;
@@ -79,14 +72,14 @@ export function GridItem({
     const baseY = pixelPos ? pixelPos.y : top;
 
     return {
-      position: "absolute",
+      position: 'absolute',
       transform: `translate(${baseX}px, ${baseY}px)`,
       width,
       height,
-      touchAction: "none",
-      userSelect: "none",
-      cursor: pixelPos ? "grabbing" : "grab",
-      transition: pixelPos ? "none" : "transform 120ms ease",
+      touchAction: 'none',
+      userSelect: 'none',
+      cursor: pixelPos ? 'grabbing' : 'grab',
+      transition: pixelPos ? 'none' : 'transform 120ms ease',
       zIndex: pixelPos ? 20 : 1,
     };
   }, [pixelPos, left, top, width, height]);
@@ -154,9 +147,7 @@ export function GridItem({
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
-      className={`rounded-2xl ${
-        isDragging ? "opacity-80 ring-2 ring-black/5" : ""
-      }`}
+      className={`rounded-2xl ${isDragging ? 'opacity-80 ring-2 ring-black/5' : ''}`}
     >
       {children}
     </div>

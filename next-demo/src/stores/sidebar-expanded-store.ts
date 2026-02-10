@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
 
 interface SidebarExpandedState {
   expanded: boolean;
@@ -28,7 +28,7 @@ export const useSidebarExpandedStore = create<SidebarExpandedState>()(
       },
     })),
     {
-      name: "lnb-expanded",
+      name: 'lnb-expanded',
       onRehydrateStorage: () => (state) => {
         state &&
           setTimeout(() => {

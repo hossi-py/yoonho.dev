@@ -1,25 +1,20 @@
-import simpleImportSort from "eslint-plugin-simple-import-sort";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import coreWebVitals from 'eslint-config-next/core-web-vitals';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
+/** @type {import('eslint').Linter.Config[]} */
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...coreWebVitals,
   {
     plugins: {
-      "simple-import-sort": simpleImportSort,
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
-      "simple-import-sort/imports": "error",
-      "simple-import-sort/exports": "error",
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
     },
+  },
+  {
+    ignores: ['.next/**', 'dist/**', 'build/**', 'node_modules/**'],
   },
 ];
 

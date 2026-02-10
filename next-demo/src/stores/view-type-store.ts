@@ -1,8 +1,8 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
 
-type ViewType = "card" | "list";
+type ViewType = 'card' | 'list';
 
 interface ViewTypeState {
   viewType: ViewType;
@@ -12,7 +12,7 @@ interface ViewTypeState {
 export const useViewTypeStore = create<ViewTypeState>()(
   persist(
     immer((set) => ({
-      viewType: "card",
+      viewType: 'card',
       setViewType: (value) => {
         set((state) => {
           state.viewType = value;
@@ -20,7 +20,7 @@ export const useViewTypeStore = create<ViewTypeState>()(
       },
     })),
     {
-      name: "view-type",
+      name: 'view-type',
     }
   )
 );

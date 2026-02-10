@@ -1,18 +1,18 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { ChevronLeft, Layout, Construction } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { getCategoryCount } from "@/lib/blog-posts";
+import { ChevronLeft, Construction, Layout } from 'lucide-react';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { getCategoryCount } from '@/lib/blog-posts';
 
 export const metadata: Metadata = {
-  title: "Frontend",
-  description:
-    "React, Vue, Next.js 등 모던 프론트엔드 기술을 다루는 블로그 카테고리",
+  title: 'Frontend',
+  description: 'React, Vue, Next.js 등 모던 프론트엔드 기술을 다루는 블로그 카테고리',
 };
 
 export default function FrontendPage() {
-  const count = getCategoryCount("frontend");
+  const count = getCategoryCount('frontend');
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">

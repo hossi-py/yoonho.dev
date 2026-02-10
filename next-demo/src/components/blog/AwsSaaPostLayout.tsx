@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProblemScenario } from "@/components/blog/ProblemScenario";
-import { QuizChoice, QuizChoiceCard } from "@/components/blog/QuizChoiceCard";
+import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+
+import { ProblemScenario } from '@/components/blog/ProblemScenario';
+import { QuizChoice, QuizChoiceCard } from '@/components/blog/QuizChoiceCard';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export interface AwsSaaPostLayoutProps {
   meta: {
@@ -131,9 +132,7 @@ export function AwsSaaPostLayout({
                     korean={analyze.scenario.korean}
                   />
 
-                  <h3 className="text-lg md:text-xl font-bold mt-8 mb-4">
-                    🎯 핵심 요구사항
-                  </h3>
+                  <h3 className="text-lg md:text-xl font-bold mt-8 mb-4">🎯 핵심 요구사항</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {analyze.requirements.map((req) => (
                       <Card
@@ -154,18 +153,14 @@ export function AwsSaaPostLayout({
                               {req.keyword}
                             </span>
                           </div>
-                          <p className="text-sm text-slate-600 dark:text-slate-400">
-                            {req.desc}
-                          </p>
+                          <p className="text-sm text-slate-600 dark:text-slate-400">{req.desc}</p>
                         </CardContent>
                       </Card>
                     ))}
                   </div>
 
                   <div className="py-6 border-y border-slate-200 dark:border-slate-800 my-6">
-                    <h3 className="text-lg md:text-xl font-bold mb-4">
-                      🤔 정답을 골라보세요
-                    </h3>
+                    <h3 className="text-lg md:text-xl font-bold mb-4">🤔 정답을 골라보세요</h3>
                     <div className="grid gap-3">
                       {analyze.quiz.map((choice) => (
                         <QuizChoiceCard key={choice.id} {...choice} />
@@ -184,16 +179,13 @@ export function AwsSaaPostLayout({
                   <Card className="bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-800">
                     <CardContent className="p-4 md:p-5">
                       <div className="flex items-center gap-3 mb-3">
-                        <span className="text-2xl md:text-3xl">
-                          {services.main.icon}
-                        </span>
+                        <span className="text-2xl md:text-3xl">{services.main.icon}</span>
                         <div>
                           <h3 className="font-bold text-indigo-700 dark:text-indigo-300 text-sm md:text-base">
                             {services.main.title}
                           </h3>
                           <span className="text-xs text-indigo-600 dark:text-indigo-400">
-                            {services.main.subTitle ||
-                              "⭐ 이 문제의 핵심 서비스"}
+                            {services.main.subTitle || '⭐ 이 문제의 핵심 서비스'}
                           </span>
                         </div>
                       </div>
@@ -210,9 +202,7 @@ export function AwsSaaPostLayout({
                     {services.others.map((service, idx) => (
                       <Card key={idx}>
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm md:text-base">
-                            {service.title}
-                          </CardTitle>
+                          <CardTitle className="text-sm md:text-base">{service.title}</CardTitle>
                         </CardHeader>
                         <CardContent className="pt-0">
                           <ul className="space-y-1.5 text-xs md:text-sm">
@@ -232,9 +222,7 @@ export function AwsSaaPostLayout({
 
                   {/* Insight */}
                   <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-                    <CardContent className="p-4">
-                      {services.insight}
-                    </CardContent>
+                    <CardContent className="p-4">{services.insight}</CardContent>
                   </Card>
                 </TabsContent>
 

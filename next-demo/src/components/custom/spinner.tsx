@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils";
-import React from "react";
+import React from 'react';
 
-export interface SpinnerProps
-  extends React.InputHTMLAttributes<HTMLDivElement> {
-  type?: "short" | "long" | "bars";
+import { cn } from '@/lib/utils';
+
+export interface SpinnerProps extends React.InputHTMLAttributes<HTMLDivElement> {
+  type?: 'short' | 'long' | 'bars';
   isLoading?: boolean;
   fullScreen?: boolean;
 }
@@ -18,16 +18,8 @@ const spinners = {
     </svg>
   ),
   short: (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={24}
-      height={24}
-      viewBox="0 0 24 24"
-    >
-      <path
-        fill="currentColor"
-        d="M2 12C2 6.477 6.477 2 12 2v3a7 7 0 0 0-7 7z"
-      />
+    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+      <path fill="currentColor" d="M2 12C2 6.477 6.477 2 12 2v3a7 7 0 0 0-7 7z" />
     </svg>
   ),
   bars: (
@@ -40,19 +32,16 @@ const spinners = {
   ),
 };
 export const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
-  (
-    { className, type, isLoading = true, fullScreen = false, ...props },
-    ref
-  ) => {
+  ({ className, type, isLoading = true, fullScreen = false, ...props }, ref) => {
     if (!isLoading) return null;
 
-    const spinnerIcon = spinners[type ?? "long"];
+    const spinnerIcon = spinners[type ?? 'long'];
 
     if (fullScreen) {
       return (
         <div
           className={cn(
-            "fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm",
+            'fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm',
             className
           )}
           ref={ref}
@@ -67,7 +56,7 @@ export const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
       <div
         data-testid="spinner"
         className={cn(
-          "h-4 w-4 text-[color:var(--primary)] animate-spin flex items-center justify-center",
+          'h-4 w-4 text-[color:var(--primary)] animate-spin flex items-center justify-center',
           className
         )}
         ref={ref}
@@ -79,4 +68,4 @@ export const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
   }
 );
 
-Spinner.displayName = "Spinner";
+Spinner.displayName = 'Spinner';

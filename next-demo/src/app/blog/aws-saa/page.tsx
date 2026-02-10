@@ -1,18 +1,19 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { ChevronLeft, Cloud } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { getPostsByCategory } from "@/lib/blog-posts";
-import { AwsSaaPostList } from "@/components/blog/AwsSaaPostList";
+import { ChevronLeft, Cloud } from 'lucide-react';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+
+import { AwsSaaPostList } from '@/components/blog/AwsSaaPostList';
+import { Badge } from '@/components/ui/badge';
+import { getPostsByCategory } from '@/lib/blog-posts';
 
 export const metadata: Metadata = {
-  title: "AWS SAA - Solutions Architect Associate",
+  title: 'AWS SAA - Solutions Architect Associate',
   description:
-    "AWS Solutions Architect Associate 자격증 준비를 위한 핵심 개념과 아키텍처 패턴을 정리합니다.",
+    'AWS Solutions Architect Associate 자격증 준비를 위한 핵심 개념과 아키텍처 패턴을 정리합니다.',
 };
 
 export default function AwsSaaPage() {
-  const posts = getPostsByCategory("aws-saa");
+  const posts = getPostsByCategory('aws-saa');
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
@@ -41,8 +42,7 @@ export default function AwsSaaPage() {
                 </Badge>
               </div>
               <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
-                AWS Solutions Architect Associate 자격증 준비를 위한 핵심 개념과
-                아키텍처 패턴을
+                AWS Solutions Architect Associate 자격증 준비를 위한 핵심 개념과 아키텍처 패턴을
                 <br />
                 정리합니다.
               </p>

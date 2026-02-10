@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import useSWR from "swr";
+import useSWR from 'swr';
 
 export default function UsersPage() {
   const { data, isLoading } = useSWR(`/api/users`);

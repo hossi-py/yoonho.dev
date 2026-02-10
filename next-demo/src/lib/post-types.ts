@@ -1,4 +1,4 @@
-import type { QuizChoice } from "@/components/blog/QuizChoiceCard";
+import type { QuizChoice } from '@/components/blog/QuizChoiceCard';
 
 /** 각 AWS SAA 콘텐츠 파일이 default export하는 타입 */
 export interface AwsSaaPostContent {

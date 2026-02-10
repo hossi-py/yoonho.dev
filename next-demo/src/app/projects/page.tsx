@@ -1,7 +1,10 @@
-import { CustomProgress } from "@/components/custom/custom-progress";
-import { GridItem } from "@/components/custom/grid-item";
-import { GridStage } from "@/components/custom/grid-stage";
-import { GridLayout } from "@/components/layout/grid-layout";
+import { FolderGit2 } from 'lucide-react';
+import Link from 'next/link';
+
+import { CustomProgress } from '@/components/custom/custom-progress';
+import { GridItem } from '@/components/custom/grid-item';
+import { GridStage } from '@/components/custom/grid-stage';
+import { GridLayout } from '@/components/layout/grid-layout';
 import {
   Card,
   CardAction,
@@ -10,47 +13,37 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { githubFetch } from "@/lib/github";
-import { FolderGit2 } from "lucide-react";
-import Link from "next/link";
+} from '@/components/ui/card';
+import { githubFetch } from '@/lib/github';
 
-const allowedRepos = [
-  "LoLIN",
-  "mindwiki",
-  "hossi-tistory",
-  "MARS",
-  "mindwiki",
-  "wedding",
-];
+const allowedRepos = ['LoLIN', 'mindwiki', 'hossi-tistory', 'MARS', 'mindwiki', 'wedding'];
 
 const langColor: Record<string, string> = {
-  TypeScript: "#3178c6",
-  JavaScript: "#f1e05a",
-  Vue: "#41b883",
-  CSS: "#663399",
-  HTML: "#e34c26",
-  Python: "#3572A5",
-  Java: "#b07219",
-  GLSL: "#5686a5",
-  SCSS: "#c6538c",
-  Less: "#1d365d",
+  TypeScript: '#3178c6',
+  JavaScript: '#f1e05a',
+  Vue: '#41b883',
+  CSS: '#663399',
+  HTML: '#e34c26',
+  Python: '#3572A5',
+  Java: '#b07219',
+  GLSL: '#5686a5',
+  SCSS: '#c6538c',
+  Less: '#1d365d',
 };
 
 export default async function ProjectsPage() {
-  const repos = (await githubFetch("/user/repos")) as any;
-  const filteredRepos = repos.filter((repo: any) =>
-    allowedRepos.includes(repo.name)
-  );
+  const repos = (await githubFetch('/user/repos')) as any;
+  const filteredRepos = repos.filter((repo: any) => allowedRepos.includes(repo.name));
   const repoWithLanguages = await Promise.all(
     filteredRepos.map(async (repo: any) => {
-      const languages = (await githubFetch(
-        `/repos/hossi-py/${repo.name}/languages`
-      )) as Record<string, string>;
+      const languages = (await githubFetch(`/repos/hossi-py/${repo.name}/languages`)) as Record<
+        string,
+        string
+      >;
       const formattedLanguages = Object.keys(languages).map((key) => ({
         title: key,
         value: languages[key],
-        color: langColor[key] ?? "bg-primary",
+        color: langColor[key] ?? 'bg-primary',
       }));
       return {
         ...repo,

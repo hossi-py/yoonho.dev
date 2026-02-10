@@ -1,24 +1,25 @@
-"use client";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+'use client';
 import {
+  ArrowRight,
+  CheckCircle2,
   Cloud,
-  Server,
   Database,
   Globe,
-  CheckCircle2,
+  Server,
   XCircle,
   Zap,
-  ArrowRight,
-} from "lucide-react";
+} from 'lucide-react';
+import { useState } from 'react';
+
+import { Button } from '@/components/ui/button';
 
 export function VpcEndpointDiagram() {
-  const [accessType, setAccessType] = useState<"endpoint" | "internet" | null>(null);
+  const [accessType, setAccessType] = useState<'endpoint' | 'internet' | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [result, setResult] = useState<"success" | "fail" | null>(null);
+  const [result, setResult] = useState<'success' | 'fail' | null>(null);
   const [animationKey, setAnimationKey] = useState(0);
 
-  const startVerification = (type: "endpoint" | "internet") => {
+  const startVerification = (type: 'endpoint' | 'internet') => {
     if (isVerifying) return;
     setAccessType(type);
     setIsVerifying(true);
@@ -26,7 +27,7 @@ export function VpcEndpointDiagram() {
     setAnimationKey((prev) => prev + 1);
 
     setTimeout(() => {
-      setResult(type === "endpoint" ? "success" : "fail");
+      setResult(type === 'endpoint' ? 'success' : 'fail');
       setIsVerifying(false);
     }, 2000);
   };
@@ -76,7 +77,7 @@ export function VpcEndpointDiagram() {
     return (
       <svg
         viewBox={`0 0 ${width} ${height}`}
-        className={`w-full h-auto select-none ${isMobile ? "md:hidden" : "hidden md:block"}`}
+        className={`w-full h-auto select-none ${isMobile ? 'md:hidden' : 'hidden md:block'}`}
         preserveAspectRatio="xMidYMid meet"
       >
         <defs>
@@ -109,11 +110,18 @@ export function VpcEndpointDiagram() {
             strokeWidth="2"
             strokeDasharray="8 6"
           />
-          <foreignObject x={pos.awsCloud.x + pos.awsCloud.w / 2 - 80} y={pos.awsCloud.y - 18} width="160" height="40">
+          <foreignObject
+            x={pos.awsCloud.x + pos.awsCloud.w / 2 - 80}
+            y={pos.awsCloud.y - 18}
+            width="160"
+            height="40"
+          >
             <div className="flex justify-center">
               <div className="bg-orange-100 dark:bg-orange-900 border-2 border-orange-200 dark:border-orange-700 rounded-full px-4 py-1 flex items-center gap-2 shadow-sm">
                 <Cloud className="w-4 h-4 text-orange-600 dark:text-orange-400" />
-                <span className="text-xs font-bold text-orange-800 dark:text-orange-200">AWS Cloud</span>
+                <span className="text-xs font-bold text-orange-800 dark:text-orange-200">
+                  AWS Cloud
+                </span>
               </div>
             </div>
           </foreignObject>
@@ -133,7 +141,9 @@ export function VpcEndpointDiagram() {
           <foreignObject x={pos.vpcBox.x} y={pos.vpcBox.y - 22} width={pos.vpcBox.w} height="50">
             <div className="flex justify-center">
               <div className="bg-cyan-100 dark:bg-cyan-900 border-2 border-cyan-300 dark:border-cyan-700 rounded-full px-4 py-1 flex items-center gap-2 shadow-sm">
-                <span className="text-sm font-black text-cyan-800 dark:text-cyan-200">🔒 VPC (Private Subnet)</span>
+                <span className="text-sm font-black text-cyan-800 dark:text-cyan-200">
+                  🔒 VPC (Private Subnet)
+                </span>
               </div>
             </div>
           </foreignObject>
@@ -146,20 +156,32 @@ export function VpcEndpointDiagram() {
             d={pathEndpoint}
             fill="none"
             strokeWidth="3"
-            className={`stroke-slate-300 dark:stroke-slate-700 ${accessType === "endpoint" ? "opacity-100" : "opacity-40"}`}
+            className={`stroke-slate-300 dark:stroke-slate-700 ${accessType === 'endpoint' ? 'opacity-100' : 'opacity-40'}`}
             strokeDasharray="6,6"
           />
           <path
             d={pathEndpointToS3}
             fill="none"
             strokeWidth="3"
-            className={`stroke-slate-300 dark:stroke-slate-700 ${accessType === "endpoint" ? "opacity-100" : "opacity-40"}`}
+            className={`stroke-slate-300 dark:stroke-slate-700 ${accessType === 'endpoint' ? 'opacity-100' : 'opacity-40'}`}
             strokeDasharray="6,6"
           />
-          {accessType === "endpoint" && (
+          {accessType === 'endpoint' && (
             <>
-              <path d={pathEndpoint} fill="none" strokeWidth="4" stroke="url(#privateGradient)" opacity={0.6} />
-              <path d={pathEndpointToS3} fill="none" strokeWidth="4" stroke="url(#privateGradient)" opacity={0.6} />
+              <path
+                d={pathEndpoint}
+                fill="none"
+                strokeWidth="4"
+                stroke="url(#privateGradient)"
+                opacity={0.6}
+              />
+              <path
+                d={pathEndpointToS3}
+                fill="none"
+                strokeWidth="4"
+                stroke="url(#privateGradient)"
+                opacity={0.6}
+              />
             </>
           )}
 
@@ -168,69 +190,105 @@ export function VpcEndpointDiagram() {
             d={pathInternet}
             fill="none"
             strokeWidth="3"
-            className={`stroke-slate-300 dark:stroke-slate-700 ${accessType === "internet" ? "opacity-100" : "opacity-40"}`}
+            className={`stroke-slate-300 dark:stroke-slate-700 ${accessType === 'internet' ? 'opacity-100' : 'opacity-40'}`}
             strokeDasharray="6,6"
           />
-          {accessType === "internet" && (
+          {accessType === 'internet' && (
             <path d={pathInternet} fill="none" strokeWidth="4" className="stroke-red-400/60" />
           )}
         </g>
 
         {/* EC2 Instance */}
-        <foreignObject x={pos.ec2.x - 80} y={pos.ec2.y - 60} width="160" height="120" className="overflow-visible">
+        <foreignObject
+          x={pos.ec2.x - 80}
+          y={pos.ec2.y - 60}
+          width="160"
+          height="120"
+          className="overflow-visible"
+        >
           <div className="w-full h-full flex items-center justify-center">
             <div
               className={`w-[120px] flex flex-col items-center p-3 rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-slate-900 shadow-lg
-              ${accessType ? "border-cyan-500 ring-4 ring-cyan-100 dark:ring-cyan-900/30" : "border-slate-200 dark:border-slate-700"}
+              ${accessType ? 'border-cyan-500 ring-4 ring-cyan-100 dark:ring-cyan-900/30' : 'border-slate-200 dark:border-slate-700'}
             `}
             >
-              <div className={`p-3 rounded-full mb-2 ${accessType ? "bg-cyan-100 text-cyan-600" : "bg-slate-100 text-slate-500"}`}>
+              <div
+                className={`p-3 rounded-full mb-2 ${accessType ? 'bg-cyan-100 text-cyan-600' : 'bg-slate-100 text-slate-500'}`}
+              >
                 <Server size={28} />
               </div>
-              <span className="text-sm font-black text-slate-800 dark:text-slate-200">EC2 Instance</span>
+              <span className="text-sm font-black text-slate-800 dark:text-slate-200">
+                EC2 Instance
+              </span>
               <span className="text-[10px] text-slate-500 font-mono mt-0.5">Private Subnet</span>
             </div>
           </div>
         </foreignObject>
 
         {/* VPC Gateway Endpoint */}
-        <foreignObject x={pos.endpoint.x - 90} y={pos.endpoint.y - 60} width="180" height="130" className="overflow-visible">
+        <foreignObject
+          x={pos.endpoint.x - 90}
+          y={pos.endpoint.y - 60}
+          width="180"
+          height="130"
+          className="overflow-visible"
+        >
           <div className="w-full h-full flex items-center justify-center">
             <div
               className={`w-[140px] flex flex-col items-center p-3 rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-slate-900 shadow-lg
-              ${accessType === "endpoint" ? "border-indigo-500 scale-105 ring-4 ring-indigo-100 dark:ring-indigo-900/30" : "border-slate-200 dark:border-slate-700"}
+              ${accessType === 'endpoint' ? 'border-indigo-500 scale-105 ring-4 ring-indigo-100 dark:ring-indigo-900/30' : 'border-slate-200 dark:border-slate-700'}
             `}
             >
               <div
-                className={`p-3 rounded-full mb-2 ${accessType === "endpoint" ? "bg-gradient-to-r from-indigo-100 to-cyan-100 text-indigo-600" : "bg-slate-100 text-slate-500"}`}
+                className={`p-3 rounded-full mb-2 ${accessType === 'endpoint' ? 'bg-gradient-to-r from-indigo-100 to-cyan-100 text-indigo-600' : 'bg-slate-100 text-slate-500'}`}
               >
                 <Zap size={28} />
               </div>
-              <span className="text-sm font-black text-slate-800 dark:text-slate-200">Gateway Endpoint</span>
-              <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold mt-0.5">com.amazonaws.*.s3</span>
+              <span className="text-sm font-black text-slate-800 dark:text-slate-200">
+                Gateway Endpoint
+              </span>
+              <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold mt-0.5">
+                com.amazonaws.*.s3
+              </span>
             </div>
           </div>
         </foreignObject>
 
         {/* Internet Gateway (blocked) */}
-        <foreignObject x={pos.internet.x - 70} y={pos.internet.y - 40} width="140" height="90" className="overflow-visible">
+        <foreignObject
+          x={pos.internet.x - 70}
+          y={pos.internet.y - 40}
+          width="140"
+          height="90"
+          className="overflow-visible"
+        >
           <div className="w-full h-full flex items-center justify-center">
             <div
               className={`w-[100px] flex flex-col items-center p-2 rounded-xl border-2 transition-all duration-300 bg-white dark:bg-slate-900 shadow-md
-              ${accessType === "internet" ? "border-red-500 ring-4 ring-red-100 dark:ring-red-900/30" : "border-slate-200 dark:border-slate-700 opacity-60"}
+              ${accessType === 'internet' ? 'border-red-500 ring-4 ring-red-100 dark:ring-red-900/30' : 'border-slate-200 dark:border-slate-700 opacity-60'}
             `}
             >
-              <div className={`p-2 rounded-full mb-1 ${accessType === "internet" ? "bg-red-100 text-red-600" : "bg-slate-100 text-slate-400"}`}>
+              <div
+                className={`p-2 rounded-full mb-1 ${accessType === 'internet' ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-400'}`}
+              >
                 <Globe size={20} />
               </div>
-              <span className="text-xs font-bold text-slate-600 dark:text-slate-400 line-through">Internet</span>
+              <span className="text-xs font-bold text-slate-600 dark:text-slate-400 line-through">
+                Internet
+              </span>
               <span className="text-[10px] text-red-500 font-bold">No Access</span>
             </div>
           </div>
         </foreignObject>
 
         {/* S3 Bucket */}
-        <foreignObject x={pos.s3.x - 90} y={pos.s3.y - 70} width="180" height="160" className="overflow-visible">
+        <foreignObject
+          x={pos.s3.x - 90}
+          y={pos.s3.y - 70}
+          width="180"
+          height="160"
+          className="overflow-visible"
+        >
           <div className="w-full h-full flex items-center justify-center">
             <div className="w-[140px] flex flex-col items-center p-4 rounded-2xl border-[3px] border-orange-400 bg-white dark:bg-slate-900 shadow-xl relative overflow-hidden group">
               <div className="absolute top-0 right-0 bg-orange-100 dark:bg-orange-900/50 px-2 py-1 rounded-bl-xl">
@@ -240,16 +298,20 @@ export function VpcEndpointDiagram() {
               <div className="p-3 rounded-full bg-orange-50 dark:bg-orange-900/20 mb-2 group-hover:scale-110 transition-transform">
                 <Database size={36} className="text-orange-500" />
               </div>
-              <span className="text-sm font-black text-slate-800 dark:text-slate-100">Amazon S3</span>
+              <span className="text-sm font-black text-slate-800 dark:text-slate-100">
+                Amazon S3
+              </span>
               <div className="mt-2 text-[10px] bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-lg text-center">
-                <span className="font-mono font-bold text-orange-600 dark:text-orange-400">logs-bucket</span>
+                <span className="font-mono font-bold text-orange-600 dark:text-orange-400">
+                  logs-bucket
+                </span>
               </div>
             </div>
           </div>
         </foreignObject>
 
         {/* Animation Packets */}
-        {isVerifying && accessType === "endpoint" && (
+        {isVerifying && accessType === 'endpoint' && (
           <g key={animationKey}>
             <circle r="8" className="fill-indigo-500">
               <animateMotion dur="1s" repeatCount="1" fill="freeze">
@@ -263,8 +325,8 @@ export function VpcEndpointDiagram() {
             </circle>
           </g>
         )}
-        {isVerifying && accessType === "internet" && (
-          <g key={animationKey + "int"}>
+        {isVerifying && accessType === 'internet' && (
+          <g key={animationKey + 'int'}>
             <circle r="8" className="fill-red-500">
               <animateMotion dur="1s" repeatCount="1" fill="freeze">
                 <mpath href="#p-internet" />
@@ -273,7 +335,12 @@ export function VpcEndpointDiagram() {
             {/* X mark at the end */}
             <g opacity={0}>
               <animate attributeName="opacity" values="0;1" dur="0.1s" begin="0.9s" fill="freeze" />
-              <circle cx={isMobile ? pos.internet.x : pos.internet.x - 50} cy={isMobile ? pos.internet.y - 50 : pos.internet.y} r="20" className="fill-red-500/20" />
+              <circle
+                cx={isMobile ? pos.internet.x : pos.internet.x - 50}
+                cy={isMobile ? pos.internet.y - 50 : pos.internet.y}
+                r="20"
+                className="fill-red-500/20"
+              />
               <text
                 x={isMobile ? pos.internet.x : pos.internet.x - 50}
                 y={isMobile ? pos.internet.y - 45 : pos.internet.y + 5}
@@ -294,22 +361,32 @@ export function VpcEndpointDiagram() {
 
         {/* Result Popup */}
         {result && (
-          <foreignObject x={pos.s3.x - 120} y={isMobile ? pos.s3.y + 60 : pos.s3.y + 70} width="240" height="80" className="overflow-visible">
+          <foreignObject
+            x={pos.s3.x - 120}
+            y={isMobile ? pos.s3.y + 60 : pos.s3.y + 70}
+            width="240"
+            height="80"
+            className="overflow-visible"
+          >
             <div className="w-full h-full flex items-center justify-center">
               <div
                 className={`
                 flex items-center gap-3 px-5 py-3 rounded-xl shadow-2xl border-2 animate-in fade-in zoom-in slide-in-from-top-4 duration-300
                 ${
-                  result === "success"
-                    ? "bg-green-50 border-green-200 text-green-800 dark:bg-green-900/90 dark:border-green-700 dark:text-green-50"
-                    : "bg-red-50 border-red-200 text-red-800 dark:bg-red-900/90 dark:border-red-700 dark:text-red-50"
+                  result === 'success'
+                    ? 'bg-green-50 border-green-200 text-green-800 dark:bg-green-900/90 dark:border-green-700 dark:text-green-50'
+                    : 'bg-red-50 border-red-200 text-red-800 dark:bg-red-900/90 dark:border-red-700 dark:text-red-50'
                 }
               `}
               >
-                {result === "success" ? <CheckCircle2 size={24} /> : <XCircle size={24} />}
+                {result === 'success' ? <CheckCircle2 size={24} /> : <XCircle size={24} />}
                 <div>
-                  <p className="font-black text-sm">{result === "success" ? "Private 연결 성공!" : "연결 실패"}</p>
-                  <p className="text-xs opacity-90 font-bold">{result === "success" ? "인터넷 없이 S3 접근" : "인터넷 없이는 불가"}</p>
+                  <p className="font-black text-sm">
+                    {result === 'success' ? 'Private 연결 성공!' : '연결 실패'}
+                  </p>
+                  <p className="text-xs opacity-90 font-bold">
+                    {result === 'success' ? '인터넷 없이 S3 접근' : '인터넷 없이는 불가'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -347,7 +424,9 @@ export function VpcEndpointDiagram() {
         {/* Right Area: Controls */}
         <div className="flex-1 p-6 md:p-8 flex flex-col bg-white dark:bg-slate-950">
           <div className="mb-6">
-            <h2 className="text-xl font-black text-slate-900 dark:text-white mb-2">S3 접근 방식 테스트</h2>
+            <h2 className="text-xl font-black text-slate-900 dark:text-white mb-2">
+              S3 접근 방식 테스트
+            </h2>
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
               인터넷 없이 Private Subnet에서 S3에 접근하는 방법을 비교해보세요.
             </p>
@@ -355,12 +434,12 @@ export function VpcEndpointDiagram() {
 
           <div className="space-y-3 flex-1">
             <Button
-              onClick={() => startVerification("endpoint")}
+              onClick={() => startVerification('endpoint')}
               disabled={isVerifying}
               className={`w-full h-auto p-4 justify-start text-left border-2 transition-all relative overflow-hidden group ${
-                accessType === "endpoint"
-                  ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300"
-                  : "border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-200 text-slate-700"
+                accessType === 'endpoint'
+                  ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300'
+                  : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-200 text-slate-700'
               }`}
               variant="ghost"
             >
@@ -371,7 +450,7 @@ export function VpcEndpointDiagram() {
                 <div className="font-bold text-base">VPC Gateway Endpoint</div>
                 <div className="text-xs opacity-70 font-medium">인터넷 없이 Private 연결 ✓</div>
               </div>
-              {accessType === "endpoint" && isVerifying && (
+              {accessType === 'endpoint' && isVerifying && (
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
@@ -380,12 +459,12 @@ export function VpcEndpointDiagram() {
             </Button>
 
             <Button
-              onClick={() => startVerification("internet")}
+              onClick={() => startVerification('internet')}
               disabled={isVerifying}
               className={`w-full h-auto p-4 justify-start text-left border-2 transition-all relative overflow-hidden group ${
-                accessType === "internet"
-                  ? "border-red-500 bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300"
-                  : "border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-red-200 text-slate-700"
+                accessType === 'internet'
+                  ? 'border-red-500 bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300'
+                  : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-red-200 text-slate-700'
               }`}
               variant="ghost"
             >
@@ -396,7 +475,7 @@ export function VpcEndpointDiagram() {
                 <div className="font-bold text-base">인터넷 경유 (불가)</div>
                 <div className="text-xs opacity-70 font-medium">인터넷 연결 없음 ✕</div>
               </div>
-              {accessType === "internet" && isVerifying && (
+              {accessType === 'internet' && isVerifying && (
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
@@ -407,13 +486,20 @@ export function VpcEndpointDiagram() {
 
           <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
             <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
-              <span className="font-bold text-slate-900 dark:text-slate-200 block mb-1">💡 Gateway Endpoint란?</span>
-              VPC에서 S3, DynamoDB로 향하는 트래픽을 AWS 내부 네트워크로 라우팅합니다. 인터넷을 거치지 않아 보안이 강화되고, 추가
-              비용이 없습니다.
+              <span className="font-bold text-slate-900 dark:text-slate-200 block mb-1">
+                💡 Gateway Endpoint란?
+              </span>
+              VPC에서 S3, DynamoDB로 향하는 트래픽을 AWS 내부 네트워크로 라우팅합니다. 인터넷을
+              거치지 않아 보안이 강화되고, 추가 비용이 없습니다.
             </div>
 
             {result && (
-              <Button onClick={reset} variant="outline" size="sm" className="w-full h-9 text-xs font-bold">
+              <Button
+                onClick={reset}
+                variant="outline"
+                size="sm"
+                className="w-full h-9 text-xs font-bold"
+              >
                 초기화
               </Button>
             )}

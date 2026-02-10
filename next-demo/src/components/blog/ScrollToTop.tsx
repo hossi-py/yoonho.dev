@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { ArrowUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowUp } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+import { Button } from '@/components/ui/button';
 
 export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
 
   // 스크롤 감지
   useEffect(() => {
-    const mainElement = document.querySelector("main");
+    const mainElement = document.querySelector('main');
     if (!mainElement) return;
 
     const toggleVisibility = () => {
@@ -21,18 +22,18 @@ export function ScrollToTop() {
       }
     };
 
-    mainElement.addEventListener("scroll", toggleVisibility);
+    mainElement.addEventListener('scroll', toggleVisibility);
 
     return () => {
-      mainElement.removeEventListener("scroll", toggleVisibility);
+      mainElement.removeEventListener('scroll', toggleVisibility);
     };
   }, []);
 
   const scrollToTop = () => {
-    const mainElement = document.querySelector("main");
+    const mainElement = document.querySelector('main');
     mainElement?.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   };
 
@@ -40,7 +41,7 @@ export function ScrollToTop() {
     <>
       <div
         className={`fixed bottom-8 right-8 z-50 transition-all duration-300 transform ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         }`}
       >
         <Button

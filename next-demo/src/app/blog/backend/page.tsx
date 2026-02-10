@@ -1,18 +1,18 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { ChevronLeft, Server, Construction } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { getCategoryCount } from "@/lib/blog-posts";
+import { ChevronLeft, Construction, Server } from 'lucide-react';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { getCategoryCount } from '@/lib/blog-posts';
 
 export const metadata: Metadata = {
-  title: "Backend",
-  description:
-    "NestJS, Spring Boot, System Design 등 백엔드 기술을 다루는 블로그 카테고리",
+  title: 'Backend',
+  description: 'NestJS, Spring Boot, System Design 등 백엔드 기술을 다루는 블로그 카테고리',
 };
 
 export default function BackendPage() {
-  const count = getCategoryCount("backend");
+  const count = getCategoryCount('backend');
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">

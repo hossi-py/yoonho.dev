@@ -1,22 +1,35 @@
-"use client";
+'use client';
+import { Text } from 'lucide-react';
 
-import { Text } from "lucide-react";
-import { Button } from "../ui/button";
-import { useSidebarExpandedStore } from "@/stores/sidebar-expanded-store";
+import { cn } from '@/lib/utils';
+import { useSidebarExpandedStore } from '@/stores/sidebar-expanded-store';
+
+import { Button } from '../ui/button';
 
 export default function GNBMobile() {
   const setExpanded = useSidebarExpandedStore((s) => s.setExpanded);
 
   return (
-    <header className="fixed flex items-center p-2 w-full top-0 h-[var(--height-header)] border-b border-zinc-700 z-10 bg-background">
-      <Button
-        onClick={() => setExpanded(true)}
-        className="cursor-pointer"
-        variant="ghost"
-        size="icon"
-      >
-        <Text style={{ width: "20px", height: "20px" }} />
-      </Button>
+    <header
+      className={cn(
+        'fixed top-0 left-0 right-0 z-50 flex h-14 items-center justify-between px-4 transition-all duration-300',
+        'bg-white/72 dark:bg-zinc-950/75',
+        'backdrop-blur-2xl',
+        'backdrop-saturate-180',
+        'border-b border-white/40 dark:border-white/10',
+        'shadow-[0_1px_0_0_rgb(255,255,255,0.6)] dark:shadow-[0_1px_0_0_rgb(255,255,255,0.08)]'
+      )}
+    >
+      <div className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setExpanded(true)}
+          className="hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+        >
+          <Text className="h-5 w-5" />
+        </Button>
+      </div>
     </header>
   );
 }

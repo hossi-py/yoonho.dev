@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 * {
   box-sizing: border-box;
@@ -141,7 +141,7 @@ body {
 
   .rainbow-frame::before,
   .rainbow-frame::after {
-    content: "";
+    content: '';
     position: absolute;
     left: calc(-1 * (var(--rf-outline) + var(--rf-blur)));
     top: calc(-1 * (var(--rf-outline) + var(--rf-blur)));

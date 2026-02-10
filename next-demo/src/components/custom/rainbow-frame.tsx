@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 type RainbowFrameProps = {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ type RainbowFrameProps = {
 
 export default function RainbowFrame({
   children,
-  className = "",
+  className = '',
   style,
   blur = 20,
   outlineSize = 1,
@@ -21,15 +21,11 @@ export default function RainbowFrame({
 }: RainbowFrameProps) {
   return (
     <div
-      className={cn(
-        "rainbow-frame",
-        active ? "animate-visible" : "animate-hidden",
-        className
-      )}
+      className={cn('rainbow-frame', active ? 'animate-visible' : 'animate-hidden', className)}
       style={
         {
-          "--rf-blur": `${blur}px`,
-          "--rf-outline": `${outlineSize}px`,
+          '--rf-blur': `${blur}px`,
+          '--rf-outline': `${outlineSize}px`,
           ...style,
         } as React.CSSProperties
       }

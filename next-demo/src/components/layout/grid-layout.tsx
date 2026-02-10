@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Children, useRef, useState } from "react";
+import { Children, useRef, useState } from 'react';
 
 type LayoutItem = { i: string; x: number; y: number; w: number; h: number };
 type GridLayoutProps = { children: React.ReactNode };
-type Dir = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
+type Dir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
 
 export function GridLayout({ children }: GridLayoutProps) {
   const childArray = Children.toArray(children);
@@ -66,11 +66,7 @@ export function GridLayout({ children }: GridLayoutProps) {
       : -Math.floor((Math.abs(deltaPx) - hys) / unit);
   };
 
-  const handlePointerDown = (
-    e: React.PointerEvent<HTMLDivElement>,
-    item: LayoutItem,
-    dir: Dir
-  ) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>, item: LayoutItem, dir: Dir) => {
     e.stopPropagation();
     e.currentTarget.setPointerCapture(e.pointerId);
 
@@ -95,9 +91,9 @@ export function GridLayout({ children }: GridLayoutProps) {
 
     setGhost({ id: item.i, left, top, width, height });
 
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerup", handlePointerUp);
-    window.addEventListener("pointercancel", handlePointerUp);
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+    window.addEventListener('pointercancel', handlePointerUp);
   };
 
   const handlePointerMove = (e: PointerEvent) => {
@@ -116,10 +112,10 @@ export function GridLayout({ children }: GridLayoutProps) {
     let height = r.baseHeightPx;
 
     // 가로 방향
-    if (r.dir.includes("e")) {
+    if (r.dir.includes('e')) {
       width = Math.max(colWidth, r.baseWidthPx + dx);
     }
-    if (r.dir.includes("w")) {
+    if (r.dir.includes('w')) {
       // 왼쪽 엣지 이동: left를 옮기며 width 재계산
       const minLeft = 0;
       const maxLeft = r.baseLeft + r.baseWidthPx - colWidth; // 최소 1칸 보장
@@ -128,10 +124,10 @@ export function GridLayout({ children }: GridLayoutProps) {
     }
 
     // 세로 방향
-    if (r.dir.includes("s")) {
+    if (r.dir.includes('s')) {
       height = Math.max(rowHeight, r.baseHeightPx + dy);
     }
-    if (r.dir.includes("n")) {
+    if (r.dir.includes('n')) {
       const minTop = 0;
       const maxTop = r.baseTop + r.baseHeightPx - rowHeight; // 최소 1칸
       top = Math.min(Math.max(r.baseTop + dy, minTop), maxTop);
@@ -151,11 +147,11 @@ export function GridLayout({ children }: GridLayoutProps) {
     let nextH = r.baseH;
 
     // 가로 계산
-    if (r.dir.includes("e")) {
+    if (r.dir.includes('e')) {
       const dw = stepBy(ghost.width - r.baseWidthPx, r.unitX, hysteresis);
       nextW = Math.max(1, Math.min(r.baseW + dw, cols - r.x));
     }
-    if (r.dir.includes("w")) {
+    if (r.dir.includes('w')) {
       // 왼쪽으로 얼마나 이동했는지(기준보다 왼쪽으로 늘리면 +)
       const movedLeftPx = r.baseLeft - ghost.left;
       const dColsLeft = stepBy(movedLeftPx, r.unitX, hysteresis);
@@ -164,11 +160,11 @@ export function GridLayout({ children }: GridLayoutProps) {
     }
 
     // 세로 계산
-    if (r.dir.includes("s")) {
+    if (r.dir.includes('s')) {
       const dh = stepBy(ghost.height - r.baseHeightPx, r.unitY, hysteresis);
       nextH = Math.max(1, r.baseH + dh);
     }
-    if (r.dir.includes("n")) {
+    if (r.dir.includes('n')) {
       const movedTopPx = r.baseTop - ghost.top;
       const dRowsUp = stepBy(movedTopPx, r.unitY, hysteresis);
       nextY = Math.max(0, r.y - dRowsUp);
@@ -179,9 +175,7 @@ export function GridLayout({ children }: GridLayoutProps) {
     nextW = Math.max(1, Math.min(nextW, cols - nextX));
 
     setLayout((prev) =>
-      prev.map((it) =>
-        it.i === r.id ? { ...it, x: nextX, y: nextY, w: nextW, h: nextH } : it
-      )
+      prev.map((it) => (it.i === r.id ? { ...it, x: nextX, y: nextY, w: nextW, h: nextH } : it))
     );
 
     cleanup();
@@ -190,14 +184,13 @@ export function GridLayout({ children }: GridLayoutProps) {
   const cleanup = () => {
     resizingRef.current = null;
     setGhost(null);
-    window.removeEventListener("pointermove", handlePointerMove);
-    window.removeEventListener("pointerup", handlePointerUp);
-    window.removeEventListener("pointercancel", handlePointerUp);
+    window.removeEventListener('pointermove', handlePointerMove);
+    window.removeEventListener('pointerup', handlePointerUp);
+    window.removeEventListener('pointercancel', handlePointerUp);
   };
 
   // 핸들 공통 스타일(작은 핸들)
-  const handleBase =
-    "absolute z-10 bg-blue-600 rounded-sm opacity-90 hover:opacity-100";
+  const handleBase = 'absolute z-10 bg-blue-600 rounded-sm opacity-90 hover:opacity-100';
 
   return (
     <div className="relative select-none touch-none">
@@ -221,9 +214,7 @@ export function GridLayout({ children }: GridLayoutProps) {
               key={item.i}
               style={style}
               className={`relative flex items-center justify-center rounded-md bg-rose-500 text-white font-bold ${
-                isResizing
-                  ? "opacity-60 outline outline-2 outline-blue-400"
-                  : ""
+                isResizing ? 'opacity-60 outline outline-2 outline-blue-400' : ''
               }`}
             >
               {childArray[idx] ?? item.i}
@@ -231,42 +222,42 @@ export function GridLayout({ children }: GridLayoutProps) {
               {/* === 8방향 리사이즈 핸들 === */}
               {/* N */}
               <div
-                onPointerDown={(e) => handlePointerDown(e, item, "n")}
+                onPointerDown={(e) => handlePointerDown(e, item, 'n')}
                 className={`${handleBase} cursor-n-resize top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-2`}
               />
               {/* S */}
               <div
-                onPointerDown={(e) => handlePointerDown(e, item, "s")}
+                onPointerDown={(e) => handlePointerDown(e, item, 's')}
                 className={`${handleBase} cursor-s-resize bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-6 h-2`}
               />
               {/* E */}
               <div
-                onPointerDown={(e) => handlePointerDown(e, item, "e")}
+                onPointerDown={(e) => handlePointerDown(e, item, 'e')}
                 className={`${handleBase} cursor-e-resize right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-6 w-2`}
               />
               {/* W */}
               <div
-                onPointerDown={(e) => handlePointerDown(e, item, "w")}
+                onPointerDown={(e) => handlePointerDown(e, item, 'w')}
                 className={`${handleBase} cursor-w-resize left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 h-6 w-2`}
               />
               {/* NW */}
               <div
-                onPointerDown={(e) => handlePointerDown(e, item, "nw")}
+                onPointerDown={(e) => handlePointerDown(e, item, 'nw')}
                 className={`${handleBase} cursor-nwse-resize top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-3 h-3`}
               />
               {/* NE */}
               <div
-                onPointerDown={(e) => handlePointerDown(e, item, "ne")}
+                onPointerDown={(e) => handlePointerDown(e, item, 'ne')}
                 className={`${handleBase} cursor-nesw-resize top-0 right-0 translate-x-1/2 -translate-y-1/2 w-3 h-3`}
               />
               {/* SW */}
               <div
-                onPointerDown={(e) => handlePointerDown(e, item, "sw")}
+                onPointerDown={(e) => handlePointerDown(e, item, 'sw')}
                 className={`${handleBase} cursor-nesw-resize bottom-0 left-0 -translate-x-1/2 translate-y-1/2 w-3 h-3`}
               />
               {/* SE */}
               <div
-                onPointerDown={(e) => handlePointerDown(e, item, "se")}
+                onPointerDown={(e) => handlePointerDown(e, item, 'se')}
                 className={`${handleBase} cursor-nwse-resize bottom-0 right-0 translate-x-1/2 translate-y-1/2 w-3 h-3`}
               />
             </div>

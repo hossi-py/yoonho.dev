@@ -1,22 +1,18 @@
-import { useIsMobile } from "@/hooks/use-mobile";
-import { Button, type buttonVariants } from "../ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
-import { type VariantProps } from "class-variance-authority";
+import { type VariantProps } from 'class-variance-authority';
+
+import { useIsMobile } from '@/hooks/use-mobile';
+
+import { Button, type buttonVariants } from '../ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 interface CustomButtonProps
-  extends React.ComponentProps<typeof Button>,
-    VariantProps<typeof buttonVariants> {
+  extends React.ComponentProps<typeof Button>, VariantProps<typeof buttonVariants> {
   icon?: React.ReactNode;
   expanded?: boolean;
   label?: string;
   tooltipContent?: React.ReactNode;
-  tooltipPosition?: "top" | "right" | "bottom" | "left";
-  size: "default" | "sm" | "lg" | "icon";
+  tooltipPosition?: 'top' | 'right' | 'bottom' | 'left';
+  size: 'default' | 'sm' | 'lg' | 'icon';
 }
 
 export default function CustomButton({
@@ -25,12 +21,12 @@ export default function CustomButton({
   label,
   children,
   tooltipContent,
-  tooltipPosition = "right",
+  tooltipPosition = 'right',
   size,
   ...buttonProps
 }: any) {
   const isMobile = useIsMobile();
-  const buttonSize = !expanded && icon ? "icon" : size;
+  const buttonSize = !expanded && icon ? 'icon' : size;
 
   const button = (
     <Button size={buttonSize} {...buttonProps}>

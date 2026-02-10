@@ -1,11 +1,13 @@
-"use client";
+'use client';
 
-import { PanelLeftClose } from "lucide-react";
-import CustomButton from "../custom/custom-button";
-import SidebarToggleButton from "./sidebar-toggle-button";
-import { cn } from "@/lib/utils";
-import { useSidebarExpandedStore } from "@/stores/sidebar-expanded-store";
-import LNBContent from "./lnb-content";
+import { PanelLeftClose } from 'lucide-react';
+
+import { cn } from '@/lib/utils';
+import { useSidebarExpandedStore } from '@/stores/sidebar-expanded-store';
+
+import CustomButton from '../custom/custom-button';
+import LNBContent from './lnb-content';
+import SidebarToggleButton from './sidebar-toggle-button';
 
 export default function LNB() {
   const expanded = useSidebarExpandedStore((s) => s.expanded);
@@ -19,11 +21,9 @@ export default function LNB() {
   return (
     <aside
       className={cn(
-        "fixed top-0 left-0 h-full transition-all ease-in-out duration-300 overflow-hidden",
-        "border-r [border-color:var(--color-navigation-border)]",
-        expanded
-          ? "[width:var(--width-expanded-lnb)]"
-          : "[width:var(--width-collapsed-lnb)]"
+        'fixed top-0 left-0 h-full transition-all ease-in-out duration-300 overflow-hidden',
+        'border-r [border-color:var(--color-navigation-border)]',
+        expanded ? '[width:var(--width-expanded-lnb)]' : '[width:var(--width-collapsed-lnb)]'
       )}
     >
       {/* 상단 영역 */}
@@ -40,7 +40,7 @@ export default function LNB() {
             tooltipPosition="bottom"
             onClick={() => setExpanded(false)}
           >
-            <PanelLeftClose style={{ width: "20px", height: "20px" }} />
+            <PanelLeftClose style={{ width: '20px', height: '20px' }} />
           </CustomButton>
         )}
       </div>

@@ -1,58 +1,45 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import {
-  Cloud,
-  Code2,
-  Layout,
-  Server,
-  Sparkles,
-  Calendar,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { getCategoryCount, getRecentPosts } from "@/lib/blog-posts";
+import { Calendar, Cloud, Code2, Layout, Server, Sparkles } from 'lucide-react';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { getCategoryCount, getRecentPosts } from '@/lib/blog-posts';
 
 export const metadata: Metadata = {
-  title: "Tech Blog",
-  description:
-    "AWS, Frontend, Backend 등 다양한 기술 주제를 다루는 FE 개발자의 블로그",
+  title: 'Tech Blog',
+  description: 'AWS, Frontend, Backend 등 다양한 기술 주제를 다루는 FE 개발자의 블로그',
 };
 
 const categoryMeta = {
-  "aws-saa": {
-    color: "text-orange-500",
-    bgColor: "bg-orange-50 dark:bg-orange-950/30",
-    borderColor: "border-orange-200 dark:border-orange-800",
+  'aws-saa': {
+    color: 'text-orange-500',
+    bgColor: 'bg-orange-50 dark:bg-orange-950/30',
+    borderColor: 'border-orange-200 dark:border-orange-800',
     gradient:
-      "bg-gradient-to-br from-orange-50 to-amber-100 dark:from-orange-950/30 dark:to-amber-950/20",
-    iconBg: "bg-orange-500/10",
+      'bg-gradient-to-br from-orange-50 to-amber-100 dark:from-orange-950/30 dark:to-amber-950/20',
+    iconBg: 'bg-orange-500/10',
   },
   frontend: {
-    color: "text-blue-500",
-    bgColor: "bg-blue-50 dark:bg-blue-950/30",
-    borderColor: "border-blue-200 dark:border-blue-800",
+    color: 'text-blue-500',
+    bgColor: 'bg-blue-50 dark:bg-blue-950/30',
+    borderColor: 'border-blue-200 dark:border-blue-800',
     gradient:
-      "bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950/30 dark:to-indigo-950/20",
-    iconBg: "bg-blue-500/10",
+      'bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950/30 dark:to-indigo-950/20',
+    iconBg: 'bg-blue-500/10',
   },
   backend: {
-    color: "text-green-500",
-    bgColor: "bg-green-50 dark:bg-green-950/30",
-    borderColor: "border-green-200 dark:border-green-800",
+    color: 'text-green-500',
+    bgColor: 'bg-green-50 dark:bg-green-950/30',
+    borderColor: 'border-green-200 dark:border-green-800',
     gradient:
-      "bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-950/30 dark:to-emerald-950/20",
-    iconBg: "bg-green-500/10",
+      'bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-950/30 dark:to-emerald-950/20',
+    iconBg: 'bg-green-500/10',
   },
 } as const;
 
 const categoryIcons = {
-  "aws-saa": Cloud,
+  'aws-saa': Cloud,
   frontend: Layout,
   backend: Server,
 } as const;
@@ -62,25 +49,25 @@ export default function BlogPage() {
 
   const categories = [
     {
-      id: "aws-saa" as const,
-      title: "AWS SAA",
-      description: "Solution Architect Associate 자격증 완벽 대비",
+      id: 'aws-saa' as const,
+      title: 'AWS SAA',
+      description: 'Solution Architect Associate 자격증 완벽 대비',
       icon: <Cloud className="w-8 h-8" />,
-      posts: getCategoryCount("aws-saa"),
+      posts: getCategoryCount('aws-saa'),
     },
     {
-      id: "frontend" as const,
-      title: "Frontend",
-      description: "React, Vue, Next.js 등 모던 프론트엔드",
+      id: 'frontend' as const,
+      title: 'Frontend',
+      description: 'React, Vue, Next.js 등 모던 프론트엔드',
       icon: <Layout className="w-8 h-8" />,
-      posts: getCategoryCount("frontend"),
+      posts: getCategoryCount('frontend'),
     },
     {
-      id: "backend" as const,
-      title: "Backend",
-      description: "NestJS, Spring Boot, System Design",
+      id: 'backend' as const,
+      title: 'Backend',
+      description: 'NestJS, Spring Boot, System Design',
       icon: <Server className="w-8 h-8" />,
-      posts: getCategoryCount("backend"),
+      posts: getCategoryCount('backend'),
     },
   ];
 
@@ -163,15 +150,10 @@ export default function BlogPage() {
 
           <div className="grid gap-6">
             {recentPosts.map((post) => {
-              const meta =
-                categoryMeta[post.category as keyof typeof categoryMeta];
-              const IconComponent =
-                categoryIcons[post.category as keyof typeof categoryIcons];
+              const meta = categoryMeta[post.category as keyof typeof categoryMeta];
+              const IconComponent = categoryIcons[post.category as keyof typeof categoryIcons];
               return (
-                <Link
-                  key={post.id}
-                  href={`/blog/${post.category}/${post.id}`}
-                >
+                <Link key={post.id} href={`/blog/${post.category}/${post.id}`}>
                   <Card className="hover:shadow-lg transition-all duration-300 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 group overflow-hidden">
                     <div className="flex flex-col md:flex-row">
                       {/* Thumbnail — 카테고리별 아이콘 + 그래디언트 */}
@@ -186,7 +168,7 @@ export default function BlogPage() {
                         <span
                           className={`text-[10px] font-bold uppercase tracking-wider ${meta.color} opacity-70`}
                         >
-                          {post.category.replace("-", " ")}
+                          {post.category.replace('-', ' ')}
                         </span>
                       </div>
 
@@ -194,14 +176,14 @@ export default function BlogPage() {
                         <div className="flex flex-wrap items-center gap-2 mb-3 md:mb-4">
                           <Badge
                             className={`text-xs ${
-                              post.category === "aws-saa"
-                                ? "bg-orange-500 hover:bg-orange-600"
-                                : post.category === "frontend"
-                                  ? "bg-blue-500 hover:bg-blue-600"
-                                  : "bg-green-500 hover:bg-green-600"
+                              post.category === 'aws-saa'
+                                ? 'bg-orange-500 hover:bg-orange-600'
+                                : post.category === 'frontend'
+                                  ? 'bg-blue-500 hover:bg-blue-600'
+                                  : 'bg-green-500 hover:bg-green-600'
                             }`}
                           >
-                            {post.category.toUpperCase().replace("-", " ")}
+                            {post.category.toUpperCase().replace('-', ' ')}
                           </Badge>
                           <span className="flex items-center text-xs text-slate-500 dark:text-slate-400 font-medium ml-2">
                             <Calendar className="w-3 h-3 mr-1" />

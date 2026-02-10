@@ -1,7 +1,9 @@
-import { LayoutGrid, List } from "lucide-react";
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
-import CustomButton from "../custom/custom-button";
-import { useViewTypeStore } from "@/stores/view-type-store";
+import { LayoutGrid, List } from 'lucide-react';
+
+import { useViewTypeStore } from '@/stores/view-type-store';
+
+import CustomButton from '../custom/custom-button';
+import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 
 export default function ViewTypeToggle() {
   const viewType = useViewTypeStore((s) => s.viewType);
@@ -10,7 +12,7 @@ export default function ViewTypeToggle() {
   return (
     <ToggleGroup
       value={viewType}
-      onValueChange={(value: "card" | "list") => setViewType(value)}
+      onValueChange={(value: 'card' | 'list') => setViewType(value)}
       variant="outline"
       type="single"
     >

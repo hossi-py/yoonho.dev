@@ -1,19 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import Link from "next/link";
-import {
-  Calendar,
-  ArrowRight,
-  Cloud,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  Tag,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import type { BlogPost } from "@/lib/blog-posts";
+import { ArrowRight, Calendar, ChevronLeftIcon, ChevronRightIcon, Cloud, Tag } from 'lucide-react';
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import type { BlogPost } from '@/lib/blog-posts';
 
 const POSTS_PER_PAGE = 5;
 
@@ -44,7 +38,7 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
   const goToPage = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -59,11 +53,11 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
       <div className="flex items-center gap-2 mb-6 flex-wrap">
         <Tag className="w-4 h-4 text-slate-400 shrink-0" />
         <Badge
-          variant={selectedTag === null ? "default" : "outline"}
+          variant={selectedTag === null ? 'default' : 'outline'}
           className={`cursor-pointer transition-all text-xs ${
             selectedTag === null
-              ? "bg-orange-500 hover:bg-orange-600 text-white"
-              : "hover:border-orange-300"
+              ? 'bg-orange-500 hover:bg-orange-600 text-white'
+              : 'hover:border-orange-300'
           }`}
           onClick={() => {
             setSelectedTag(null);
@@ -75,11 +69,11 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
         {allTags.map((tag) => (
           <Badge
             key={tag}
-            variant={selectedTag === tag ? "default" : "outline"}
+            variant={selectedTag === tag ? 'default' : 'outline'}
             className={`cursor-pointer transition-all text-xs ${
               selectedTag === tag
-                ? "bg-orange-500 hover:bg-orange-600 text-white"
-                : "hover:border-orange-300"
+                ? 'bg-orange-500 hover:bg-orange-600 text-white'
+                : 'hover:border-orange-300'
             }`}
             onClick={() => handleTagClick(tag)}
           >
@@ -112,15 +106,15 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
                       <Badge
                         variant="outline"
                         className={`
-                          ${post.frequency === "High" ? "bg-red-50 text-red-600 border-red-200 dark:bg-red-900/20 dark:border-red-800" : ""}
-                          ${post.frequency === "Medium" ? "bg-yellow-50 text-yellow-600 border-yellow-200" : ""}
-                          ${post.frequency === "Low" ? "bg-green-50 text-green-600 border-green-200" : ""}
+                          ${post.frequency === 'High' ? 'bg-red-50 text-red-600 border-red-200 dark:bg-red-900/20 dark:border-red-800' : ''}
+                          ${post.frequency === 'Medium' ? 'bg-yellow-50 text-yellow-600 border-yellow-200' : ''}
+                          ${post.frequency === 'Low' ? 'bg-green-50 text-green-600 border-green-200' : ''}
                           px-2 py-1 gap-1 text-xs
                         `}
                       >
-                        {post.frequency === "High" && "🔥🔥🔥 높음"}
-                        {post.frequency === "Medium" && "🔥🔥 보통"}
-                        {post.frequency === "Low" && "🔥 낮음"}
+                        {post.frequency === 'High' && '🔥🔥🔥 높음'}
+                        {post.frequency === 'Medium' && '🔥🔥 보통'}
+                        {post.frequency === 'Low' && '🔥 낮음'}
                       </Badge>
                     </div>
                   </div>
@@ -163,8 +157,7 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
                         {post.date}
                       </span>
                       <div className="flex items-center text-sm font-bold text-orange-500 group-hover:translate-x-1 transition-transform">
-                        자세히 보기{" "}
-                        <ArrowRight className="w-4 h-4 ml-1" />
+                        자세히 보기 <ArrowRight className="w-4 h-4 ml-1" />
                       </div>
                     </div>
                   </div>
@@ -175,9 +168,7 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
         ))}
 
         {filteredPosts.length === 0 && (
-          <div className="text-center py-12 text-slate-400">
-            해당 태그의 게시물이 없습니다.
-          </div>
+          <div className="text-center py-12 text-slate-400">해당 태그의 게시물이 없습니다.</div>
         )}
       </div>
 
@@ -196,23 +187,21 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
               <span className="hidden sm:inline">이전</span>
             </Button>
             <div className="flex items-center gap-1 px-2">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <Button
-                    key={page}
-                    variant={currentPage === page ? "default" : "ghost"}
-                    size="sm"
-                    onClick={() => goToPage(page)}
-                    className={`w-10 h-10 rounded-xl font-bold transition-all duration-200 ${
-                      currentPage === page
-                        ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 scale-105"
-                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-                    }`}
-                  >
-                    {page}
-                  </Button>
-                )
-              )}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <Button
+                  key={page}
+                  variant={currentPage === page ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => goToPage(page)}
+                  className={`w-10 h-10 rounded-xl font-bold transition-all duration-200 ${
+                    currentPage === page
+                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 scale-105'
+                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  {page}
+                </Button>
+              ))}
             </div>
             <Button
               variant="ghost"
@@ -232,7 +221,7 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
         <div className="mt-4 text-center">
           <span className="text-sm text-slate-500 dark:text-slate-400">
             총 <strong className="text-orange-500">{filteredPosts.length}</strong>
-            개의 포스트 중{" "}
+            개의 포스트 중{' '}
             <strong>
               {startIndex + 1}-{Math.min(endIndex, filteredPosts.length)}
             </strong>

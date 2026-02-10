@@ -1,13 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { ChevronDown, BookOpen, ALargeSmall } from "lucide-react";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { Card, CardContent } from "@/components/ui/card";
+import { ALargeSmall, BookOpen, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+
+import { Card, CardContent } from '@/components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 interface ProblemScenarioProps {
   english: string;
@@ -16,7 +13,7 @@ interface ProblemScenarioProps {
 
 export function ProblemScenario({ english, korean }: ProblemScenarioProps) {
   const [isOpen, setIsOpen] = useState(true);
-  const [language, setLanguage] = useState<"en" | "ko">("ko");
+  const [language, setLanguage] = useState<'en' | 'ko'>('ko');
 
   return (
     <Card className="border-2 border-blue-100 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-900/10 overflow-hidden shadow-none">
@@ -32,9 +29,7 @@ export function ProblemScenario({ english, korean }: ProblemScenarioProps) {
                 <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">
                   문제 시나리오
                 </h3>
-                <p className="text-xs text-muted-foreground font-medium">
-                  Problem Scenario
-                </p>
+                <p className="text-xs text-muted-foreground font-medium">Problem Scenario</p>
               </div>
             </div>
 
@@ -47,11 +42,11 @@ export function ProblemScenario({ english, korean }: ProblemScenarioProps) {
                 <div
                   role="button"
                   tabIndex={0}
-                  onClick={() => setLanguage("ko")}
+                  onClick={() => setLanguage('ko')}
                   className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all cursor-pointer ${
-                    language === "ko"
-                      ? "bg-blue-500 text-white shadow-md"
-                      : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    language === 'ko'
+                      ? 'bg-blue-500 text-white shadow-md'
+                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                   }`}
                 >
                   한글
@@ -59,11 +54,11 @@ export function ProblemScenario({ english, korean }: ProblemScenarioProps) {
                 <div
                   role="button"
                   tabIndex={0}
-                  onClick={() => setLanguage("en")}
+                  onClick={() => setLanguage('en')}
                   className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all cursor-pointer ${
-                    language === "en"
-                      ? "bg-blue-500 text-white shadow-md"
-                      : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    language === 'en'
+                      ? 'bg-blue-500 text-white shadow-md'
+                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                   }`}
                 >
                   EN
@@ -73,7 +68,7 @@ export function ProblemScenario({ english, korean }: ProblemScenarioProps) {
               <div className="w-8 h-8 rounded-full bg-white dark:bg-slate-800 border border-blue-100 dark:border-blue-800 flex items-center justify-center text-slate-400 group-hover:text-blue-500 transition-colors">
                 <ChevronDown
                   className={`w-4 h-4 transition-transform duration-300 ${
-                    isOpen ? "rotate-180" : ""
+                    isOpen ? 'rotate-180' : ''
                   }`}
                 />
               </div>
@@ -87,12 +82,12 @@ export function ProblemScenario({ english, korean }: ProblemScenarioProps) {
             <div className="p-6 bg-white dark:bg-slate-800 rounded-xl border border-blue-100 dark:border-blue-800 shadow-sm">
               <p
                 className={`text-base md:text-lg leading-loose transition-all duration-300 ${
-                  language === "en"
-                    ? "text-slate-700 dark:text-slate-300 font-medium font-nunito tracking-wide"
-                    : "text-slate-700 dark:text-slate-300 font-medium tracking-wide word-break-keep-all"
+                  language === 'en'
+                    ? 'text-slate-700 dark:text-slate-300 font-medium font-nunito tracking-wide'
+                    : 'text-slate-700 dark:text-slate-300 font-medium tracking-wide word-break-keep-all'
                 }`}
               >
-                {language === "ko" ? korean : english}
+                {language === 'ko' ? korean : english}
               </p>
             </div>
           </div>

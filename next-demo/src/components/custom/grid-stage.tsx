@@ -1,15 +1,8 @@
-"use client";
+'use client';
 
-import {
-  Children,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { GridItem } from "./grid-item";
+import { Children, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { GridItem } from './grid-item';
 
 export type LayoutItem = {
   id: string;
@@ -26,7 +19,7 @@ type GridStageProps = {
   rowHeight?: number; // 한 칸의 px 높이
   margin?: [number, number];
   preventCollision?: boolean; // true면 겹치면 이동 불가
-  compactType?: "vertical" | "none";
+  compactType?: 'vertical' | 'none';
   className?: string;
 };
 
@@ -41,7 +34,7 @@ export function GridStage({
   rowHeight = 160,
   margin = [16, 16],
   preventCollision = false,
-  compactType = "vertical",
+  compactType = 'vertical',
   className,
 }: GridStageProps) {
   const childArray = Children.toArray(children);
@@ -84,98 +77,107 @@ export function GridStage({
   const [dragLayout, setDragLayout] = useState<LayoutItem[] | null>(null);
 
   // y우선, x다음(위→아래, 좌→우) 정렬: 컴팩션/높이계산에 유용
-  const sortLayout = (items: LayoutItem[]) =>
-    [...items].sort((a, b) => a.y - b.y || a.x - b.x);
+  const sortLayout = useCallback(
+    (items: LayoutItem[]) => [...items].sort((a, b) => a.y - b.y || a.x - b.x),
+    []
+  );
 
   // 충돌 검사
-  const collides = (a: LayoutItem, b: LayoutItem) => {
+  const collides = useCallback((a: LayoutItem, b: LayoutItem) => {
     if (a.id === b.id) return false;
-    return !(
-      a.x + a.w <= b.x ||
-      b.x + b.w <= a.x ||
-      a.y + a.h <= b.y ||
-      b.y + b.h <= a.y
-    );
-  };
+    return !(a.x + a.w <= b.x || b.x + b.w <= a.x || a.y + a.h <= b.y || b.y + b.h <= a.y);
+  }, []);
 
-  const getAllCollisions = (items: LayoutItem[], item: LayoutItem) =>
-    items.filter((it) => collides(item, it));
+  const getAllCollisions = useCallback(
+    (items: LayoutItem[], item: LayoutItem) => items.filter((it) => collides(item, it)),
+    [collides]
+  );
 
   // 경계 보정: 열 범위를 벗어나지 않게, y는 0 이상
-  const clampItem = (it: LayoutItem) => {
-    it.w = Math.min(it.w, cols);
-    it.x = Math.max(0, Math.min(it.x, cols - it.w));
-    it.y = Math.max(0, it.y);
-    return it;
-  };
+  const clampItem = useCallback(
+    (it: LayoutItem) => {
+      it.w = Math.min(it.w, cols);
+      it.x = Math.max(0, Math.min(it.x, cols - it.w));
+      it.y = Math.max(0, it.y);
+      return it;
+    },
+    [cols]
+  );
 
   /**
    * 충돌 해소(푸시다운):
    * - moving을 새 좌표에 두고, 부딪히는 애들을 아래로 보냄.
    * - 각 반복에서 적어도 하나의 y가 증가 → 유한 단계 후 종료.
    */
-  const resolveCollisions = (items: LayoutItem[], moving: LayoutItem) => {
-    let out = items.map((x) => ({ ...x }));
-    const itemRef = out.find((x) => x.id === moving.id)!;
-    clampItem(itemRef);
+  const resolveCollisions = useCallback(
+    (items: LayoutItem[], moving: LayoutItem) => {
+      const out = items.map((x) => ({ ...x }));
+      const itemRef = out.find((x) => x.id === moving.id)!;
+      clampItem(itemRef);
 
-    let collisions = getAllCollisions(out, itemRef);
-    if (preventCollision && collisions.length) {
-      // 충돌 금지 모드면 이동 불허 → 기존 상태 유지
-      return items;
-    }
-
-    while (collisions.length) {
-      for (const c of collisions) {
-        if (c.static) continue;
-        // 핵심: M 아래로 즉시 이동(한 번에 h_M 만큼 내리기)
-        c.y = itemRef.y + itemRef.h;
-        clampItem(c);
+      let collisions = getAllCollisions(out, itemRef);
+      if (preventCollision && collisions.length) {
+        // 충돌 금지 모드면 이동 불허 → 기존 상태 유지
+        return items;
       }
-      collisions = getAllCollisions(out, itemRef);
-    }
-    return out;
-  };
+
+      while (collisions.length) {
+        for (const c of collisions) {
+          if (c.static) continue;
+          // 핵심: M 아래로 즉시 이동(한 번에 h_M 만큼 내리기)
+          c.y = itemRef.y + itemRef.h;
+          clampItem(c);
+        }
+        collisions = getAllCollisions(out, itemRef);
+      }
+      return out;
+    },
+    [clampItem, getAllCollisions, preventCollision]
+  );
 
   /**
    * 수직 컴팩션:
    * - 각 아이템을 가능한 위쪽 최소 y로 끌어올려 빈칸 제거.
    * - 0,1,2,... 순으로 충돌 없는 최소 y를 탐색.
    */
-  const compactVertical = (items: LayoutItem[]) => {
-    if (compactType !== "vertical") return items;
-    const out = sortLayout(items).map((x) => ({ ...x }));
+  const compactVertical = useCallback(
+    (items: LayoutItem[]) => {
+      if (compactType !== 'vertical') return items;
+      const out = sortLayout(items).map((x) => ({ ...x }));
 
-    for (const it of out) {
-      if (it.static) continue;
+      for (const it of out) {
+        if (it.static) continue;
 
-      let targetY = 0;
-      const probe: LayoutItem = { ...it, y: targetY };
+        let targetY = 0;
+        const probe: LayoutItem = { ...it, y: targetY };
 
-      // "첫 충돌 없는 y"를 찾을 때까지 1씩 증가
-      while (true) {
-        probe.y = targetY;
-        const hasCollision = out.some(
-          (o) => o.id !== it.id && collides(probe, o)
-        );
-        if (!hasCollision) {
-          it.y = targetY;
-          break;
+        // "첫 충돌 없는 y"를 찾을 때까지 1씩 증가
+        while (true) {
+          probe.y = targetY;
+          const hasCollision = out.some((o) => o.id !== it.id && collides(probe, o));
+          if (!hasCollision) {
+            it.y = targetY;
+            break;
+          }
+          targetY += 1;
         }
-        targetY += 1;
       }
-    }
-    return sortLayout(out);
-  };
+      return sortLayout(out);
+    },
+    [compactType, sortLayout, collides]
+  );
 
   // 픽셀 → 그리드 좌표(라운드 스냅). 마진 포함 칸 간격으로 나눔.
-  const pxToGrid = (left: number, top: number, w: number, h: number) => {
-    const cellW = colWidth + mx;
-    const cellH = rowHeight + my;
-    const x = Math.round(left / cellW);
-    const y = Math.round(top / cellH);
-    return clampItem({ id: "", x, y, w, h });
-  };
+  const pxToGrid = useCallback(
+    (left: number, top: number, w: number, h: number) => {
+      const cellW = colWidth + mx;
+      const cellH = rowHeight + my;
+      const x = Math.round(left / cellW);
+      const y = Math.round(top / cellH);
+      return clampItem({ id: '', x, y, w, h });
+    },
+    [colWidth, mx, rowHeight, my, clampItem]
+  );
 
   const handleDragStart = useCallback(
     (id: string) => {
@@ -203,7 +205,7 @@ export function GridStage({
         return compacted;
       });
     },
-    [layout, colWidth, mx, rowHeight, my]
+    [layout, pxToGrid, resolveCollisions, compactVertical]
   );
 
   const handleDragStop = useCallback(() => {
@@ -224,7 +226,7 @@ export function GridStage({
   return (
     <div
       ref={containerRef}
-      className={className ?? "relative w-full"}
+      className={className ?? 'relative w-full'}
       style={{ height: containerHeight }}
     >
       {current.map((it) => {
