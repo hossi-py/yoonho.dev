@@ -38,7 +38,7 @@ export const NAV_CONFIG: NavSection[] = [
       {
         icon: Github,
         label: 'GitHub',
-        href: 'https://github.com/yourusername',
+        href: 'https://github.com/hossi-py',
         external: true,
       },
       {

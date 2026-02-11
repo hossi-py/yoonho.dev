@@ -1,13 +1,15 @@
 'use client';
+
 import { Menu, Search } from 'lucide-react';
 
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useSearchStore } from '@/stores/search-store';
 import { useSidebarExpandedStore } from '@/stores/sidebar-expanded-store';
-
-import { Button } from '../ui/button';
 
 export default function GNBMobile() {
   const setExpanded = useSidebarExpandedStore((s) => s.setExpanded);
+  const { setOpen: setSearchOpen } = useSearchStore();
 
   return (
     <header
@@ -39,6 +41,7 @@ export default function GNBMobile() {
       <Button
         variant="ghost"
         size="icon"
+        onClick={() => setSearchOpen(true)}
         className={cn(
           'h-9 w-9 rounded-xl transition-all duration-200',
           'hover:bg-white/60 dark:hover:bg-white/10',
