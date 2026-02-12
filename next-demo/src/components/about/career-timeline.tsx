@@ -99,41 +99,43 @@ export function CareerTimeline() {
                       {project.period}
                     </span>
 
-                    {/* Expanded content */}
+                    {/* Expanded content — grid-rows trick for iOS Safari compat */}
                     <div
                       className={cn(
-                        'overflow-hidden transition-all duration-300 ease-out',
-                        isExpanded ? 'max-h-[600px] opacity-100 mt-4' : 'max-h-0 opacity-0 mt-0'
+                        'grid transition-[grid-template-rows,opacity] duration-300 ease-out',
+                        isExpanded ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0 mt-0'
                       )}
                     >
-                      <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                        {project.description}
-                      </p>
+                      <div className="overflow-hidden">
+                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                          {project.description}
+                        </p>
 
-                      {/* Achievements */}
-                      <ul className="space-y-2 mb-5">
-                        {project.achievements.map((achievement, i) => (
-                          <li
-                            key={i}
-                            className="flex items-start gap-2.5 text-sm text-muted-foreground/90"
-                          >
-                            <span className="mt-2 h-1 w-1 rounded-full bg-primary shrink-0" />
-                            <span className="leading-relaxed">{achievement}</span>
-                          </li>
-                        ))}
-                      </ul>
+                        {/* Achievements */}
+                        <ul className="space-y-2 mb-5">
+                          {project.achievements.map((achievement, i) => (
+                            <li
+                              key={i}
+                              className="flex items-start gap-2.5 text-sm text-muted-foreground/90"
+                            >
+                              <span className="mt-2 h-1 w-1 rounded-full bg-primary shrink-0" />
+                              <span className="leading-relaxed">{achievement}</span>
+                            </li>
+                          ))}
+                        </ul>
 
-                      {/* Tech stack */}
-                      <div className="flex flex-wrap gap-1.5">
-                        {project.techStack.map((tech) => (
-                          <Badge
-                            key={tech}
-                            variant="secondary"
-                            className="text-[10px] font-medium px-2.5 py-0.5 bg-primary/8 text-primary/90 border-0"
-                          >
-                            {tech}
-                          </Badge>
-                        ))}
+                        {/* Tech stack */}
+                        <div className="flex flex-wrap gap-1.5">
+                          {project.techStack.map((tech) => (
+                            <Badge
+                              key={tech}
+                              variant="secondary"
+                              className="text-[10px] font-medium px-2.5 py-0.5 bg-primary/8 text-primary/90 border-0"
+                            >
+                              {tech}
+                            </Badge>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </button>
