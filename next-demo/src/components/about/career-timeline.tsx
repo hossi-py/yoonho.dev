@@ -27,17 +27,17 @@ export function CareerTimeline() {
         </div>
 
         {/* Timeline */}
-        <div className="relative">
+        <div className="relative min-w-0 overflow-x-hidden">
           {/* Timeline line */}
           <div className="absolute left-[11px] top-3 bottom-3 w-px bg-border/60" />
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 min-w-0">
             {PROJECTS.map((project, index) => {
               const isExpanded = expandedId === project.id;
               const isCurrent = index === 0;
 
               return (
-                <div key={project.id} className="relative pl-10">
+                <div key={project.id} className="relative pl-10 min-w-0">
                   {/* Timeline dot */}
                   <div
                     className={cn(
@@ -56,7 +56,7 @@ export function CareerTimeline() {
                   <button
                     onClick={() => toggleExpand(project.id)}
                     className={cn(
-                      'w-full text-left rounded-2xl p-5',
+                      'w-full min-w-0 text-left rounded-2xl p-5',
                       'border transition-all duration-300',
                       isExpanded
                         ? 'bg-card/60 border-primary/20 shadow-lg shadow-primary/5'
