@@ -51,11 +51,11 @@ export function CareerTimeline() {
                   </div>
 
                   {/* Card */}
-                  <button
+                  <div
                     onClick={() => toggleExpand(project.id)}
                     className={cn(
-                      'w-full min-w-0 text-left rounded-2xl p-5',
-                      'border transition-all duration-300',
+                      'w-full min-w-0 text-left rounded-2xl p-5 cursor-pointer',
+                      'border transition-all duration-300 select-none',
                       isExpanded
                         ? 'bg-card/60 border-primary/20 shadow-lg shadow-primary/5'
                         : 'bg-card/20 border-border/30 hover:bg-card/40 hover:border-border/60'
@@ -95,50 +95,49 @@ export function CareerTimeline() {
                       {project.period}
                     </span>
 
-                    {/* Expanded content - Grid Trick 적용 */}
+                    {/* Expanded content */}
                     <div
                       className={cn(
-                        'grid transition-all duration-300 ease-out',
+                        'overflow-hidden transition-all duration-300 ease-in-out',
+                        // maxHeight를 넉넉하게 주되, 닫힐 때는 확실하게 0으로
                         isExpanded
-                          ? 'grid-rows-[1fr] opacity-100 mt-4'
-                          : 'grid-rows-[0fr] opacity-0 mt-0'
+                          ? 'max-h-[2000px] opacity-100 mt-4'
+                          : 'max-h-0 opacity-0 mt-0 pointer-events-none' // pointer-events-none 추가
                       )}
                     >
-                      <div className="overflow-hidden">
-                        <div>
-                          <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                            {project.description}
-                          </p>
-
-                          {/* Achievements */}
-                          <ul className="space-y-2 mb-5">
-                            {project.achievements.map((achievement, i) => (
-                              <li
-                                key={i}
-                                className="flex items-start gap-2.5 text-sm text-muted-foreground/90"
-                              >
-                                <span className="mt-2 h-1 w-1 rounded-full bg-primary shrink-0" />
-                                <span className="leading-relaxed">{achievement}</span>
-                              </li>
-                            ))}
-                          </ul>
-
-                          {/* Tech stack */}
-                          <div className="flex flex-wrap gap-1.5">
-                            {project.techStack.map((tech) => (
-                              <Badge
-                                key={tech}
-                                variant="secondary"
-                                className="text-[10px] font-medium px-2.5 py-0.5 bg-primary/8 text-primary/90 border-0"
-                              >
-                                {tech}
-                              </Badge>
-                            ))}
-                          </div>
+                      <div>
+                        {' '}
+                        {/* 내부 콘텐츠 래퍼 */}
+                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                          {project.description}
+                        </p>
+                        {/* Achievements */}
+                        <ul className="space-y-2 mb-5">
+                          {project.achievements.map((achievement, i) => (
+                            <li
+                              key={i}
+                              className="flex items-start gap-2.5 text-sm text-muted-foreground/90"
+                            >
+                              <span className="mt-2 h-1 w-1 rounded-full bg-primary shrink-0" />
+                              <span className="leading-relaxed">{achievement}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        {/* Tech stack */}
+                        <div className="flex flex-wrap gap-1.5">
+                          {project.techStack.map((tech) => (
+                            <Badge
+                              key={tech}
+                              variant="secondary"
+                              className="text-[10px] font-medium px-2.5 py-0.5 bg-primary/8 text-primary/90 border-0"
+                            >
+                              {tech}
+                            </Badge>
+                          ))}
                         </div>
                       </div>
                     </div>
-                  </button>
+                  </div>
                 </div>
               );
             })}
