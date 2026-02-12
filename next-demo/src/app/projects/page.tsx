@@ -1,103 +1,31 @@
-import { FolderGit2 } from 'lucide-react';
-import Link from 'next/link';
+import type { Metadata } from 'next';
 
-import { CustomProgress } from '@/components/custom/custom-progress';
-import { GridItem } from '@/components/custom/grid-item';
-import { GridStage } from '@/components/custom/grid-stage';
-import { GridLayout } from '@/components/layout/grid-layout';
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { githubFetch } from '@/lib/github';
+import { ProjectListView } from '@/components/projects/project-list-view';
 
-const allowedRepos = ['LoLIN', 'mindwiki', 'hossi-tistory', 'MARS', 'mindwiki', 'wedding'];
-
-const langColor: Record<string, string> = {
-  TypeScript: '#3178c6',
-  JavaScript: '#f1e05a',
-  Vue: '#41b883',
-  CSS: '#663399',
-  HTML: '#e34c26',
-  Python: '#3572A5',
-  Java: '#b07219',
-  GLSL: '#5686a5',
-  SCSS: '#c6538c',
-  Less: '#1d365d',
+export const metadata: Metadata = {
+  title: 'Projects | 황윤호',
+  description: '프론트엔드 개발자 황윤호의 프로젝트 포트폴리오입니다.',
 };
 
-export default async function ProjectsPage() {
-  const repos = (await githubFetch('/user/repos')) as any;
-  const filteredRepos = repos.filter((repo: any) => allowedRepos.includes(repo.name));
-  const repoWithLanguages = await Promise.all(
-    filteredRepos.map(async (repo: any) => {
-      const languages = (await githubFetch(`/repos/hossi-py/${repo.name}/languages`)) as Record<
-        string,
-        string
-      >;
-      const formattedLanguages = Object.keys(languages).map((key) => ({
-        title: key,
-        value: languages[key],
-        color: langColor[key] ?? 'bg-primary',
-      }));
-      return {
-        ...repo,
-        formattedLanguages,
-      };
-    })
-  );
-
+// ✨ Noise Background Component
+function NoiseBackground() {
   return (
-    <GridLayout>
-      <div>01</div>
-      <div>02</div>
-      <div>03</div>
-      <div>04</div>
-      <div>05</div>
-      <div>06</div>
-      <div>07</div>
-      <div>08</div>
-      <div>09</div>
-    </GridLayout>
-    // <GridStage>
-    //   {repoWithLanguages.map((repo: any) => (
-    //     <Card key={repo.id} className="w-full h-full">
-    //       <CardHeader>
-    //         <CardTitle>{repo.name}</CardTitle>
-    //         <CardDescription>{repo.description}</CardDescription>
-    //         <CardAction>
-    //           <Link href={repo.html_url} target="_blank">
-    //             <FolderGit2 />
-    //           </Link>
-    //         </CardAction>
-    //       </CardHeader>
-    //       <CardContent>
-    //         <div>
-    //           <CustomProgress segments={repo.formattedLanguages} />
-    //         </div>
-    //       </CardContent>
-    //       <CardFooter className="flex gap-2"></CardFooter>
-    //     </Card>
+    <div className="fixed inset-0 -z-10 h-full w-full bg-background pointer-events-none">
+      <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03] mix-blend-overlay" />
+      <div className="absolute top-[-20%] right-[-10%] h-[500px] w-[500px] rounded-full bg-primary/10 blur-[100px]" />
+      <div className="absolute bottom-[-20%] left-[-10%] h-[500px] w-[500px] rounded-full bg-purple-500/10 blur-[100px]" />
+    </div>
+  );
+}
 
-    //     // <div key={repo.id}>
-    //     //   <a href={repo.html_url} target="_blank">
-    //     //     {repo.name}
-    //     //     {repo.description}
-    //     //     {repo.topics}
-    //     //     {repo.created_at}
-    //     //     {repo.pushed_at}
-    //     //     {repo.stargazers_count}
-    //     //     {repo.watchers_count}
-    //     //     {repo.forks_count}
-    //     //     {repo.languages}
-    //     //   </a>
-    //     // </div>
-    //   ))}
-    // </GridStage>
+export default function ProjectsPage() {
+  return (
+    <>
+      <NoiseBackground />
+
+      <main className="min-h-screen px-6 pt-24 pb-32">
+        <ProjectListView />
+      </main>
+    </>
   );
 }
