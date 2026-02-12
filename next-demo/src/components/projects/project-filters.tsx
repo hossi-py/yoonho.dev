@@ -1,13 +1,37 @@
 'use client';
 
-import { Filter, Grid, LayoutList, SortAsc, SortDesc } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import {
+  ArrowDownWideNarrow,
+  ArrowUpNarrowWide,
+  Briefcase,
+  LayoutGrid,
+  List,
+  Sparkles,
+  User,
+} from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
+import { PROJECTS } from '@/lib/projects';
 
 export type FilterType = 'all' | 'company' | 'personal';
 export type SortType = 'latest' | 'oldest';
 export type ViewMode = 'grid' | 'list';
+
+const FILTERS: {
+  value: FilterType;
+  label: string;
+  icon: typeof Sparkles;
+}[] = [
+  { value: 'all', label: 'All', icon: Sparkles },
+  { value: 'company', label: 'Company', icon: Briefcase },
+  { value: 'personal', label: 'Personal', icon: User },
+];
+
+function getFilterCount(filter: FilterType): number {
+  if (filter === 'all') return PROJECTS.length;
+  return PROJECTS.filter((p) => p.category === filter).length;
+}
 
 interface ProjectFiltersProps {
   currentFilter: FilterType;
@@ -28,143 +52,218 @@ export function ProjectFilters({
   onViewModeChange,
   className,
 }: ProjectFiltersProps) {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [pillStyle, setPillStyle] = useState({ left: 0, width: 0 });
+  const filterRefs = useRef<Map<FilterType, HTMLButtonElement>>(new Map());
 
+  // IntersectionObserver for sticky detection
   useEffect(() => {
-    const scrollContainer = document.querySelector('main');
-    const target = scrollContainer || window;
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
 
-    const handleScroll = () => {
-      const scrollTop = scrollContainer ? scrollContainer.scrollTop : window.scrollY;
-      setIsScrolled(scrollTop > 100);
-    };
+    const observer = new IntersectionObserver(([entry]) => setIsSticky(!entry.isIntersecting), {
+      threshold: 0,
+      rootMargin: '-1px 0px 0px 0px',
+    });
 
-    target.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-
-    return () => target.removeEventListener('scroll', handleScroll);
+    observer.observe(sentinel);
+    return () => observer.disconnect();
   }, []);
 
-  // Compact 상태: 스크롤됨 AND 호버되지 않음
-  const isCompact = isScrolled && !isHovered;
+  // Sliding pill position calculator
+  const updatePillPosition = useCallback(() => {
+    const el = filterRefs.current.get(currentFilter);
+    if (!el) return;
+    const parent = el.parentElement;
+    if (!parent) return;
+    const parentRect = parent.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    setPillStyle({
+      left: elRect.left - parentRect.left,
+      width: elRect.width,
+    });
+  }, [currentFilter]);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(updatePillPosition);
+    window.addEventListener('resize', updatePillPosition);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', updatePillPosition);
+    };
+  }, [updatePillPosition]);
+
+  const setFilterRef = useCallback(
+    (filter: FilterType) => (el: HTMLButtonElement | null) => {
+      if (el) filterRefs.current.set(filter, el);
+    },
+    []
+  );
 
   return (
-    <div
-      className={cn(
-        'sticky z-40 mb-12 flex gap-4 border border-white/10 bg-black/20 backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]',
-        // 스크롤 여부에 따른 위치 및 기본 스타일
-        isScrolled
-          ? 'top-6 mr-6 ml-auto rounded-2xl shadow-xl bg-black/40 border-white/10' // 우측 상단 고정
-          : 'top-20 mx-auto w-full max-w-5xl rounded-2xl p-2', // 중앙 정렬 (기본)
+    <>
+      {/* Sentinel for IntersectionObserver */}
+      <div ref={sentinelRef} className="h-0 w-full" aria-hidden="true" />
 
-        // Compact 여부에 따른 Layout 스타일
-        isCompact
-          ? 'w-fit flex-row items-center px-3 py-2'
-          : isScrolled
-            ? 'w-auto flex-col p-4 md:flex-row items-center justify-between' // 스크롤 상태에서 펼쳐짐
-            : 'flex-col md:flex-row md:items-center md:justify-between', // 기본 상태
-        className
-      )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Filter Group */}
       <div
         className={cn(
-          'flex items-center gap-1 transition-all duration-500',
-          !isCompact && 'rounded-xl bg-muted/20 p-1'
+          'sticky top-0 z-40 mb-12 transition-all duration-500 ease-out',
+          isSticky && '-mx-4 px-4 py-3 sm:-mx-6 sm:px-6',
+          className
         )}
       >
-        {isCompact ? (
-          <div className="flex items-center gap-2 px-2 text-sm font-medium text-primary">
-            <Filter className="h-4 w-4" />
-            <span className="capitalize">{currentFilter}</span>
-          </div>
-        ) : (
-          (['all', 'company', 'personal'] as const).map((filter) => (
-            <button
-              key={filter}
-              onClick={() => onFilterChange(filter)}
-              className={cn(
-                'relative rounded-lg px-4 py-2 text-sm font-medium transition-all duration-300',
-                currentFilter === filter
-                  ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
-                  : 'text-muted-foreground hover:bg-muted/30 hover:text-foreground'
-              )}
-            >
-              {filter === 'all' && 'All'}
-              {filter === 'company' && 'Company'}
-              {filter === 'personal' && 'Personal'}
-            </button>
-          ))
-        )}
-      </div>
-
-      <div className={cn('flex items-center gap-2', !isCompact && 'gap-4')}>
-        {/* Sort Toggle */}
-        <button
-          onClick={() => onSortChange(currentSort === 'latest' ? 'oldest' : 'latest')}
-          className={cn(
-            'group flex items-center gap-2 rounded-xl text-sm font-medium text-muted-foreground transition-all duration-300 hover:bg-muted/30 hover:text-foreground',
-            isCompact ? 'px-2 py-2' : 'px-4 py-2'
-          )}
-        >
-          <span
-            className={cn(
-              'transition-all duration-300 overflow-hidden',
-              isCompact ? 'w-0 opacity-0 hidden' : 'w-auto opacity-70 block'
-            )}
-          >
-            Sort by
-          </span>
-          <span className={cn('text-foreground', isCompact && 'hidden')}>
-            {currentSort === 'latest' ? 'Newest' : 'Oldest'}
-          </span>
-          {currentSort === 'latest' ? (
-            <SortDesc className="h-4 w-4 transition-transform group-hover:scale-110" />
-          ) : (
-            <SortAsc className="h-4 w-4 transition-transform group-hover:scale-110" />
-          )}
-        </button>
-
-        <div className="h-6 w-px bg-white/10" />
-
-        {/* View Mode Toggle */}
         <div
           className={cn(
-            'flex items-center gap-1 rounded-xl transition-all duration-500',
-            !isCompact && 'bg-muted/20 p-1'
+            'mx-auto max-w-6xl rounded-2xl border transition-all duration-500 ease-out',
+            isSticky
+              ? 'border-border/40 bg-background/80 shadow-lg shadow-black/5 backdrop-blur-xl dark:shadow-black/20'
+              : 'border-transparent bg-transparent'
           )}
         >
-          <button
-            onClick={() => onViewModeChange('grid')}
+          <div
             className={cn(
-              'rounded-lg transition-all duration-300',
-              isCompact ? 'p-2' : 'p-2',
-              viewMode === 'grid'
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:bg-muted/30 hover:text-foreground'
+              'flex items-center justify-between gap-2 transition-all duration-500',
+              isSticky ? 'px-3 py-2 sm:px-4 sm:py-3' : 'px-0 py-0'
             )}
-            aria-label="Grid View"
           >
-            <Grid className="h-4 w-4" />
-          </button>
-          <button
-            onClick={() => onViewModeChange('list')}
-            className={cn(
-              'rounded-lg transition-all duration-300',
-              isCompact ? 'p-2' : 'p-2',
-              viewMode === 'list'
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:bg-muted/30 hover:text-foreground'
-            )}
-            aria-label="List View"
-          >
-            <LayoutList className="h-4 w-4" />
-          </button>
+            {/* Filter Tabs -- scrollable on mobile */}
+            <div className="min-w-0 flex-1 overflow-x-auto [-webkit-overflow-scrolling:touch] scrollbar-hide">
+              <nav
+                className="relative inline-flex items-center gap-0.5 rounded-xl bg-muted/40 p-1 ring-1 ring-border/50"
+                role="tablist"
+                aria-label="Filter projects by category"
+              >
+                {/* Animated sliding pill */}
+                <div
+                  className="absolute top-1 bottom-1 rounded-lg bg-foreground transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  style={{
+                    left: `${pillStyle.left}px`,
+                    width: `${pillStyle.width}px`,
+                  }}
+                  aria-hidden="true"
+                />
+
+                {FILTERS.map((filter) => {
+                  const Icon = filter.icon;
+                  const count = getFilterCount(filter.value);
+                  const isActive = currentFilter === filter.value;
+
+                  return (
+                    <button
+                      key={filter.value}
+                      ref={setFilterRef(filter.value)}
+                      role="tab"
+                      aria-selected={isActive}
+                      onClick={() => onFilterChange(filter.value)}
+                      className={cn(
+                        'relative z-10 flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-2.5 text-sm font-medium whitespace-nowrap transition-colors duration-300',
+                        'sm:gap-2 sm:px-4 sm:py-2',
+                        'min-h-[44px] min-w-[44px]', // 터치 영역 확보
+                        isActive ? 'text-background' : 'text-muted-foreground hover:text-foreground'
+                      )}
+                    >
+                      <Icon
+                        className={cn(
+                          'h-4 w-4 shrink-0 transition-all duration-300',
+                          'sm:h-3.5 sm:w-3.5',
+                          'hidden sm:block',
+                          isActive ? 'opacity-100' : 'opacity-40'
+                        )}
+                      />
+                      <span className="text-xs sm:text-sm">{filter.label}</span>
+                      <span
+                        className={cn(
+                          'flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] font-bold tabular-nums transition-all duration-300',
+                          isActive
+                            ? 'bg-background/20 text-background'
+                            : 'bg-muted text-muted-foreground'
+                        )}
+                      >
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
+
+            {/* Right-side controls */}
+            <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+              {/* Sort Toggle */}
+              <button
+                onClick={() => onSortChange(currentSort === 'latest' ? 'oldest' : 'latest')}
+                className={cn(
+                  'group flex items-center gap-1.5 rounded-xl px-2 py-2 text-sm font-medium transition-all duration-200',
+                  'sm:gap-2 sm:px-3',
+                  'min-h-[44px] min-w-[44px]', // 터치 영역 확보
+                  'text-muted-foreground ring-1 ring-transparent hover:bg-muted/40 hover:text-foreground hover:ring-border/50'
+                )}
+                aria-label={`Sort by ${currentSort === 'latest' ? 'oldest' : 'newest'} first`}
+              >
+                <span className="hidden text-xs uppercase tracking-widest opacity-40 sm:inline">
+                  Sort
+                </span>
+                <span className="hidden text-foreground text-xs sm:inline sm:text-sm">
+                  {currentSort === 'latest' ? 'Newest' : 'Oldest'}
+                </span>
+                <div className="relative h-4 w-4 overflow-hidden">
+                  <ArrowDownWideNarrow
+                    className={cn(
+                      'absolute inset-0 h-4 w-4 transition-all duration-300 ease-out',
+                      currentSort === 'latest'
+                        ? 'translate-y-0 opacity-100'
+                        : '-translate-y-full opacity-0'
+                    )}
+                  />
+                  <ArrowUpNarrowWide
+                    className={cn(
+                      'absolute inset-0 h-4 w-4 transition-all duration-300 ease-out',
+                      currentSort === 'oldest'
+                        ? 'translate-y-0 opacity-100'
+                        : 'translate-y-full opacity-0'
+                    )}
+                  />
+                </div>
+              </button>
+
+              {/* Divider */}
+              <div className="mx-0.5 hidden h-5 w-px bg-border/60 sm:block" aria-hidden="true" />
+
+              {/* View Mode Toggle */}
+              <div
+                className="flex items-center gap-0.5 rounded-xl bg-muted/40 p-1 ring-1 ring-border/50"
+                role="radiogroup"
+                aria-label="View mode"
+              >
+                {(
+                  [
+                    { mode: 'grid' as const, icon: LayoutGrid, label: 'Grid view' },
+                    { mode: 'list' as const, icon: List, label: 'List view' },
+                  ] as const
+                ).map(({ mode, icon: Icon, label }) => (
+                  <button
+                    key={mode}
+                    role="radio"
+                    aria-checked={viewMode === mode}
+                    aria-label={label}
+                    onClick={() => onViewModeChange(mode)}
+                    className={cn(
+                      'relative rounded-lg p-2 transition-all duration-200',
+                      'min-h-[44px] min-w-[44px] flex items-center justify-center', // 터치 영역 확보
+                      viewMode === mode
+                        ? 'bg-foreground text-background shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground'
+                    )}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
