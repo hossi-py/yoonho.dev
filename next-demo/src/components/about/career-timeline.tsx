@@ -95,16 +95,14 @@ export function CareerTimeline() {
                       {project.period}
                     </span>
 
-                    {/* Expanded content — grid-rows trick for iOS Safari compat */}
+                    {/* Expanded content - Safari-safe approach */}
                     <div
                       className={cn(
-                        'grid transition-[grid-template-rows,opacity] duration-300 ease-out',
-                        isExpanded
-                          ? 'grid-rows-[1fr] opacity-100 mt-4'
-                          : 'grid-rows-[0fr] opacity-0 mt-0'
+                        'overflow-hidden transition-all duration-300 ease-out',
+                        isExpanded ? 'max-h-[1000px] opacity-100 mt-4' : 'max-h-0 opacity-0 mt-0'
                       )}
                     >
-                      <div className="overflow-hidden min-h-0">
+                      <div>
                         <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
                           {project.description}
                         </p>
