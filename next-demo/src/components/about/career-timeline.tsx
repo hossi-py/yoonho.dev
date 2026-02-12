@@ -104,7 +104,7 @@ export function CareerTimeline() {
                           : 'grid-rows-[0fr] opacity-0 mt-0'
                       )}
                     >
-                      <div className="overflow-hidden">
+                      <div className="overflow-hidden min-h-0">
                         <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
                           {project.description}
                         </p>
