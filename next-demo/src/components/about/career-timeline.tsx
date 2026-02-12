@@ -21,9 +21,7 @@ export function CareerTimeline() {
           <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-2">
             Experience
           </p>
-          <h2 className="text-2xl font-bold text-foreground">
-            Career Journey
-          </h2>
+          <h2 className="text-2xl font-bold text-foreground">Career Journey</h2>
         </div>
 
         {/* Timeline */}
@@ -76,9 +74,7 @@ export function CareerTimeline() {
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground mt-0.5">
-                          {project.role}
-                        </p>
+                        <p className="text-sm text-muted-foreground mt-0.5">{project.role}</p>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
@@ -103,7 +99,9 @@ export function CareerTimeline() {
                     <div
                       className={cn(
                         'grid transition-[grid-template-rows,opacity] duration-300 ease-out',
-                        isExpanded ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0 mt-0'
+                        isExpanded
+                          ? 'grid-rows-[1fr] opacity-100 mt-4'
+                          : 'grid-rows-[0fr] opacity-0 mt-0'
                       )}
                     >
                       <div className="overflow-hidden">
