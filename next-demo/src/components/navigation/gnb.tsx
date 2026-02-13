@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, Command,Search } from 'lucide-react';
+import { Bell, Command, Search } from 'lucide-react';
 import * as React from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -109,12 +109,11 @@ export default function GNB() {
             )}
           >
             <Avatar className="h-7 w-7 border-2 border-white/50 dark:border-white/20 shadow-sm">
-              <AvatarImage src="/avatars/01.png" alt="YH" />
+              <AvatarImage src="" alt="YH" />
               <AvatarFallback className="bg-gradient-to-br from-primary to-primary/70 text-[10px] font-bold text-primary-foreground">
                 YH
               </AvatarFallback>
             </Avatar>
-            <span className="text-sm font-medium hidden md:block">YH</span>
           </Button>
         </div>
       </header>
