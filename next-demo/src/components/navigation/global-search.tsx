@@ -14,7 +14,7 @@ import {
   CommandSeparator,
 } from '@/components/ui/command';
 import { ALL_NAV_ITEMS } from '@/lib/nav-config';
-import { searchPosts, type SearchablePost } from '@/lib/search-posts';
+import { type SearchablePost,searchPosts } from '@/lib/search-posts';
 import { useSearchStore } from '@/stores/search-store';
 
 export function GlobalSearch() {

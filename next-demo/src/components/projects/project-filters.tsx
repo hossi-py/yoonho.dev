@@ -11,8 +11,8 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { cn } from '@/lib/utils';
 import { PROJECTS } from '@/lib/projects';
+import { cn } from '@/lib/utils';
 
 export type FilterType = 'all' | 'company' | 'personal';
 export type SortType = 'latest' | 'oldest';

@@ -1,21 +1,21 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
+import Link from 'next/link';
+import { useMemo,useState } from 'react';
 
-import { Badge } from '@/components/ui/badge';
 import { ProjectCard } from '@/components/projects/project-card';
 import {
-  ProjectFilters,
   type FilterType,
+  ProjectFilters,
   type SortType,
   type ViewMode,
 } from '@/components/projects/project-filters';
 import { ProjectListItem } from '@/components/projects/project-list-item';
+import { Badge } from '@/components/ui/badge';
 import type { Project } from '@/lib/projects';
-import { cn } from '@/lib/utils';
 import { PROJECTS } from '@/lib/projects';
+import { cn } from '@/lib/utils';
 
 export function ProjectListView() {
   const [filter, setFilter] = useState<FilterType>('all');
@@ -149,7 +149,7 @@ export function ProjectListView() {
 
         {/* ✨ Footer CTA */}
         <footer className="mt-32 border-t border-border/40 pt-16 text-center">
-          <h2 className="text-3xl font-bold mb-6">Let's build something amazing together.</h2>
+          <h2 className="text-3xl font-bold mb-6">Let&apos;s build something amazing together.</h2>
           <p className="text-muted-foreground mb-8">새로운 기회와 협업을 기다립니다.</p>
 
           <div className="flex justify-center gap-4">

@@ -1,32 +1,32 @@
 'use client';
 
-import Link from 'next/link';
-import { useEffect, useState, useRef } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
   Calendar,
   CheckCircle2,
   ChevronRight,
+  Clock,
+  Code2,
+  GitBranch,
+  Layers,
   Lightbulb,
+  Quote,
   Rocket,
   Sparkles,
+  Star,
   Target,
+  Terminal,
   TrendingUp,
   Users,
   Zap,
-  Code2,
-  Terminal,
-  Layers,
-  Star,
-  Quote,
-  Clock,
-  GitBranch,
 } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useRef,useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
-import { PROJECTS } from '@/lib/projects';
 import type { Project } from '@/lib/projects';
+import { PROJECTS } from '@/lib/projects';
 import { cn } from '@/lib/utils';
 
 interface ProjectDetailProps {

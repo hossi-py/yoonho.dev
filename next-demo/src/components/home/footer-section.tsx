@@ -1,5 +1,6 @@
-import Link from 'next/link';
 import { Github, Linkedin, Mail } from 'lucide-react';
+import Link from 'next/link';
+
 import { cn } from '@/lib/utils';
 
 const socialLinks = [

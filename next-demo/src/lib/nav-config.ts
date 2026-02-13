@@ -3,10 +3,10 @@ import {
   Github,
   Home,
   Linkedin,
+  type LucideIcon,
   Mail,
   PenLine,
   User,
-  type LucideIcon,
 } from 'lucide-react';
 
 export interface NavItem {

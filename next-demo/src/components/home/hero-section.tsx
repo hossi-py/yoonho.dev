@@ -1,11 +1,12 @@
 'use client';
 
-import { ArrowRight, Search, Command, Sparkles } from 'lucide-react';
+import { ArrowRight, Command, Search, Sparkles } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchStore } from '@/stores/search-store';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useSearchStore } from '@/stores/search-store';
 
 export function HeroSection() {
   const { setOpen } = useSearchStore();

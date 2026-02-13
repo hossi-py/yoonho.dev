@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+
 import { Badge } from '@/components/ui/badge';
 import { PROJECTS } from '@/lib/projects';
 import { cn } from '@/lib/utils';

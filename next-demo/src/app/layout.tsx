@@ -1,7 +1,6 @@
-import './globals.css';
+﻿import './globals.css';
 
 import type { Metadata } from 'next';
-import { Noto_Sans_KR, Nunito } from 'next/font/google';
 
 import ClientLayout from '@/components/layout/client-layout';
 import GNBWrapper from '@/components/navigation/gnb-wrapper';
@@ -17,21 +16,8 @@ export const metadata: Metadata = {
     template: '%s | DevLog',
     default: 'DevLog - FE 개발자의 기술 블로그',
   },
-  description: '코딩 파트너 AI와 함께하는 FE 개발자의 블로그',
+  description: '코딩, 프론트엔드, AI를 다루는 FE 개발자의 블로그',
 };
-
-const nunito = Nunito({
-  subsets: ['latin'],
-  variable: '--font-nunito',
-  display: 'swap',
-});
-
-const notoSansKr = Noto_Sans_KR({
-  subsets: ['latin'],
-  weight: ['100', '300', '400', '500', '700', '900'],
-  variable: '--font-noto-sans-kr',
-  display: 'swap',
-});
 
 export default function RootLayout({
   children,
@@ -40,14 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body
-        className={cn(
-          'antialiased overflow-hidden',
-          nunito.variable,
-          notoSansKr.variable,
-          'font-sans'
-        )}
-      >
+      <body className={cn('antialiased overflow-hidden', 'font-sans')}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <div>
             <LNBWrapper />

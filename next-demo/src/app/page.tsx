@@ -1,7 +1,7 @@
-import { HeroSection } from '@/components/home/hero-section';
 import { FeaturedProjects } from '@/components/home/featured-projects';
-import { TechStackSection } from '@/components/home/tech-stack-section';
 import { FooterSection } from '@/components/home/footer-section';
+import { HeroSection } from '@/components/home/hero-section';
+import { TechStackSection } from '@/components/home/tech-stack-section';
 
 export default function Home() {
   return (

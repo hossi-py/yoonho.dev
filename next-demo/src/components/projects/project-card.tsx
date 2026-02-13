@@ -1,12 +1,12 @@
 'use client';
 
-import { useRef, useState, useCallback } from 'react';
+import { ArrowUpRight, Calendar, Github, Globe,Terminal, Users } from 'lucide-react';
 import Link from 'next/link';
-import { ArrowUpRight, Calendar, Users, Terminal, Github, Globe } from 'lucide-react';
+import { useCallback,useRef, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
 import type { PROJECTS } from '@/lib/projects';
+import { cn } from '@/lib/utils';
 
 export function ProjectCard({
   project,

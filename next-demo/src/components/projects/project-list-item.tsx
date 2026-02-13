@@ -4,8 +4,8 @@ import { ArrowUpRight, Calendar, Github, Globe, Terminal } from 'lucide-react';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
 import type { PROJECTS } from '@/lib/projects';
+import { cn } from '@/lib/utils';
 
 export function ProjectListItem({
   project,

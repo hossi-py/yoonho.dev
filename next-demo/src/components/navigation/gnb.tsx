@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, Search, Command } from 'lucide-react';
+import { Bell, Command,Search } from 'lucide-react';
 import * as React from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useSearchStore } from '@/stores/search-store';
 import { useSidebarExpandedStore } from '@/stores/sidebar-expanded-store';
+
 import { GlobalSearch } from './global-search';
 
 export default function GNB() {

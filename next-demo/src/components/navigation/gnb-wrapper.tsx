@@ -2,9 +2,9 @@
 
 import { useIsMobile } from '@/hooks/use-mobile';
 
+import { GlobalSearch } from './global-search';
 import GNB from './gnb';
 import GNBMobile from './gnb-mobile';
-import { GlobalSearch } from './global-search';
 
 export default function GNBWrapper() {
   const isMobile = useIsMobile();
