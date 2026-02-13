@@ -1,9 +1,9 @@
-'use client';
+import prisma from '@/lib/prisma';
 
-import useSWR from 'swr';
+export default async function UsersPage() {
+  const users = await prisma.user.findMany({
+    orderBy: { id: 'asc' },
+  });
 
-export default function UsersPage() {
-  const { data, isLoading } = useSWR(`/api/users`);
-
-  return <pre>{JSON.stringify(data, null, 2)}</pre>;
+  return <pre>{JSON.stringify(users, null, 2)}</pre>;
 }
