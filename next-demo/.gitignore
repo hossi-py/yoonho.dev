@@ -40,4 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# legacy generated prisma output (if present locally)
 /src/generated/prisma
