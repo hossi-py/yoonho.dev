@@ -13,6 +13,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <main
+      id="app-scroll-container"
       className={cn(
         'pt-[var(--height-header)]',
         'h-dvh flex flex-col overflow-y-auto',
