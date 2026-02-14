@@ -357,38 +357,44 @@ function HorizontalScrollSection({
     const sticky = stickyRef.current;
     if (!scroller || !section || !sticky) return;
 
-    const STEP = 0.0016;
+    const STEP = 0.0026;
+    const PINNED_BUFFER = 56;
+    const PROGRESS_EPSILON = 0.001;
+
+    const rootStyle = getComputedStyle(document.documentElement);
+    const headerHeightVar = rootStyle.getPropertyValue('--height-header').trim();
+    const rootFontSize = parseFloat(rootStyle.fontSize) || 16;
+    const headerHeight = headerHeightVar.endsWith('rem')
+      ? parseFloat(headerHeightVar) * rootFontSize
+      : parseFloat(headerHeightVar) || 0;
 
     const onWheel = (event: WheelEvent) => {
-      const top = section.offsetTop;
-      const bottom = top + section.offsetHeight;
+      const sectionTop = section.offsetTop;
+      const sectionBottom = sectionTop + section.offsetHeight;
       const viewportTop = scroller.scrollTop;
       const viewportBottom = viewportTop + scroller.clientHeight;
-      const isSectionVisible = viewportBottom > top && viewportTop < bottom;
+      const isSectionVisible = viewportBottom > sectionTop && viewportTop < sectionBottom;
       if (!isSectionVisible) return;
 
-      const scrollerRect = scroller.getBoundingClientRect();
-      const stickyRect = sticky.getBoundingClientRect();
-      const viewportCenter = scrollerRect.top + scrollerRect.height / 2;
-      const stickyCenter = stickyRect.top + stickyRect.height / 2;
-      const isCentered = Math.abs(stickyCenter - viewportCenter) < 20;
-
-      // 카드 영역이 화면 중앙에 들어온 뒤에만 수평 잠금을 시작
-      if (!isCentered) return;
+      const stickyStart = sectionTop - headerHeight;
+      const stickyEnd = sectionBottom - scroller.clientHeight;
+      const isStickyPinned =
+        viewportTop >= stickyStart - PINNED_BUFFER && viewportTop <= stickyEnd + PINNED_BUFFER;
+      if (!isStickyPinned) return;
 
       const current = horizontalProgress.get();
       const direction = Math.sign(event.deltaY);
+      if (direction === 0) return;
+      const next = Math.min(1, Math.max(0, current + Math.abs(event.deltaY) * STEP * direction));
 
-      if (direction > 0 && current < 1) {
-        event.preventDefault();
-        horizontalProgress.set(Math.min(1, current + Math.abs(event.deltaY) * STEP));
-        return;
-      }
+      const shouldConsume =
+        (direction > 0 && current < 1 - PROGRESS_EPSILON) ||
+        (direction < 0 && current > PROGRESS_EPSILON);
+      if (!shouldConsume) return;
 
-      if (direction < 0 && current > 0) {
-        event.preventDefault();
-        horizontalProgress.set(Math.max(0, current - Math.abs(event.deltaY) * STEP));
-      }
+      // 수평 전환이 끝나기 전에는 세로 스크롤을 막아 카드 진행을 우선시한다.
+      event.preventDefault();
+      horizontalProgress.set(next);
     };
 
     scroller.addEventListener('wheel', onWheel, { passive: false });
@@ -549,6 +555,26 @@ function GlitchText({ text, className }: { text: string; className?: string }) {
   );
 }
 
+function ScrambledGlitchText({
+  text,
+  trigger,
+  widthCh,
+  className,
+}: {
+  text: string;
+  trigger: boolean;
+  widthCh: number;
+  className?: string;
+}) {
+  const scrambled = useTextScramble(text, trigger);
+
+  return (
+    <span className="inline-block align-top" style={{ width: `${widthCh}ch` }}>
+      <GlitchText text={scrambled} className={className} />
+    </span>
+  );
+}
+
 function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLElement }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLElement | null>(scrollContainer);
@@ -568,10 +594,6 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
   const glowX = useSpring(mx, { stiffness: 140, damping: 24, mass: 0.4 });
   const glowY = useSpring(my, { stiffness: 140, damping: 24, mass: 0.4 });
   const spotlight = useMotionTemplate`radial-gradient(800px circle at ${useTransform(glowX, (v) => `${v * 100}%`)} ${useTransform(glowY, (v) => `${v * 100}%`)}, rgba(255,255,255,0.15), transparent 50%)`;
-
-  const scrambledTitle1 = useTextScramble('BOLD.', isLoaded);
-  const scrambledTitle2 = useTextScramble('FLUID.', isLoaded);
-  const scrambledTitle3 = useTextScramble('INTERACTIVE.', isLoaded);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 500);
@@ -669,13 +691,16 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
               transition={{ delay: 0.2, duration: 0.6, type: 'spring' }}
             >
               <h1 className="text-balance text-5xl font-black leading-[0.9] tracking-[-0.03em] text-white md:text-7xl lg:text-[7.4rem]">
-                <GlitchText text={scrambledTitle1} />
+                <ScrambledGlitchText text="BOLD." trigger={isLoaded} widthCh={5} />
                 <br />
-                <span className="bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-lime-200 bg-clip-text text-transparent">
-                  <GlitchText text={scrambledTitle2} />
-                </span>
+                <ScrambledGlitchText
+                  text="FLUID."
+                  trigger={isLoaded}
+                  widthCh={6}
+                  className="bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-lime-200 bg-clip-text text-transparent"
+                />
                 <br />
-                <GlitchText text={scrambledTitle3} />
+                <ScrambledGlitchText text="INTERACTIVE." trigger={isLoaded} widthCh={12} />
               </h1>
               <motion.p
                 className="mt-6 max-w-2xl text-base leading-relaxed text-white/70 md:text-lg"
