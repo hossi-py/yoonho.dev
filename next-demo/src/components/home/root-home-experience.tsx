@@ -234,7 +234,7 @@ function ParticleField() {
     window.addEventListener('resize', resize);
 
     const colors = ['#22d3ee', '#f0abfc', '#a3e635', '#fbbf24'];
-    particlesRef.current = Array.from({ length: 50 }, () => ({
+    particlesRef.current = Array.from({ length: 36 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       vx: (Math.random() - 0.5) * 0.5,
@@ -248,50 +248,46 @@ function ParticleField() {
     };
     window.addEventListener('mousemove', handleMouseMove);
 
-    let frameCount = 0;
     const animate = () => {
-      frameCount++;
-      if (frameCount % 2 === 0) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        particlesRef.current.forEach((particle, i) => {
-          if (i % 5 === 0) {
-            const dx = mouseRef.current.x - particle.x;
-            const dy = mouseRef.current.y - particle.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 150) {
-              particle.vx += dx * 0.0001;
-              particle.vy += dy * 0.0001;
-            }
+      particlesRef.current.forEach((particle, i) => {
+        if (i % 5 === 0) {
+          const dx = mouseRef.current.x - particle.x;
+          const dy = mouseRef.current.y - particle.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150) {
+            particle.vx += dx * 0.0001;
+            particle.vy += dy * 0.0001;
           }
+        }
 
-          particle.x += particle.vx;
-          particle.y += particle.vy;
+        particle.x += particle.vx;
+        particle.y += particle.vy;
 
-          if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-          if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
 
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-          ctx.fillStyle = particle.color;
-          ctx.globalAlpha = 0.6;
-          ctx.fill();
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fillStyle = particle.color;
+        ctx.globalAlpha = 0.6;
+        ctx.fill();
 
-          particlesRef.current.slice(i + 1).forEach((other) => {
-            const dx = particle.x - other.x;
-            const dy = particle.y - other.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 100) {
-              ctx.beginPath();
-              ctx.moveTo(particle.x, particle.y);
-              ctx.lineTo(other.x, other.y);
-              ctx.strokeStyle = particle.color;
-              ctx.globalAlpha = (1 - dist / 100) * 0.2;
-              ctx.stroke();
-            }
-          });
+        particlesRef.current.slice(i + 1).forEach((other) => {
+          const dx = particle.x - other.x;
+          const dy = particle.y - other.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 100) {
+            ctx.beginPath();
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(other.x, other.y);
+            ctx.strokeStyle = particle.color;
+            ctx.globalAlpha = (1 - dist / 100) * 0.2;
+            ctx.stroke();
+          }
         });
-      }
+      });
 
       animationRef.current = requestAnimationFrame(animate);
     };
@@ -322,13 +318,14 @@ function HorizontalScrollSection({
   const HORIZONTAL_DISTANCE = '-128vw';
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
-  const horizontalProgress = useMotionValue(0);
-  const x = useTransform(horizontalProgress, [0, 1], ['0%', HORIZONTAL_DISTANCE]);
-  const horizontalPhaseProgress = useSpring(horizontalProgress, {
-    stiffness: 180,
-    damping: 30,
-    mass: 0.4,
+  const forwardReleaseAccumRef = useRef(0);
+  const horizontalTarget = useMotionValue(0);
+  const horizontalProgress = useSpring(horizontalTarget, {
+    stiffness: 210,
+    damping: 34,
+    mass: 0.55,
   });
+  const x = useTransform(horizontalProgress, [0, 1], ['0%', HORIZONTAL_DISTANCE]);
 
   const items = [
     {
@@ -357,9 +354,10 @@ function HorizontalScrollSection({
     const sticky = stickyRef.current;
     if (!scroller || !section || !sticky) return;
 
-    const STEP = 0.0026;
+    const STEP = 0.003;
     const PINNED_BUFFER = 56;
     const PROGRESS_EPSILON = 0.001;
+    const FORWARD_RELEASE_THRESHOLD = 220;
 
     const rootStyle = getComputedStyle(document.documentElement);
     const headerHeightVar = rootStyle.getPropertyValue('--height-header').trim();
@@ -380,12 +378,33 @@ function HorizontalScrollSection({
       const stickyEnd = sectionBottom - scroller.clientHeight;
       const isStickyPinned =
         viewportTop >= stickyStart - PINNED_BUFFER && viewportTop <= stickyEnd + PINNED_BUFFER;
-      if (!isStickyPinned) return;
+      if (!isStickyPinned) {
+        forwardReleaseAccumRef.current = 0;
+        return;
+      }
 
-      const current = horizontalProgress.get();
+      const current = horizontalTarget.get();
       const direction = Math.sign(event.deltaY);
       if (direction === 0) return;
-      const next = Math.min(1, Math.max(0, current + Math.abs(event.deltaY) * STEP * direction));
+
+      if (direction < 0) {
+        forwardReleaseAccumRef.current = 0;
+      }
+
+      const reachedEnd = current >= 1 - PROGRESS_EPSILON;
+      if (direction > 0 && reachedEnd) {
+        if (forwardReleaseAccumRef.current < FORWARD_RELEASE_THRESHOLD) {
+          event.preventDefault();
+          forwardReleaseAccumRef.current += Math.abs(event.deltaY);
+          return;
+        }
+        return;
+      }
+
+      const deltaUnit =
+        event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? scroller.clientHeight : 1;
+      const normalizedDelta = Math.min(48, Math.abs(event.deltaY) * deltaUnit);
+      const next = Math.min(1, Math.max(0, current + normalizedDelta * STEP * direction));
 
       const shouldConsume =
         (direction > 0 && current < 1 - PROGRESS_EPSILON) ||
@@ -394,12 +413,12 @@ function HorizontalScrollSection({
 
       // 수평 전환이 끝나기 전에는 세로 스크롤을 막아 카드 진행을 우선시한다.
       event.preventDefault();
-      horizontalProgress.set(next);
+      horizontalTarget.set(next);
     };
 
     scroller.addEventListener('wheel', onWheel, { passive: false });
     return () => scroller.removeEventListener('wheel', onWheel);
-  }, [horizontalProgress, scrollContainerRef]);
+  }, [horizontalTarget, scrollContainerRef]);
 
   return (
     <div ref={containerRef} className="relative" style={{ height: '220vh', zIndex: 10 }}>
@@ -498,7 +517,7 @@ function HorizontalScrollSection({
           <motion.div
             className="h-[4px] rounded-full bg-white"
             style={{
-              scaleX: horizontalPhaseProgress,
+              scaleX: horizontalProgress,
               transformOrigin: 'left',
             }}
           />
