@@ -9,38 +9,38 @@ import {
   useSpring,
   useTransform,
 } from 'framer-motion';
-import { ArrowUpRight, Eye, Layers,Sparkles, Zap } from 'lucide-react';
+import { ArrowUpRight, Eye, Layers, Sparkles, Zap } from 'lucide-react';
 import Link from 'next/link';
-import { type RefObject,useCallback, useEffect, useRef, useState } from 'react';
+import { type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 const marqueeItems = [
-  'Aesthetic Motion',
-  'Product-grade Frontend',
-  'Interactive Storytelling',
-  'High-energy Visual Systems',
-  'WebGL Experiences',
-  'Immersive Interfaces',
+  'Frontend Engineering',
+  'React & Next.js',
+  'TypeScript Patterns',
+  'Devlog & TIL',
+  'Work Project Cases',
+  'UI/UX Problem Solving',
 ];
 
 const featureCards = [
   {
-    title: 'Motion System',
-    description: '스크롤 반응형 모션과 진입 애니메이션을 하나의 흐름으로 설계합니다.',
+    title: 'Study Log',
+    description: '하루 학습 내용을 기록하고 시행착오를 정리해 다음 구현에 바로 반영합니다.',
     icon: Zap,
     color: 'from-cyan-400 to-blue-500',
   },
   {
-    title: 'Color Direction',
-    description: '브랜드 톤을 살리는 강한 컬러 대비로 첫 인상을 확실하게 만듭니다.',
+    title: 'Work Projects',
+    description: '회사에서 진행한 기능 개발과 개선 경험을 배경, 선택, 결과 중심으로 공유합니다.',
     icon: Eye,
     color: 'from-fuchsia-400 to-purple-500',
   },
   {
-    title: 'Dynamic Layout',
-    description: '정적인 정보 나열 대신 리듬감 있는 화면 전개로 몰입을 만듭니다.',
+    title: 'Interests',
+    description: '프론트엔드 생산성, UI/UX, 협업 방식처럼 제가 꾸준히 파고드는 관심사를 다룹니다.',
     icon: Layers,
     color: 'from-lime-400 to-emerald-500',
   },
@@ -329,20 +329,23 @@ function HorizontalScrollSection({
 
   const items = [
     {
-      title: 'WebGL',
-      subtitle: 'Immersive 3D',
+      title: 'Blog',
+      subtitle: 'Study Archive',
+      description: '개념 정리부터 트러블슈팅까지, 공부 흔적을 누적하는 기록 공간입니다.',
       color: 'from-cyan-400 to-blue-600',
       bg: 'bg-cyan-500',
     },
     {
-      title: 'Motion',
-      subtitle: 'Fluid Animation',
+      title: 'Projects',
+      subtitle: 'Work Cases',
+      description: '회사에서 만든 기능을 왜 그렇게 구현했는지 의사결정 과정까지 남깁니다.',
       color: 'from-fuchsia-400 to-purple-600',
       bg: 'bg-fuchsia-500',
     },
     {
-      title: 'Design',
-      subtitle: 'Visual Systems',
+      title: 'About Me',
+      subtitle: 'Values & Interests',
+      description: '어떤 개발자인지, 무엇에 끌리고 어떤 방식으로 성장하는지 소개합니다.',
       color: 'from-lime-400 to-emerald-600',
       bg: 'bg-lime-500',
     },
@@ -428,8 +431,10 @@ function HorizontalScrollSection({
       >
         {/* 섹션 타이틀 */}
         <div className="absolute top-8 left-8 z-20">
-          <p className="text-xs uppercase tracking-[0.3em] text-white/50 mb-2">Scroll to Explore</p>
-          <h3 className="text-2xl font-bold text-white">Our Expertise</h3>
+          <p className="text-xs uppercase tracking-[0.3em] text-white/50 mb-2">
+            Scroll Through My Story
+          </p>
+          <h3 className="text-2xl font-bold text-white">What I Share</h3>
         </div>
 
         <motion.div className="flex gap-8 px-8 pl-32" style={{ x }}>
@@ -499,8 +504,7 @@ function HorizontalScrollSection({
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
                 >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-                  incididunt ut labore.
+                  {item.description}
                 </motion.p>
 
                 {/* 인덱스 표시 */}
@@ -700,7 +704,7 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
             >
               <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
             </motion.span>
-            2026 Visual-First Frontend
+            FE DEVELOPER DEVLOG & PROJECT ARCHIVE
           </motion.p>
 
           <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
@@ -710,16 +714,16 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
               transition={{ delay: 0.2, duration: 0.6, type: 'spring' }}
             >
               <h1 className="text-balance text-5xl font-black leading-[0.9] tracking-[-0.03em] text-white md:text-7xl lg:text-[7.4rem]">
-                <ScrambledGlitchText text="BOLD." trigger={isLoaded} widthCh={5} />
+                <ScrambledGlitchText text="STUDY." trigger={isLoaded} widthCh={6} />
                 <br />
                 <ScrambledGlitchText
-                  text="FLUID."
+                  text="BUILD."
                   trigger={isLoaded}
                   widthCh={6}
                   className="bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-lime-200 bg-clip-text text-transparent"
                 />
                 <br />
-                <ScrambledGlitchText text="INTERACTIVE." trigger={isLoaded} widthCh={12} />
+                <ScrambledGlitchText text="SHARE." trigger={isLoaded} widthCh={6} />
               </h1>
               <motion.p
                 className="mt-6 max-w-2xl text-base leading-relaxed text-white/70 md:text-lg"
@@ -727,8 +731,8 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
               >
-                화려함은 과장 없이, 기술력은 숨기지 않고. 진입 순간부터 스크롤 마지막까지 역동적인
-                인터페이스 경험을 설계합니다.
+                이 공간에는 FE 개발자로서의 학습 기록, 회사에서 진행한 프로젝트, 그리고 제가 중요하게
+                생각하는 관심사와 일하는 방식이 담겨 있습니다.
               </motion.p>
 
               <motion.div
@@ -743,7 +747,7 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
                     className="h-12 border-0 bg-white text-black hover:bg-white/90 rounded-full px-8 font-semibold group"
                   >
                     <Link href="/projects">
-                      Selected Projects
+                      회사 프로젝트 보기
                       <motion.span
                         className="ml-2 inline-block"
                         animate={{ x: [0, 4, 0] }}
@@ -760,7 +764,7 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
                     variant="outline"
                     className="h-12 rounded-full border-white/35 bg-transparent px-8 text-white hover:bg-white/10 hover:text-white backdrop-blur-sm"
                   >
-                    <Link href="/blog">Read Articles</Link>
+                    <Link href="/blog">공부 블로그 읽기</Link>
                   </Button>
                 </motion.div>
               </motion.div>
@@ -773,9 +777,9 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
               className="grid gap-3"
             >
               {[
-                { text: 'Realtime Feel', color: 'from-cyan-400/20 to-blue-500/20' },
-                { text: 'Visual Rhythm', color: 'from-fuchsia-400/20 to-purple-500/20' },
-                { text: 'System Precision', color: 'from-lime-400/20 to-emerald-500/20' },
+                { text: '학습 기록', color: 'from-cyan-400/20 to-blue-500/20' },
+                { text: '실무 프로젝트', color: 'from-fuchsia-400/20 to-purple-500/20' },
+                { text: '관심사 탐구', color: 'from-lime-400/20 to-emerald-500/20' },
               ].map((item, i) => (
                 <TiltCard key={item.text}>
                   <motion.div
@@ -786,7 +790,7 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
                     )}
                   >
                     <p className="text-[11px] uppercase tracking-[0.16em] text-white/65">
-                      Signal 0{i + 1}
+                      Focus 0{i + 1}
                     </p>
                     <p className="mt-1.5 text-lg font-bold tracking-tight">{item.text}</p>
                   </motion.div>
@@ -858,9 +862,9 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-              <GlitchText text="CORE CAPABILITIES" />
+              <GlitchText text="WHAT I SHARE" />
             </h2>
-            <p className="text-white/60">기술과 디자인의 경계를 넘나드는 경험</p>
+            <p className="text-white/60">블로그, 프로젝트, 그리고 FE 개발자로서의 성장 기록</p>
           </motion.div>
 
           <div className="grid gap-6 md:grid-cols-3">
@@ -891,7 +895,7 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
                   </motion.div>
 
                   <p className="text-xs uppercase tracking-[0.17em] text-white/55 mb-2">
-                    Block 0{index + 1}
+                    Track 0{index + 1}
                   </p>
                   <h3 className="text-2xl font-bold tracking-tight text-white mb-3">
                     {card.title}
@@ -944,20 +948,22 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
             }}
             transition={{ duration: 3, repeat: Infinity }}
           >
-            LET&apos;S CREATE
+            FOLLOW MY
             <br />
             <span className="bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-lime-200 bg-clip-text text-transparent">
-              SOMETHING BOLD
+              FRONTEND JOURNEY
             </span>
           </motion.h2>
-          <p className="text-white/60 text-lg mb-8">함께 다음 프로젝트를 시작핵시죠</p>
+          <p className="text-white/60 text-lg mb-8">
+            새로운 글과 프로젝트 회고를 계속 업데이트하고 있습니다.
+          </p>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               asChild
               className="h-14 px-10 rounded-full bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-lime-300 text-black font-bold text-lg hover:opacity-90"
             >
-              <Link href="/contact">
-                Start a Project
+              <Link href="/about">
+                About Me 보러가기
                 <ArrowUpRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
