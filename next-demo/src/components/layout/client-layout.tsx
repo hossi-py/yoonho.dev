@@ -6,10 +6,7 @@ import { useSidebarExpandedStore } from '@/stores/sidebar-expanded-store';
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const expanded = useSidebarExpandedStore((s) => s.expanded);
-  const isHydrated = useSidebarExpandedStore((s) => s.isHydrated);
   const isMobile = useIsMobile();
-
-  if (!isHydrated) return null;
 
   return (
     <main

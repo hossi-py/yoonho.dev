@@ -15,7 +15,6 @@ export default function GNB() {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const expanded = useSidebarExpandedStore((s) => s.expanded);
-  const isHydrated = useSidebarExpandedStore((s) => s.isHydrated);
   const { setOpen } = useSearchStore();
 
   // 검색어 입력 시 포스트 검색 수행
@@ -39,8 +38,6 @@ export default function GNB() {
       inputRef.current?.blur();
     }, 0);
   };
-
-  if (!isHydrated) return null;
 
   return (
     <>

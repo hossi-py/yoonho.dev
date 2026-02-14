@@ -12,7 +12,6 @@ import { useSidebarExpandedStore } from '@/stores/sidebar-expanded-store';
 
 export default function LNB() {
   const expanded = useSidebarExpandedStore((s) => s.expanded);
-  const isHydrated = useSidebarExpandedStore((s) => s.isHydrated);
   const setExpanded = useSidebarExpandedStore((s) => s.setExpanded);
   const pathname = usePathname();
   const { theme, setTheme, resolvedTheme } = useTheme();
@@ -20,8 +19,6 @@ export default function LNB() {
   // Hydration safety for theme-specific values
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
-
-  if (!isHydrated) return null;
 
   // Active link logic that handles nested paths
   const isLinkActive = (href: string) => {
