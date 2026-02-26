@@ -362,12 +362,20 @@ function HorizontalScrollSection({
     const PROGRESS_EPSILON = 0.001;
     const FORWARD_RELEASE_THRESHOLD = 220;
 
-    const rootStyle = getComputedStyle(document.documentElement);
-    const headerHeightVar = rootStyle.getPropertyValue('--height-header').trim();
-    const rootFontSize = parseFloat(rootStyle.fontSize) || 16;
-    const headerHeight = headerHeightVar.endsWith('rem')
-      ? parseFloat(headerHeightVar) * rootFontSize
-      : parseFloat(headerHeightVar) || 0;
+    // sticky top = 15vh → (viewport 높이) * 0.15 와 동일
+    const getStickyTopPx = () => scroller.clientHeight * 0.15;
+
+    // ── 섹션이 뷰포트 아래에 있으면 수평 진행도를 0으로 리셋 ──
+    // 사용자가 위로 돌아온 뒤 다시 내려올 때 처음부터 시작하도록 한다.
+    const onScroll = () => {
+      const sectionTop = section.offsetTop;
+      const viewportBottom = scroller.scrollTop + scroller.clientHeight;
+
+      if (viewportBottom < sectionTop && horizontalTarget.get() > PROGRESS_EPSILON) {
+        horizontalTarget.set(0);
+        forwardReleaseAccumRef.current = 0;
+      }
+    };
 
     const onWheel = (event: WheelEvent) => {
       const sectionTop = section.offsetTop;
@@ -377,7 +385,8 @@ function HorizontalScrollSection({
       const isSectionVisible = viewportBottom > sectionTop && viewportTop < sectionBottom;
       if (!isSectionVisible) return;
 
-      const stickyStart = sectionTop - headerHeight;
+      const stickyTopOffset = getStickyTopPx();
+      const stickyStart = sectionTop - stickyTopOffset;
       const stickyEnd = sectionBottom - scroller.clientHeight;
       const isStickyPinned =
         viewportTop >= stickyStart - PINNED_BUFFER && viewportTop <= stickyEnd + PINNED_BUFFER;
@@ -419,29 +428,34 @@ function HorizontalScrollSection({
       horizontalTarget.set(next);
     };
 
+    scroller.addEventListener('scroll', onScroll, { passive: true });
     scroller.addEventListener('wheel', onWheel, { passive: false });
-    return () => scroller.removeEventListener('wheel', onWheel);
+    return () => {
+      scroller.removeEventListener('scroll', onScroll);
+      scroller.removeEventListener('wheel', onWheel);
+    };
   }, [horizontalTarget, scrollContainerRef]);
 
   return (
     <div ref={containerRef} className="relative" style={{ height: '220vh', zIndex: 10 }}>
       <div
         ref={stickyRef}
-        className="sticky top-[var(--height-header)] h-[calc(100dvh-var(--height-header))] overflow-hidden flex items-center bg-[#06070b]"
+        className="sticky h-[70vh] overflow-hidden flex flex-col justify-center bg-[#06070b]"
+        style={{ top: '15vh' }}
       >
         {/* 섹션 타이틀 */}
-        <div className="absolute top-8 left-8 z-20">
+        <div className="px-8 mb-6 z-20">
           <p className="text-xs uppercase tracking-[0.3em] text-white/50 mb-2">
             Scroll Through My Story
           </p>
           <h3 className="text-2xl font-bold text-white">What I Share</h3>
         </div>
 
-        <motion.div className="flex gap-8 px-8 pl-32" style={{ x }}>
+        <motion.div className="flex gap-8 px-8" style={{ x }}>
           {items.map((item, i) => (
             <motion.div
               key={item.title}
-              className="w-[70vw] h-[60vh] flex-shrink-0 relative overflow-hidden rounded-3xl border border-white/20"
+              className="w-[70vw] h-[55vh] flex-shrink-0 relative overflow-hidden rounded-3xl border border-white/20"
             >
               {/* 배경 그라데이션 */}
               <div className={cn('absolute inset-0 bg-gradient-to-br', item.color)} />
@@ -626,7 +640,7 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
   return (
     <div
       ref={rootRef}
-      className="relative overflow-hidden bg-[#06070b]"
+      className="relative overflow-clip bg-[#06070b]"
       onMouseMove={(e) => {
         const bounds = e.currentTarget.getBoundingClientRect();
         mx.set((e.clientX - bounds.left) / bounds.width);
@@ -731,8 +745,8 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
               >
-                이 공간에는 FE 개발자로서의 학습 기록, 회사에서 진행한 프로젝트, 그리고 제가 중요하게
-                생각하는 관심사와 일하는 방식이 담겨 있습니다.
+                이 공간에는 FE 개발자로서의 학습 기록, 회사에서 진행한 프로젝트, 그리고 제가
+                중요하게 생각하는 관심사와 일하는 방식이 담겨 있습니다.
               </motion.p>
 
               <motion.div
