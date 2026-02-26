@@ -11,25 +11,33 @@ import {
 } from 'framer-motion';
 import { ArrowUpRight, Eye, Layers, Sparkles, Zap } from 'lucide-react';
 import Link from 'next/link';
-import { type RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  type RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 // ── 모바일 감지 훅 ──
 function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(false);
+  const query = `(max-width: ${breakpoint}px)`;
 
-  useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${breakpoint}px)`);
-    setIsMobile(mql.matches);
-
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mql.addEventListener('change', handler);
-    return () => mql.removeEventListener('change', handler);
-  }, [breakpoint]);
-
-  return isMobile;
+  return useSyncExternalStore(
+    (onStoreChange) => {
+      if (typeof window === 'undefined') return () => undefined;
+      const mql = window.matchMedia(query);
+      const handler = () => onStoreChange();
+      mql.addEventListener('change', handler);
+      return () => mql.removeEventListener('change', handler);
+    },
+    () => (typeof window !== 'undefined' ? window.matchMedia(query).matches : false),
+    () => false
+  );
 }
 
 const marqueeItems = [

@@ -8,7 +8,7 @@ import { getCategoryCount, getRecentPosts } from '@/lib/blog-posts';
 
 export const metadata: Metadata = {
   title: 'Tech Blog',
-  description: 'AWS, Frontend, Backend 등 다양한 기술 주제를 다루는 FE 개발자의 블로그',
+  description: 'AWS, Frontend, Backend 주제를 다루는 기술 블로그',
 };
 
 const categoryMeta = {
@@ -19,6 +19,14 @@ const categoryMeta = {
     gradient:
       'bg-gradient-to-br from-orange-50 to-amber-100 dark:from-orange-950/30 dark:to-amber-950/20',
     iconBg: 'bg-orange-500/10',
+  },
+  'aws-aif': {
+    color: 'text-cyan-500',
+    bgColor: 'bg-cyan-50 dark:bg-cyan-950/30',
+    borderColor: 'border-cyan-200 dark:border-cyan-800',
+    gradient:
+      'bg-gradient-to-br from-cyan-50 to-sky-100 dark:from-cyan-950/30 dark:to-sky-950/20',
+    iconBg: 'bg-cyan-500/10',
   },
   frontend: {
     color: 'text-blue-500',
@@ -40,6 +48,7 @@ const categoryMeta = {
 
 const categoryIcons = {
   'aws-saa': Cloud,
+  'aws-aif': Sparkles,
   frontend: Layout,
   backend: Server,
 } as const;
@@ -51,14 +60,21 @@ export default function BlogPage() {
     {
       id: 'aws-saa' as const,
       title: 'AWS SAA',
-      description: 'Solution Architect Associate 자격증 완벽 대비',
+      description: 'Solutions Architect Associate 문제 풀이',
       icon: <Cloud className="w-8 h-8" />,
       posts: getCategoryCount('aws-saa'),
     },
     {
+      id: 'aws-aif' as const,
+      title: 'AWS AIF-C01',
+      description: 'AI Practitioner 문제 풀이',
+      icon: <Sparkles className="w-8 h-8" />,
+      posts: getCategoryCount('aws-aif'),
+    },
+    {
       id: 'frontend' as const,
       title: 'Frontend',
-      description: 'React, Vue, Next.js 등 모던 프론트엔드',
+      description: 'React, Vue, Next.js 중심의 프론트엔드 정리',
       icon: <Layout className="w-8 h-8" />,
       posts: getCategoryCount('frontend'),
     },
@@ -73,7 +89,6 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      {/* Hero Section */}
       <section className="relative overflow-hidden py-16 md:py-24 px-3 md:px-6 mb-8 md:mb-12">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30" />
         <div className="relative max-w-5xl mx-auto text-center">
@@ -91,13 +106,12 @@ export default function BlogPage() {
             <span className="text-slate-800 dark:text-slate-100">Log</span>
           </h1>
           <p className="text-lg md:text-2xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed">
-            코딩 파트너 AI와 함께하는 FE 개발자의 블로그
+            클라우드와 AI, 그리고 FE/BE를 연결해서 기록합니다.
           </p>
         </div>
       </section>
 
       <div className="max-w-6xl mx-auto px-3 md:px-6 pb-20 md:pb-24">
-        {/* Categories */}
         <section className="mb-16 md:mb-20">
           <div className="flex items-center justify-between mb-6 md:mb-8">
             <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 text-slate-800 dark:text-slate-100">
@@ -105,7 +119,7 @@ export default function BlogPage() {
               Categories
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {categories.map((cat) => {
               const meta = categoryMeta[cat.id];
               return (
@@ -139,7 +153,6 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* Recent Posts */}
         <section>
           <div className="flex items-center justify-between mb-6 md:mb-8">
             <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 text-slate-800 dark:text-slate-100">
@@ -156,7 +169,6 @@ export default function BlogPage() {
                 <Link key={post.id} href={`/blog/${post.category}/${post.id}`}>
                   <Card className="hover:shadow-lg transition-all duration-300 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 group overflow-hidden">
                     <div className="flex flex-col md:flex-row">
-                      {/* Thumbnail — 카테고리별 아이콘 + 그래디언트 */}
                       <div
                         className={`w-full md:w-64 h-40 md:h-auto flex flex-col items-center justify-center shrink-0 border-b md:border-b-0 md:border-r gap-2 ${meta.gradient} border-slate-100 dark:border-slate-700`}
                       >
@@ -178,9 +190,11 @@ export default function BlogPage() {
                             className={`text-xs ${
                               post.category === 'aws-saa'
                                 ? 'bg-orange-500 hover:bg-orange-600'
-                                : post.category === 'frontend'
-                                  ? 'bg-blue-500 hover:bg-blue-600'
-                                  : 'bg-green-500 hover:bg-green-600'
+                                : post.category === 'aws-aif'
+                                  ? 'bg-cyan-500 hover:bg-cyan-600'
+                                  : post.category === 'frontend'
+                                    ? 'bg-blue-500 hover:bg-blue-600'
+                                    : 'bg-green-500 hover:bg-green-600'
                             }`}
                           >
                             {post.category.toUpperCase().replace('-', ' ')}

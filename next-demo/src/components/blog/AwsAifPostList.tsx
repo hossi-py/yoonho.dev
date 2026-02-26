@@ -1,6 +1,13 @@
 'use client';
 
-import { ArrowRight, Calendar, ChevronLeftIcon, ChevronRightIcon, Cloud, Tag } from 'lucide-react';
+import {
+  ArrowRight,
+  Calendar,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  Sparkles,
+  Tag,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
@@ -11,7 +18,7 @@ import type { BlogPost } from '@/lib/blog-posts';
 
 const POSTS_PER_PAGE = 5;
 
-interface AwsSaaPostListProps {
+interface AwsAifPostListProps {
   posts: BlogPost[];
 }
 
@@ -22,7 +29,7 @@ function frequencyLabel(frequency?: BlogPost['frequency']) {
   return '빈도 미정';
 }
 
-export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
+export function AwsAifPostList({ posts }: AwsAifPostListProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
@@ -62,8 +69,8 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
           variant={selectedTag === null ? 'default' : 'outline'}
           className={`cursor-pointer transition-all text-xs ${
             selectedTag === null
-              ? 'bg-orange-500 hover:bg-orange-600 text-white'
-              : 'hover:border-orange-300'
+              ? 'bg-cyan-500 hover:bg-cyan-600 text-white'
+              : 'hover:border-cyan-300'
           }`}
           onClick={() => {
             setSelectedTag(null);
@@ -78,8 +85,8 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
             variant={selectedTag === tag ? 'default' : 'outline'}
             className={`cursor-pointer transition-all text-xs ${
               selectedTag === tag
-                ? 'bg-orange-500 hover:bg-orange-600 text-white'
-                : 'hover:border-orange-300'
+                ? 'bg-cyan-500 hover:bg-cyan-600 text-white'
+                : 'hover:border-cyan-300'
             }`}
             onClick={() => handleTagClick(tag)}
           >
@@ -90,16 +97,16 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
 
       <div className="grid gap-6 md:gap-8">
         {currentPosts.map((post) => (
-          <Link key={post.id} href={`/blog/aws-saa/${post.id}`}>
-            <Card className="group relative overflow-hidden rounded-3xl border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(249,115,22,0.3)] dark:hover:shadow-[0_20px_40px_-15px_rgba(249,115,22,0.1)] hover:border-orange-200 dark:hover:border-orange-800">
+          <Link key={post.id} href={`/blog/aws-aif/${post.id}`}>
+            <Card className="group relative overflow-hidden rounded-3xl border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(6,182,212,0.3)] dark:hover:shadow-[0_20px_40px_-15px_rgba(6,182,212,0.1)] hover:border-cyan-200 dark:hover:border-cyan-800">
               <div className="absolute -right-10 -top-10 opacity-5 dark:opacity-[0.02] transform rotate-12 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                <Cloud className="w-64 h-64 text-slate-900 dark:text-white" />
+                <Sparkles className="w-64 h-64 text-slate-900 dark:text-white" />
               </div>
 
               <CardContent className="p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-8 relative z-10">
                 <div className="flex md:flex-col items-center md:items-start justify-between md:justify-start gap-4 flex-shrink-0 min-w-[120px]">
                   <div className="flex items-center gap-3 md:gap-0 md:flex-col md:items-start md:space-y-4 w-full">
-                    <span className="text-5xl md:text-6xl font-black text-slate-200/80 dark:text-slate-700/50 group-hover:text-orange-400/80 dark:group-hover:text-orange-600/80 transition-colors duration-500 font-nunito select-none -ml-1">
+                    <span className="text-5xl md:text-6xl font-black text-slate-200/80 dark:text-slate-700/50 group-hover:text-cyan-400/80 dark:group-hover:text-cyan-600/80 transition-colors duration-500 font-nunito select-none -ml-1">
                       #{post.number}
                     </span>
                     <div className="flex flex-col items-start gap-1">
@@ -131,7 +138,7 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
 
                 <div className="flex-1 flex flex-col">
                   <div className="mb-4">
-                    <h2 className="text-xl md:text-2xl lg:text-3xl font-extrabold text-slate-800 dark:text-slate-100 mb-3 leading-tight group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors font-nunito">
+                    <h2 className="text-xl md:text-2xl lg:text-3xl font-extrabold text-slate-800 dark:text-slate-100 mb-3 leading-tight group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors font-nunito">
                       {post.title}
                     </h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2 md:line-clamp-3">
@@ -144,7 +151,7 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
                       {post.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 group-hover:bg-orange-50 dark:group-hover:bg-orange-900/20 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors"
+                          className="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 group-hover:bg-cyan-50 dark:group-hover:bg-cyan-900/20 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors"
                         >
                           #{tag}
                         </span>
@@ -155,7 +162,7 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
                         <Calendar className="w-3.5 h-3.5 mr-1.5" />
                         {post.date}
                       </span>
-                      <div className="flex items-center text-sm font-bold text-orange-500 group-hover:translate-x-1 transition-transform">
+                      <div className="flex items-center text-sm font-bold text-cyan-500 group-hover:translate-x-1 transition-transform">
                         자세히 보기 <ArrowRight className="w-4 h-4 ml-1" />
                       </div>
                     </div>
@@ -193,7 +200,7 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
                   onClick={() => goToPage(page)}
                   className={`w-10 h-10 rounded-xl font-bold transition-all duration-200 ${
                     currentPage === page
-                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 scale-105'
+                      ? 'bg-gradient-to-r from-cyan-500 to-sky-500 text-white shadow-lg shadow-cyan-500/25 scale-105'
                       : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
@@ -218,7 +225,7 @@ export function AwsSaaPostList({ posts }: AwsSaaPostListProps) {
       {totalPages > 1 && (
         <div className="mt-4 text-center">
           <span className="text-sm text-slate-500 dark:text-slate-400">
-            총 <strong className="text-orange-500">{filteredPosts.length}</strong>개 중{' '}
+            총 <strong className="text-cyan-500">{filteredPosts.length}</strong>개 중{' '}
             <strong>
               {startIndex + 1}-{Math.min(endIndex, filteredPosts.length)}
             </strong>

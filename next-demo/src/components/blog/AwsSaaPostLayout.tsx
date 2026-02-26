@@ -51,6 +51,9 @@ export interface AwsSaaPostLayoutProps {
     prev: { id: string; title: string; category: string } | null;
     next: { id: string; title: string; category: string } | null;
   };
+  seriesLabel?: string;
+  listHref?: string;
+  listLabel?: string;
 }
 
 export function AwsSaaPostLayout({
@@ -60,26 +63,28 @@ export function AwsSaaPostLayout({
   services,
   deepDive,
   navigation,
+  seriesLabel = 'AWS SAA',
+  listHref = '/blog/aws-saa',
+  listLabel = '카테고리 목록',
 }: AwsSaaPostLayoutProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-      {/* Hero Content */}
       <section className="relative pt-8 pb-12 px-3 md:px-6">
         <div className="max-w-4xl mx-auto">
-          {/* Back Link */}
           <Link
-            href="/blog/aws-saa"
+            href={listHref}
+            aria-label={listLabel}
+            title={listLabel}
             className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 mb-6 md:mb-8 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
-            목록으로 돌아가기
+            {listLabel}
           </Link>
 
-          {/* Title Area */}
           <div className="flex flex-col gap-6">
             <div className="flex flex-wrap items-center gap-3">
               <Badge className="bg-orange-500 hover:bg-orange-600 text-white border-0">
-                AWS SAA
+                {seriesLabel}
               </Badge>
               <Badge variant="outline" className="text-slate-500">
                 {meta.tagId}
@@ -100,39 +105,36 @@ export function AwsSaaPostLayout({
         </div>
       </section>
 
-      {/* Interactive Diagram */}
       <section className="px-3 md:px-6 mb-8 md:mb-12">
         <div className="max-w-5xl mx-auto">
           <Card className="p-3 md:p-6 overflow-hidden">{diagram}</Card>
         </div>
       </section>
 
-      {/* Content Tabs */}
       <section className="px-3 md:px-6 pb-12">
         <div className="max-w-4xl mx-auto">
           <Tabs defaultValue="analyze" className="w-full">
             <TabsList className="w-full md:w-auto grid grid-cols-3 md:flex">
               <TabsTrigger value="analyze" className="text-xs md:text-sm">
-                1️⃣ 요구사항 분석
+                1. 요구사항 분석
               </TabsTrigger>
               <TabsTrigger value="services" className="text-xs md:text-sm">
-                2️⃣ AWS 서비스
+                2. AWS 서비스
               </TabsTrigger>
               <TabsTrigger value="deep-dive" className="text-xs md:text-sm">
-                3️⃣ 심화 학습
+                3. 심화 학습
               </TabsTrigger>
             </TabsList>
 
             <Card className="mt-4">
               <CardContent className="p-4 md:p-6">
-                {/* 1. Analyze Tab */}
                 <TabsContent value="analyze" className="mt-0 space-y-6">
                   <ProblemScenario
                     english={analyze.scenario.english}
                     korean={analyze.scenario.korean}
                   />
 
-                  <h3 className="text-lg md:text-xl font-bold mt-8 mb-4">🎯 핵심 요구사항</h3>
+                  <h3 className="text-lg md:text-xl font-bold mt-8 mb-4">핵심 요구사항</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {analyze.requirements.map((req) => (
                       <Card
@@ -160,7 +162,7 @@ export function AwsSaaPostLayout({
                   </div>
 
                   <div className="py-6 border-y border-slate-200 dark:border-slate-800 my-6">
-                    <h3 className="text-lg md:text-xl font-bold mb-4">🤔 정답을 골라보세요</h3>
+                    <h3 className="text-lg md:text-xl font-bold mb-4">정답을 골라보세요</h3>
                     <div className="grid gap-3">
                       {analyze.quiz.map((choice) => (
                         <QuizChoiceCard key={choice.id} {...choice} />
@@ -169,13 +171,11 @@ export function AwsSaaPostLayout({
                   </div>
                 </TabsContent>
 
-                {/* 2. Services Tab */}
                 <TabsContent value="services" className="mt-0 space-y-8">
                   <p className="text-slate-600 dark:text-slate-300 text-sm">
-                    이 문제와 관련된 핵심 AWS 서비스들을 알아볼게요.
+                    문제와 관련된 핵심 AWS 서비스를 비교합니다.
                   </p>
 
-                  {/* Main Service */}
                   <Card className="bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-800">
                     <CardContent className="p-4 md:p-5">
                       <div className="flex items-center gap-3 mb-3">
@@ -185,7 +185,7 @@ export function AwsSaaPostLayout({
                             {services.main.title}
                           </h3>
                           <span className="text-xs text-indigo-600 dark:text-indigo-400">
-                            {services.main.subTitle || '⭐ 이 문제의 핵심 서비스'}
+                            {services.main.subTitle || '이 문제의 핵심 서비스'}
                           </span>
                         </div>
                       </div>
@@ -197,7 +197,6 @@ export function AwsSaaPostLayout({
                     </CardContent>
                   </Card>
 
-                  {/* Comparative Services */}
                   <div className="space-y-4">
                     {services.others.map((service, idx) => (
                       <Card key={idx}>
@@ -211,7 +210,7 @@ export function AwsSaaPostLayout({
                             ))}
                             {service.warning && (
                               <li className="text-amber-600 dark:text-amber-400 mt-2 font-medium">
-                                ⚠️ {service.warning}
+                                ⚠ {service.warning}
                               </li>
                             )}
                           </ul>
@@ -220,13 +219,11 @@ export function AwsSaaPostLayout({
                     ))}
                   </div>
 
-                  {/* Insight */}
                   <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
                     <CardContent className="p-4">{services.insight}</CardContent>
                   </Card>
                 </TabsContent>
 
-                {/* 3. Deep Dive Tab */}
                 <TabsContent value="deep-dive" className="mt-0 space-y-8">
                   {deepDive}
                 </TabsContent>
@@ -236,7 +233,6 @@ export function AwsSaaPostLayout({
         </div>
       </section>
 
-      {/* Post Navigation */}
       {navigation && (navigation.prev || navigation.next) && (
         <section className="px-3 md:px-6 pb-20">
           <div className="max-w-4xl mx-auto">

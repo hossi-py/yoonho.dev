@@ -1,18 +1,18 @@
-import { ChevronLeft, Cloud } from 'lucide-react';
+import { ChevronLeft, Sparkles } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { AwsSaaPostList } from '@/components/blog/AwsSaaPostList';
+import { AwsAifPostList } from '@/components/blog/AwsAifPostList';
 import { Badge } from '@/components/ui/badge';
 import { getPostsByCategory } from '@/lib/blog-posts';
 
 export const metadata: Metadata = {
-  title: 'AWS SAA - Solutions Architect Associate',
-  description: 'AWS Solutions Architect Associate 문제를 실전형 해설로 정리한 카테고리',
+  title: 'AWS AIF-C01 - AI Practitioner',
+  description: 'AWS Certified AI Practitioner (AIF-C01) 문제를 실전형 해설로 정리한 카테고리',
 };
 
-export default function AwsSaaPage() {
-  const posts = getPostsByCategory('aws-saa');
+export default function AwsAifPage() {
+  const posts = getPostsByCategory('aws-aif');
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
@@ -27,29 +27,29 @@ export default function AwsSaaPage() {
           </Link>
 
           <div className="flex items-start md:items-center gap-4 md:gap-6 flex-col md:flex-row">
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center shrink-0">
-              <Cloud className="w-8 h-8 md:w-10 md:h-10 text-orange-500" />
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center shrink-0">
+              <Sparkles className="w-8 h-8 md:w-10 md:h-10 text-cyan-500" />
             </div>
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-slate-100 font-nunito">
-                  AWS SAA
+                  AWS AIF-C01
                 </h1>
-                <Badge className="bg-orange-500 hover:bg-orange-600 text-white border-0 text-xs md:text-sm">
+                <Badge className="bg-cyan-500 hover:bg-cyan-600 text-white border-0 text-xs md:text-sm">
                   {posts.length} Posts
                 </Badge>
               </div>
               <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
-                AWS Solutions Architect Associate 문제를
+                AWS Certified AI Practitioner 문제를
                 <br />
-                실무형 사고 흐름으로 풀어낸 아카이브입니다.
+                SAA와 동일한 포맷으로 정리한 아카이브입니다.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <AwsSaaPostList posts={posts} />
+      <AwsAifPostList posts={posts} />
     </div>
   );
 }
