@@ -16,6 +16,22 @@ import { type RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
+// ── 모바일 감지 훅 ──
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    setIsMobile(mql.matches);
+
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, [breakpoint]);
+
+  return isMobile;
+}
+
 const marqueeItems = [
   'Frontend Engineering',
   'React & Next.js',
@@ -79,7 +95,7 @@ function useTextScramble(text: string, trigger: boolean) {
   return display;
 }
 
-// 플루이드 블롭 컴포넌트
+// 플루이드 블롭 컴포넌트 (will-change 추가로 GPU 가속)
 function FluidBlob({
   className,
   color1 = '#f0abfc',
@@ -112,6 +128,7 @@ function FluidBlob({
       style={{
         background: `linear-gradient(135deg, ${color1}40, ${color2}40)`,
         filter: 'blur(60px)',
+        willChange: 'transform',
       }}
     />
   );
@@ -145,36 +162,34 @@ function HexagonPattern() {
   );
 }
 
-// 3D 틸트 카드
+// 3D 틸트 카드 — useMotionValue로 리렌더 제거
 function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [rotateX, setRotateX] = useState(0);
-  const [rotateY, setRotateY] = useState(0);
-  const [glowPosition, setGlowPosition] = useState({ x: 50, y: 50 });
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+  const glowX = useMotionValue(50);
+  const glowY = useMotionValue(50);
+  const glowBg = useMotionTemplate`radial-gradient(circle at ${glowX}% ${glowY}%, rgba(255,255,255,0.15) 0%, transparent 50%)`;
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const mouseX = e.clientX - centerX;
-    const mouseY = e.clientY - centerY;
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
 
-    const rotateXValue = (mouseY / (rect.height / 2)) * -15;
-    const rotateYValue = (mouseX / (rect.width / 2)) * 15;
-
-    setRotateX(rotateXValue);
-    setRotateY(rotateYValue);
-    setGlowPosition({
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100,
-    });
-  }, []);
+      rotateX.set(((e.clientY - centerY) / (rect.height / 2)) * -15);
+      rotateY.set(((e.clientX - centerX) / (rect.width / 2)) * 15);
+      glowX.set(((e.clientX - rect.left) / rect.width) * 100);
+      glowY.set(((e.clientY - rect.top) / rect.height) * 100);
+    },
+    [rotateX, rotateY, glowX, glowY]
+  );
 
   const handleMouseLeave = useCallback(() => {
-    setRotateX(0);
-    setRotateY(0);
-  }, []);
+    rotateX.set(0);
+    rotateY.set(0);
+  }, [rotateX, rotateY]);
 
   return (
     <motion.div
@@ -185,25 +200,21 @@ function TiltCard({ children, className }: { children: React.ReactNode; classNam
       style={{
         transformStyle: 'preserve-3d',
         perspective: '1000px',
-      }}
-      animate={{
         rotateX,
         rotateY,
       }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
     >
-      <div
+      <motion.div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{
-          background: `radial-gradient(circle at ${glowPosition.x}% ${glowPosition.y}%, rgba(255,255,255,0.15) 0%, transparent 50%)`,
-        }}
+        style={{ background: glowBg }}
       />
       {children}
     </motion.div>
   );
 }
 
-// 파티클 필드
+// 파티클 필드 — O(n) 최적화, 연결선 제거, visibility 기반 정지
 function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<
@@ -216,8 +227,8 @@ function ParticleField() {
       color: string;
     }>
   >([]);
-  const mouseRef = useRef({ x: 0, y: 0 });
   const animationRef = useRef<number>(0);
+  const isVisibleRef = useRef(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -225,6 +236,13 @@ function ParticleField() {
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+
+    // ── visibility 감지: 탭이 백그라운드면 중단 ──
+    const onVisibilityChange = () => {
+      isVisibleRef.current = !document.hidden;
+      if (isVisibleRef.current && !animationRef.current) animate();
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -234,7 +252,8 @@ function ParticleField() {
     window.addEventListener('resize', resize);
 
     const colors = ['#22d3ee', '#f0abfc', '#a3e635', '#fbbf24'];
-    particlesRef.current = Array.from({ length: 36 }, () => ({
+    const PARTICLE_COUNT = 20; // 36 → 20 으로 축소
+    particlesRef.current = Array.from({ length: PARTICLE_COUNT }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       vx: (Math.random() - 0.5) * 0.5,
@@ -243,25 +262,17 @@ function ParticleField() {
       color: colors[Math.floor(Math.random() * colors.length)],
     }));
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-
+    // O(n) 렌더링 — 연결선(O(n²)) 제거
     const animate = () => {
+      if (!isVisibleRef.current) {
+        animationRef.current = 0;
+        return;
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 0.6;
 
-      particlesRef.current.forEach((particle, i) => {
-        if (i % 5 === 0) {
-          const dx = mouseRef.current.x - particle.x;
-          const dy = mouseRef.current.y - particle.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 150) {
-            particle.vx += dx * 0.0001;
-            particle.vy += dy * 0.0001;
-          }
-        }
-
+      for (const particle of particlesRef.current) {
         particle.x += particle.vx;
         particle.y += particle.vy;
 
@@ -271,31 +282,16 @@ function ParticleField() {
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fillStyle = particle.color;
-        ctx.globalAlpha = 0.6;
         ctx.fill();
-
-        particlesRef.current.slice(i + 1).forEach((other) => {
-          const dx = particle.x - other.x;
-          const dy = particle.y - other.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 100) {
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = particle.color;
-            ctx.globalAlpha = (1 - dist / 100) * 0.2;
-            ctx.stroke();
-          }
-        });
-      });
+      }
 
       animationRef.current = requestAnimationFrame(animate);
     };
     animate();
 
     return () => {
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', handleMouseMove);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
   }, []);
@@ -616,6 +612,8 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
   const rootRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLElement | null>(scrollContainer);
   const [isLoaded, setIsLoaded] = useState(false);
+  const isMobile = useIsMobile();
+
   const { scrollYProgress } = useScroll({
     container: scrollContainerRef,
     target: rootRef,
@@ -626,11 +624,19 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
   const heroY = useTransform(scrollYProgress, [0, 0.5], [0, -120]);
   const orbY = useTransform(scrollYProgress, [0, 1], [0, -220]);
 
+  // ── useTransform 을 컴포넌트 최상위로 이동 (렌더 바디 내 호출 제거) ──
+  const orbRotate = useTransform(scrollYProgress, [0, 1], [0, 50]);
+  const orbNegY = useTransform(orbY, (v) => -v * 0.6);
+  const orbNegRotate = useTransform(scrollYProgress, [0, 1], [0, -35]);
+  const orbSmallY = useTransform(orbY, (v) => v * 0.35);
+
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
   const glowX = useSpring(mx, { stiffness: 140, damping: 24, mass: 0.4 });
   const glowY = useSpring(my, { stiffness: 140, damping: 24, mass: 0.4 });
-  const spotlight = useMotionTemplate`radial-gradient(800px circle at ${useTransform(glowX, (v) => `${v * 100}%`)} ${useTransform(glowY, (v) => `${v * 100}%`)}, rgba(255,255,255,0.15), transparent 50%)`;
+  const glowXPercent = useTransform(glowX, (v) => `${v * 100}%`);
+  const glowYPercent = useTransform(glowY, (v) => `${v * 100}%`);
+  const spotlight = useMotionTemplate`radial-gradient(800px circle at ${glowXPercent} ${glowYPercent}, rgba(255,255,255,0.15), transparent 50%)`;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 500);
@@ -641,13 +647,18 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
     <div
       ref={rootRef}
       className="relative overflow-clip bg-[#06070b]"
-      onMouseMove={(e) => {
-        const bounds = e.currentTarget.getBoundingClientRect();
-        mx.set((e.clientX - bounds.left) / bounds.width);
-        my.set((e.clientY - bounds.top) / bounds.height);
-      }}
+      onMouseMove={
+        isMobile
+          ? undefined
+          : (e) => {
+              const bounds = e.currentTarget.getBoundingClientRect();
+              mx.set((e.clientX - bounds.left) / bounds.width);
+              my.set((e.clientY - bounds.top) / bounds.height);
+            }
+      }
     >
-      <ParticleField />
+      {/* 모바일에서 ParticleField 비활성화 */}
+      {!isMobile && <ParticleField />}
 
       {/* 스크롤 프로그레스 바 */}
       <motion.div
@@ -657,48 +668,52 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
 
       {/* 배경 */}
       <div className="pointer-events-none absolute inset-0 bg-[#06070b]" style={{ zIndex: 0 }} />
-      <motion.div
-        className="pointer-events-none absolute inset-0"
-        style={{ background: spotlight, zIndex: 2 }}
-      />
+      {/* 모바일에서 커서 스포트라이트 비활성화 */}
+      {!isMobile && (
+        <motion.div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: spotlight, zIndex: 2 }}
+        />
+      )}
       <HexagonPattern />
 
-      {/* 플루이드 블롭들 */}
-      <FluidBlob
-        className="-left-40 top-20 w-[40rem] h-[40rem]"
-        color1="#f0abfc"
-        color2="#c084fc"
-        delay={0}
-      />
-      <FluidBlob
-        className="-right-32 top-32 w-[35rem] h-[35rem]"
-        color1="#22d3ee"
-        color2="#0ea5e9"
-        delay={2}
-      />
-      <FluidBlob
-        className="bottom-20 left-1/4 w-[30rem] h-[30rem]"
-        color1="#a3e635"
-        color2="#22c55e"
-        delay={4}
-      />
+      {/* 플루이드 블롭들 — 모바일 비활성화 */}
+      {!isMobile && (
+        <>
+          <FluidBlob
+            className="-left-40 top-20 w-[40rem] h-[40rem]"
+            color1="#f0abfc"
+            color2="#c084fc"
+            delay={0}
+          />
+          <FluidBlob
+            className="-right-32 top-32 w-[35rem] h-[35rem]"
+            color1="#22d3ee"
+            color2="#0ea5e9"
+            delay={2}
+          />
+          <FluidBlob
+            className="bottom-20 left-1/4 w-[30rem] h-[30rem]"
+            color1="#a3e635"
+            color2="#22c55e"
+            delay={4}
+          />
 
-      {/* 추가 블롭 */}
-      <motion.div
-        style={{ y: orbY, rotate: useTransform(scrollYProgress, [0, 1], [0, 50]) }}
-        className="pointer-events-none absolute -left-28 top-16 h-[30rem] w-[30rem] rounded-full bg-fuchsia-500/30 blur-[130px]"
-      />
-      <motion.div
-        style={{
-          y: useTransform(orbY, (v) => -v * 0.6),
-          rotate: useTransform(scrollYProgress, [0, 1], [0, -35]),
-        }}
-        className="pointer-events-none absolute -right-24 top-24 h-[26rem] w-[26rem] rounded-full bg-cyan-400/25 blur-[120px]"
-      />
-      <motion.div
-        style={{ y: useTransform(orbY, (v) => v * 0.35) }}
-        className="pointer-events-none absolute bottom-8 left-1/3 h-[24rem] w-[24rem] rounded-full bg-lime-300/15 blur-[120px]"
-      />
+          {/* 추가 블롭 */}
+          <motion.div
+            style={{ y: orbY, rotate: orbRotate }}
+            className="pointer-events-none absolute -left-28 top-16 h-[30rem] w-[30rem] rounded-full bg-fuchsia-500/30 blur-[130px]"
+          />
+          <motion.div
+            style={{ y: orbNegY, rotate: orbNegRotate }}
+            className="pointer-events-none absolute -right-24 top-24 h-[26rem] w-[26rem] rounded-full bg-cyan-400/25 blur-[120px]"
+          />
+          <motion.div
+            style={{ y: orbSmallY }}
+            className="pointer-events-none absolute bottom-8 left-1/3 h-[24rem] w-[24rem] rounded-full bg-lime-300/15 blur-[120px]"
+          />
+        </>
+      )}
 
       {/* 히어로 섹션 */}
       <section
@@ -835,7 +850,7 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
         </motion.div>
       </section>
 
-      {/* 마퀴 섹션 */}
+      {/* 마퀴 섹션 — 개별 회전 애니메이션 제거 */}
       <section
         className="overflow-hidden border-y border-white/15 bg-white/[0.04] py-4 backdrop-blur-xl relative"
         style={{ zIndex: 5 }}
@@ -852,11 +867,7 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
                 <span className="text-xs uppercase tracking-[0.2em] text-white/70 whitespace-nowrap">
                   {text}
                 </span>
-                <motion.span
-                  className="h-2 w-2 rounded-full bg-gradient-to-r from-cyan-300 to-fuchsia-300"
-                  animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: index * 0.1 }}
-                />
+                <span className="h-2 w-2 rounded-full bg-gradient-to-r from-cyan-300 to-fuchsia-300" />
               </div>
             )
           )}
