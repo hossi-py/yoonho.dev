@@ -42,7 +42,7 @@ export default function AwsAifPage() {
               <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
                 AWS Certified AI Practitioner 문제를
                 <br />
-                SAA와 동일한 포맷으로 정리한 아카이브입니다.
+                정리한 아카이브입니다.
               </p>
             </div>
           </div>

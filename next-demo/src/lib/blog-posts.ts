@@ -11,6 +11,28 @@ export interface BlogPost {
 
 export const allPosts: BlogPost[] = [
   {
+    id: 'aif-c01-q3-gene-classification-decision-tree',
+    category: 'aws-aif',
+    number: 3,
+    title: 'AWS AIF-C01 합격으로 가는 길 #3: 유전자 20개 범주 분류와 Decision Tree',
+    description:
+      '유전자 분류 문제에서 모델 내부 작동 원리를 문서화해야 할 때 왜 Decision Tree가 정답인지 정리합니다.',
+    tags: ['Decision Tree', 'Classification', 'Explainability'],
+    date: '2026-02-26',
+    frequency: 'High',
+  },
+  {
+    id: 'aif-c01-q2-legal-document-summarization-chatbot',
+    category: 'aws-aif',
+    number: 2,
+    title: 'AWS AIF-C01 합격으로 가는 길 #2: 법률 문서 핵심 포인트 추출과 요약 챗봇',
+    description:
+      '법률 문서를 읽어 핵심 포인트를 추출해야 할 때 NER/추천/번역이 아닌 Summarization Chatbot을 선택하는 이유를 정리합니다.',
+    tags: ['LLM', 'Summarization', 'Chatbot'],
+    date: '2026-02-26',
+    frequency: 'High',
+  },
+  {
     id: 'aif-c01-q1-model-explainability-pdp',
     category: 'aws-aif',
     number: 1,
