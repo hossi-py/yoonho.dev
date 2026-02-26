@@ -313,14 +313,20 @@ function HorizontalScrollSection({
 }) {
   const HORIZONTAL_DISTANCE = '-128vw';
   const containerRef = useRef<HTMLDivElement>(null);
-  const stickyRef = useRef<HTMLDivElement>(null);
-  const forwardReleaseAccumRef = useRef(0);
-  const horizontalTarget = useMotionValue(0);
-  const horizontalProgress = useSpring(horizontalTarget, {
-    stiffness: 210,
-    damping: 34,
-    mass: 0.55,
+
+  // 컨테이너가 뷰포트의 15% (sticky top)을 지날 때 시작, 85% 지점(하단 도달) 완료
+  const { scrollYProgress } = useScroll({
+    container: scrollContainerRef,
+    target: containerRef,
+    offset: ['start 15vh', 'end 85vh'],
   });
+
+  const horizontalProgress = useSpring(scrollYProgress, {
+    stiffness: 250,
+    damping: 35,
+    mass: 0.5,
+  });
+
   const x = useTransform(horizontalProgress, [0, 1], ['0%', HORIZONTAL_DISTANCE]);
 
   const items = [
@@ -347,95 +353,10 @@ function HorizontalScrollSection({
     },
   ];
 
-  useEffect(() => {
-    const scroller = scrollContainerRef.current;
-    const section = containerRef.current;
-    const sticky = stickyRef.current;
-    if (!scroller || !section || !sticky) return;
-
-    const STEP = 0.003;
-    const PINNED_BUFFER = 56;
-    const PROGRESS_EPSILON = 0.001;
-    const FORWARD_RELEASE_THRESHOLD = 220;
-
-    // sticky top = 15vh → (viewport 높이) * 0.15 와 동일
-    const getStickyTopPx = () => scroller.clientHeight * 0.15;
-
-    // ── 섹션이 뷰포트 아래에 있으면 수평 진행도를 0으로 리셋 ──
-    // 사용자가 위로 돌아온 뒤 다시 내려올 때 처음부터 시작하도록 한다.
-    const onScroll = () => {
-      const sectionTop = section.offsetTop;
-      const viewportBottom = scroller.scrollTop + scroller.clientHeight;
-
-      if (viewportBottom < sectionTop && horizontalTarget.get() > PROGRESS_EPSILON) {
-        horizontalTarget.set(0);
-        forwardReleaseAccumRef.current = 0;
-      }
-    };
-
-    const onWheel = (event: WheelEvent) => {
-      const sectionTop = section.offsetTop;
-      const sectionBottom = sectionTop + section.offsetHeight;
-      const viewportTop = scroller.scrollTop;
-      const viewportBottom = viewportTop + scroller.clientHeight;
-      const isSectionVisible = viewportBottom > sectionTop && viewportTop < sectionBottom;
-      if (!isSectionVisible) return;
-
-      const stickyTopOffset = getStickyTopPx();
-      const stickyStart = sectionTop - stickyTopOffset;
-      const stickyEnd = sectionBottom - scroller.clientHeight;
-      const isStickyPinned =
-        viewportTop >= stickyStart - PINNED_BUFFER && viewportTop <= stickyEnd + PINNED_BUFFER;
-      if (!isStickyPinned) {
-        forwardReleaseAccumRef.current = 0;
-        return;
-      }
-
-      const current = horizontalTarget.get();
-      const direction = Math.sign(event.deltaY);
-      if (direction === 0) return;
-
-      if (direction < 0) {
-        forwardReleaseAccumRef.current = 0;
-      }
-
-      const reachedEnd = current >= 1 - PROGRESS_EPSILON;
-      if (direction > 0 && reachedEnd) {
-        if (forwardReleaseAccumRef.current < FORWARD_RELEASE_THRESHOLD) {
-          event.preventDefault();
-          forwardReleaseAccumRef.current += Math.abs(event.deltaY);
-          return;
-        }
-        return;
-      }
-
-      const deltaUnit =
-        event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? scroller.clientHeight : 1;
-      const normalizedDelta = Math.min(48, Math.abs(event.deltaY) * deltaUnit);
-      const next = Math.min(1, Math.max(0, current + normalizedDelta * STEP * direction));
-
-      const shouldConsume =
-        (direction > 0 && current < 1 - PROGRESS_EPSILON) ||
-        (direction < 0 && current > PROGRESS_EPSILON);
-      if (!shouldConsume) return;
-
-      // 수평 전환이 끝나기 전에는 세로 스크롤을 막아 카드 진행을 우선시한다.
-      event.preventDefault();
-      horizontalTarget.set(next);
-    };
-
-    scroller.addEventListener('scroll', onScroll, { passive: true });
-    scroller.addEventListener('wheel', onWheel, { passive: false });
-    return () => {
-      scroller.removeEventListener('scroll', onScroll);
-      scroller.removeEventListener('wheel', onWheel);
-    };
-  }, [horizontalTarget, scrollContainerRef]);
-
   return (
-    <div ref={containerRef} className="relative" style={{ height: '220vh', zIndex: 10 }}>
+    <div ref={containerRef} className="relative" style={{ height: '300vh', zIndex: 10 }}>
+      {/* 화면의 15vh ~ 85vh (총 70vh) 위치에 sticky 고정 */}
       <div
-        ref={stickyRef}
         className="sticky h-[70vh] overflow-hidden flex flex-col justify-center bg-[#06070b]"
         style={{ top: '15vh' }}
       >
@@ -483,9 +404,9 @@ function HorizontalScrollSection({
               />
 
               {/* 콘텐츠 */}
-              <div className="relative h-full flex flex-col justify-center items-center text-white p-8">
+              <div className="relative h-full flex flex-col justify-center items-center text-white p-6 md:p-8">
                 <motion.span
-                  className="text-sm uppercase tracking-[0.3em] mb-4 text-white/80 font-medium"
+                  className="text-[10px] md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] mb-4 text-white/80 font-medium"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
@@ -493,7 +414,7 @@ function HorizontalScrollSection({
                   {item.subtitle}
                 </motion.span>
                 <motion.h2
-                  className="text-7xl md:text-8xl font-black tracking-tighter mb-6"
+                  className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-4 md:mb-6"
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.4, type: 'spring' }}
@@ -501,7 +422,7 @@ function HorizontalScrollSection({
                   {item.title}
                 </motion.h2>
                 <motion.div
-                  className="w-32 h-1 bg-white/70 rounded-full"
+                  className="w-24 md:w-32 h-1 bg-white/70 rounded-full"
                   initial={{ scaleX: 0 }}
                   whileInView={{ scaleX: 1 }}
                   transition={{ delay: 0.5, duration: 0.6 }}
@@ -509,7 +430,7 @@ function HorizontalScrollSection({
 
                 {/* 추가 정보 */}
                 <motion.p
-                  className="mt-8 text-white/70 text-center max-w-md"
+                  className="mt-6 md:mt-8 text-white/70 text-center text-sm md:text-base max-w-md"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
@@ -518,7 +439,7 @@ function HorizontalScrollSection({
                 </motion.p>
 
                 {/* 인덱스 표시 */}
-                <div className="absolute bottom-8 right-8 text-6xl font-black text-white/20">
+                <div className="absolute bottom-6 md:bottom-8 right-6 md:right-8 text-4xl md:text-6xl font-black text-white/20">
                   0{i + 1}
                 </div>
               </div>
@@ -527,11 +448,11 @@ function HorizontalScrollSection({
         </motion.div>
 
         {/* 진행 표시기 */}
-        <div className="absolute bottom-8 left-1/2 w-[220px] -translate-x-1/2 rounded-full bg-white/20 p-[2px]">
+        <div className="absolute bottom-4 md:bottom-8 left-1/2 w-[160px] md:w-[220px] -translate-x-1/2 rounded-full bg-white/20 p-[2px]">
           <motion.div
-            className="h-[4px] rounded-full bg-white"
+            className="h-[3px] md:h-[4px] rounded-full bg-white"
             style={{
-              scaleX: horizontalProgress,
+              scaleX: scrollYProgress,
               transformOrigin: 'left',
             }}
           />
@@ -542,7 +463,15 @@ function HorizontalScrollSection({
 }
 
 // 글리치 텍스트
-function GlitchText({ text, className }: { text: string; className?: string }) {
+function GlitchText({
+  text,
+  className,
+  textClassName,
+}: {
+  text: string;
+  className?: string;
+  textClassName?: string;
+}) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -551,7 +480,7 @@ function GlitchText({ text, className }: { text: string; className?: string }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <span className="relative z-10">{text}</span>
+      <span className={cn('relative z-10', textClassName)}>{text}</span>
       <AnimatePresence>
         {isHovered && (
           <>
@@ -593,17 +522,19 @@ function ScrambledGlitchText({
   trigger,
   widthCh,
   className,
+  textClassName,
 }: {
   text: string;
   trigger: boolean;
   widthCh: number;
   className?: string;
+  textClassName?: string;
 }) {
   const scrambled = useTextScramble(text, trigger);
 
   return (
     <span className="inline-block align-top" style={{ width: `${widthCh}ch` }}>
-      <GlitchText text={scrambled} className={className} />
+      <GlitchText text={scrambled} className={className} textClassName={textClassName} />
     </span>
   );
 }
@@ -749,7 +680,7 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
                   text="BUILD."
                   trigger={isLoaded}
                   widthCh={6}
-                  className="bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-lime-200 bg-clip-text text-transparent"
+                  textClassName="bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-lime-200 bg-clip-text text-transparent"
                 />
                 <br />
                 <ScrambledGlitchText text="SHARE." trigger={isLoaded} widthCh={6} />
