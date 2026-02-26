@@ -487,3 +487,21 @@ export const PROJECTS: Project[] = [
     },
   },
 ];
+
+export function searchProjects(query: string): Project[] {
+  // 공백을 모두 제거하고 소문자로 변환하여 비교 (한글 띄어쓰기 제약 완화)
+  const normalizedQuery = query.toLowerCase().replace(/\s+/g, '');
+  if (!normalizedQuery) return [];
+
+  return PROJECTS.filter((project) => {
+    const title = project.title.toLowerCase().replace(/\s+/g, '');
+    const description = project.description.toLowerCase().replace(/\s+/g, '');
+    const techStacks = project.techStack.map((tech) => tech.toLowerCase().replace(/\s+/g, ''));
+
+    return (
+      title.includes(normalizedQuery) ||
+      description.includes(normalizedQuery) ||
+      techStacks.some((tech) => tech.includes(normalizedQuery))
+    );
+  });
+}

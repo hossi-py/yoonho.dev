@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText } from 'lucide-react';
+import { FileText, FolderGit2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
@@ -14,19 +14,22 @@ import {
   CommandSeparator,
 } from '@/components/ui/command';
 import { ALL_NAV_ITEMS } from '@/lib/nav-config';
-import { type SearchablePost,searchPosts } from '@/lib/search-posts';
+import { type Project, searchProjects } from '@/lib/projects';
+import { type SearchablePost, searchPosts } from '@/lib/search-posts';
 import { useSearchStore } from '@/stores/search-store';
 
 export function GlobalSearch() {
   const { open, setOpen } = useSearchStore();
   const [search, setSearch] = React.useState('');
   const [postResults, setPostResults] = React.useState<SearchablePost[]>([]);
+  const [projectResults, setProjectResults] = React.useState<Project[]>([]);
   const router = useRouter();
 
-  // 검색어 입력 시 포스트 검색 수행
+  // 검색어 입력 시 포스트/프로젝트 검색 수행
   const handleSearchChange = (value: string) => {
     setSearch(value);
     setPostResults(searchPosts(value));
+    setProjectResults(searchProjects(value));
   };
 
   // 검색 실행 (이동 후 닫기)
@@ -35,6 +38,7 @@ export function GlobalSearch() {
       setOpen(false);
       setSearch('');
       setPostResults([]);
+      setProjectResults([]);
       command();
     },
     [setOpen]
@@ -67,6 +71,7 @@ export function GlobalSearch() {
           {ALL_NAV_ITEMS.filter((item) => !item.external).map((item) => (
             <CommandItem
               key={item.label}
+              value={item.label}
               onSelect={() => runCommand(() => router.push(item.href))}
               className="gap-2"
             >
@@ -83,12 +88,38 @@ export function GlobalSearch() {
 
         <CommandSeparator />
 
+        {/* Project Results */}
+        {projectResults.length > 0 && (
+          <CommandGroup heading="Projects">
+            {projectResults.map((project) => (
+              <CommandItem
+                key={project.id}
+                value={`${project.title} ${project.description} ${search}`}
+                onSelect={() => runCommand(() => router.push(`/projects/${project.id}`))}
+                className="gap-2 flex-col items-start py-2"
+              >
+                <div className="flex items-center gap-2 w-full">
+                  <FolderGit2 className="h-4 w-4 text-primary shrink-0" />
+                  <span className="font-medium truncate">{project.title}</span>
+                  <span className="ml-auto text-[10px] uppercase tracking-wider text-muted-foreground/60 shrink-0">
+                    {project.category}
+                  </span>
+                </div>
+                <span className="text-[11px] text-muted-foreground line-clamp-1 pl-6">
+                  {project.description}
+                </span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
+
         {/* Blog Post Results */}
         {postResults.length > 0 && (
           <CommandGroup heading="Blog Posts">
             {postResults.map((post) => (
               <CommandItem
                 key={post.slug}
+                value={`${post.title} ${post.description} ${post.category} ${search}`}
                 onSelect={() => runCommand(() => router.push(`/blog/aws-saa/${post.slug}`))}
                 className="gap-2 flex-col items-start py-2"
               >

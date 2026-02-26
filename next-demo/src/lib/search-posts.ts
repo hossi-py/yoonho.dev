@@ -57,13 +57,18 @@ export const AWS_SAA_POSTS: SearchablePost[] = [
 ];
 
 export function searchPosts(query: string): SearchablePost[] {
-  const normalizedQuery = query.toLowerCase().trim();
+  const normalizedQuery = query.toLowerCase().replace(/\s+/g, '');
   if (!normalizedQuery) return [];
 
-  return AWS_SAA_POSTS.filter(
-    (post) =>
-      post.title.toLowerCase().includes(normalizedQuery) ||
-      post.description.toLowerCase().includes(normalizedQuery) ||
-      post.category.toLowerCase().includes(normalizedQuery)
-  );
+  return AWS_SAA_POSTS.filter((post) => {
+    const title = post.title.toLowerCase().replace(/\s+/g, '');
+    const description = post.description.toLowerCase().replace(/\s+/g, '');
+    const category = post.category.toLowerCase().replace(/\s+/g, '');
+
+    return (
+      title.includes(normalizedQuery) ||
+      description.includes(normalizedQuery) ||
+      category.includes(normalizedQuery)
+    );
+  });
 }

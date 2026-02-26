@@ -982,16 +982,33 @@ function RootHomeExperienceContent({ scrollContainer }: { scrollContainer: HTMLE
           <p className="text-white/60 text-lg mb-8">
             새로운 글과 프로젝트 회고를 계속 업데이트하고 있습니다.
           </p>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button
-              asChild
-              className="h-14 px-10 rounded-full bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-lime-300 text-black font-bold text-lg hover:opacity-90"
-            >
-              <Link href="/about">
-                About Me 보러가기
-                <ArrowUpRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
+          <motion.div className="flex flex-wrap justify-center gap-4">
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                asChild
+                className="h-14 px-10 rounded-full bg-white text-black font-bold text-lg border-0 hover:bg-white/90 group"
+              >
+                <Link href="/about">
+                  About Me 보러가기
+                  <motion.span
+                    className="ml-2 inline-block"
+                    animate={{ x: [0, 4, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    <ArrowUpRight className="h-5 w-5" />
+                  </motion.span>
+                </Link>
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                asChild
+                variant="outline"
+                className="h-14 px-10 rounded-full border-white/35 bg-transparent text-white text-lg hover:bg-white/10 hover:text-white backdrop-blur-sm"
+              >
+                <Link href="/blog">블로그 둘러보기</Link>
+              </Button>
+            </motion.div>
           </motion.div>
         </motion.div>
       </section>

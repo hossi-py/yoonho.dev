@@ -9,6 +9,8 @@ import {
   User,
 } from 'lucide-react';
 
+import { PROJECTS } from '@/lib/projects';
+
 export interface NavItem {
   icon: LucideIcon;
   label: string;
@@ -28,7 +30,7 @@ export const NAV_CONFIG: NavSection[] = [
     items: [
       { icon: Home, label: 'Home', href: '/' },
       { icon: User, label: 'About', href: '/about' },
-      { icon: FolderGit2, label: 'Projects', href: '/projects', badge: '6' },
+      { icon: FolderGit2, label: 'Projects', href: '/projects', badge: PROJECTS.length.toString() },
       { icon: PenLine, label: 'Blog', href: '/blog' },
     ],
   },
