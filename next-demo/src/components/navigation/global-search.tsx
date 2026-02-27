@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { FileText, FolderGit2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -25,14 +25,12 @@ export function GlobalSearch() {
   const [projectResults, setProjectResults] = React.useState<Project[]>([]);
   const router = useRouter();
 
-  // 검색어 입력 시 포스트/프로젝트 검색 수행
   const handleSearchChange = (value: string) => {
     setSearch(value);
     setPostResults(searchPosts(value));
     setProjectResults(searchProjects(value));
   };
 
-  // 검색 실행 (이동 후 닫기)
   const runCommand = React.useCallback(
     (command: () => void) => {
       setOpen(false);
@@ -44,7 +42,6 @@ export function GlobalSearch() {
     [setOpen]
   );
 
-  // ⌘K 단축키
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -66,7 +63,6 @@ export function GlobalSearch() {
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
 
-        {/* Navigation Items */}
         <CommandGroup heading="Navigation">
           {ALL_NAV_ITEMS.filter((item) => !item.external).map((item) => (
             <CommandItem
@@ -88,7 +84,6 @@ export function GlobalSearch() {
 
         <CommandSeparator />
 
-        {/* Project Results */}
         {projectResults.length > 0 && (
           <CommandGroup heading="Projects">
             {projectResults.map((project) => (
@@ -113,14 +108,13 @@ export function GlobalSearch() {
           </CommandGroup>
         )}
 
-        {/* Blog Post Results */}
         {postResults.length > 0 && (
           <CommandGroup heading="Blog Posts">
             {postResults.map((post) => (
               <CommandItem
                 key={post.slug}
                 value={`${post.title} ${post.description} ${post.category} ${search}`}
-                onSelect={() => runCommand(() => router.push(`/blog/aws-saa/${post.slug}`))}
+                onSelect={() => runCommand(() => router.push(post.href))}
                 className="gap-2 flex-col items-start py-2"
               >
                 <div className="flex items-center gap-2 w-full">

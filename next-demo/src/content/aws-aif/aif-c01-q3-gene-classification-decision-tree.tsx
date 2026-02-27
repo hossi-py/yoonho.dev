@@ -5,9 +5,9 @@ const content: AwsSaaPostContent = {
   meta: {
     tagId: 'ML Algorithm Selection',
     date: '2026. 02. 26',
-    title: '유전자 20개 범주 분류와 모델 내부 설명 가능성',
+    title: '유전자 20개 범주 분류: 설명 가능한 알고리즘 선택',
     description:
-      '유전자 특성 기반 다중 분류 문제에서 모델의 내부 작동 원리를 문서화해야 할 때 어떤 알고리즘이 적합한지 정리합니다.',
+      '다중 분류 문제에서 모델 내부 동작을 문서화해야 할 때 어떤 알고리즘이 맞는지 비교합니다.',
   },
   diagram: <AifGeneDecisionTreeDiagram />,
   analyze: {
@@ -15,60 +15,59 @@ const content: AwsSaaPostContent = {
       english:
         'A company wants to classify human genes into 20 categories based on gene characteristics. The company needs an ML algorithm to document how the inner mechanism of the model affects the output. Which ML algorithm meets these requirements?',
       korean:
-        '회사가 유전자 특성을 기반으로 인간 유전자를 20개 범주로 분류하려고 합니다. 또한 모델의 내부 메커니즘이 출력에 어떤 영향을 주는지 문서화해야 합니다. 어떤 ML 알고리즘이 요구사항에 가장 적합할까요?',
+        '회사가 유전자 특성으로 사람 유전자를 20개 범주로 분류하려고 한다. 또한 모델 내부 메커니즘이 출력에 어떤 영향을 주는지 문서화해야 한다. 어떤 ML 알고리즘이 가장 적합한가?',
     },
     requirements: [
       {
         num: 1,
-        title: 'Multi-class Classification',
-        desc: '20개 카테고리 분류가 가능한 알고리즘이어야 합니다.',
-        keyword: 'Classification',
+        title: '다중 분류',
+        desc: '20개 클래스를 예측하는 분류(Classification) 문제다.',
+        keyword: 'Multi-class Classification',
       },
       {
         num: 2,
-        title: 'Explainable Mechanism',
-        desc: '모델 내부 의사결정 과정을 사람이 추적하고 설명할 수 있어야 합니다.',
+        title: '설명 가능성',
+        desc: '모델 내부 의사결정 과정을 사람이 이해할 수 있어야 한다.',
         keyword: 'Interpretability',
       },
       {
         num: 3,
-        title: 'Rule-based Documentation',
-        desc: '출력이 어떤 분기/규칙으로 결정되는지 문서화하기 쉬워야 합니다.',
+        title: '문서화 용이성',
+        desc: '출력 근거를 규칙/분기로 설명 가능해야 한다.',
         keyword: 'Traceability',
       },
       {
         num: 4,
-        title: 'Practical Reporting',
-        desc: '이해관계자에게 모델 동작 원리를 직관적으로 전달할 수 있어야 합니다.',
-        keyword: 'Transparency',
+        title: '오답 유형 구분',
+        desc: '회귀/군집화/차원축소와 분류 모델을 구분해야 한다.',
+        keyword: 'Algorithm Fit',
       },
     ],
     quiz: [
       {
         id: 'A',
-        text: 'Decision trees',
-        isCorrect: true,
-        explanation:
-          '정답입니다. Decision Tree는 분기 규칙을 통해 결과가 도출되는 과정을 명확히 추적할 수 있어 내부 메커니즘 문서화에 가장 적합합니다.',
+        text: '선형 회귀 (Linear Regression)',
+        isCorrect: false,
+        explanation: '선형 회귀는 연속값 예측 모델로 분류 라벨 예측 목적과 맞지 않는다.',
       },
       {
         id: 'B',
-        text: 'Linear regression',
+        text: 'K-means 클러스터링',
         isCorrect: false,
-        explanation: '선형 회귀는 연속값 예측이 목적이며, 20개 범주의 다중 분류 문제에 직접적이지 않습니다.',
+        explanation: 'K-means는 비지도 학습으로 라벨이 있는 분류 문제의 정답 모델이 아니다.',
       },
       {
         id: 'C',
-        text: 'Logistic regression',
-        isCorrect: false,
+        text: '의사결정 트리 (Decision Tree)',
+        isCorrect: true,
         explanation:
-          '다중 분류 확장은 가능하지만, 문제의 핵심인 내부 메커니즘의 직관적 문서화 측면에서는 Decision Tree가 더 적합합니다.',
+          '정답이다. Decision Tree는 분류에 적합하며, 분기 규칙을 통해 예측 근거를 문서화하기 쉬워 설명가능성 요구를 충족한다.',
       },
       {
         id: 'D',
-        text: 'Neural networks',
+        text: '주성분 분석 (PCA)',
         isCorrect: false,
-        explanation: '신경망은 성능은 높을 수 있으나 내부 동작 해석과 문서화가 상대적으로 어렵습니다.',
+        explanation: 'PCA는 차원 축소 기법으로 단독 분류 알고리즘이 아니다.',
       },
     ],
   },
@@ -76,44 +75,99 @@ const content: AwsSaaPostContent = {
     main: {
       icon: '🌳',
       title: 'Decision Tree',
+      subTitle: '분류 + 설명가능성 요구를 동시에 만족',
       desc: [
-        '특성 임계값 기반 분기 구조를 명시적으로 제공',
-        '각 출력이 어떤 규칙 경로를 거쳤는지 추적 가능',
-        '모델 해석/감사 보고서 작성에 유리',
+        '분류 경로가 규칙 형태로 명확하게 드러남',
+        '예측 근거를 문서화하기 쉬움',
+        '다중 클래스 분류 문제에 자연스럽게 적용 가능',
       ],
-      subTitle: '설명 가능성이 필요한 분류 문제의 기본 선택지',
     },
     others: [
       {
         title: 'Linear Regression',
-        items: ['연속값 예측에 적합', '범주형 다중 분류 문제와 목적 불일치'],
+        items: ['연속형 값 예측', '분류 라벨 예측과 목적 불일치'],
+        warning: 'Classification 문제에서는 1차적으로 제외',
       },
       {
-        title: 'Logistic Regression',
-        items: ['분류 문제에 사용 가능', '결정 경로 설명 직관성은 트리 대비 낮음'],
+        title: 'K-means',
+        items: ['비지도 군집화', '정답 라벨 기반 분류가 아님'],
       },
       {
-        title: 'Neural Networks',
-        items: ['복잡한 패턴 학습에 강점', '내부 메커니즘 문서화 요구에는 불리'],
-        warning: 'High performance != High explainability',
+        title: 'PCA',
+        items: ['차원 축소/전처리', '단독 분류 모델이 아님'],
       },
     ],
     insight: (
       <p className="text-xs md:text-sm text-blue-700 dark:text-blue-300">
-        <strong>핵심 인사이트:</strong> 문제에서 “내부 메커니즘을 문서화”하라고 하면 블랙박스 모델보다
-        규칙 기반 경로를 설명할 수 있는 트리 계열을 우선 고려해야 합니다.
+        <strong>핵심 인사이트:</strong> 문제에
+        {' '}
+        <strong>classify + explain/document mechanism</strong>
+        {' '}
+        이 동시에 나오면 Decision Tree를 우선 검토한다.
       </p>
     ),
   },
   deepDive: (
-    <div className="space-y-4">
-      <h3 className="text-lg font-bold">빠른 복습 포인트</h3>
-      <ul className="list-disc pl-5 text-sm text-slate-700 dark:text-slate-300 space-y-2">
-        <li>설명 가능성 요구가 강하면 Decision Tree/Rule-based 모델을 먼저 검토합니다.</li>
-        <li>다중 분류 가능 여부 + 설명 가능성 요구를 함께 읽어야 합니다.</li>
-        <li>신경망은 정확도가 높아도 해석/문서화 요구에서는 오답 패턴이 됩니다.</li>
-      </ul>
-    </div>
+    <>
+      <div className="space-y-5">
+        <h3 className="text-lg font-bold">비교 테이블</h3>
+        <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+          <table className="w-full text-sm text-left border-collapse">
+            <thead>
+              <tr className="bg-slate-100 dark:bg-slate-800 border-b dark:border-slate-700">
+                <th className="p-3 font-bold whitespace-nowrap">선지</th>
+                <th className="p-3 font-bold whitespace-nowrap">역할</th>
+                <th className="p-3 font-bold whitespace-nowrap">판단 포인트</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tr className="bg-green-50/50 dark:bg-green-900/10">
+                <td className="p-3 font-bold text-green-700 dark:text-green-400">C. Decision Tree</td>
+                <td className="p-3">지도학습 분류 + 규칙 기반 분기</td>
+                <td className="p-3">분류 정확성과 설명 가능성을 함께 만족</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-bold">A. Linear Regression</td>
+                <td className="p-3">회귀(Regression)</td>
+                <td className="p-3">문제 유형 자체가 다름</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-bold">B. K-means</td>
+                <td className="p-3">비지도 군집화</td>
+                <td className="p-3">라벨 기반 분류 문제에 부적합</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-bold">D. PCA</td>
+                <td className="p-3">차원 축소</td>
+                <td className="p-3">전처리 기법이지 최종 분류기가 아님</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-bold">시험장 치트키 (Cheat Sheet)</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="rounded-xl border-l-4 border-l-green-500 border border-slate-200 dark:border-slate-700 p-4">
+            <h4 className="font-bold text-green-700 dark:text-green-400 mb-2">정답 트리거</h4>
+            <ul className="text-sm space-y-2 list-disc pl-4 text-slate-600 dark:text-slate-300">
+              <li>키워드: classification, interpretable, document mechanism</li>
+              <li>규칙 기반 설명이 필요하면 Decision Tree 우선</li>
+              <li>분류 문제인지 먼저 확정한 뒤 모델 고르기</li>
+            </ul>
+          </div>
+          <div className="rounded-xl border-l-4 border-l-blue-500 border border-slate-200 dark:border-slate-700 p-4">
+            <h4 className="font-bold text-blue-700 dark:text-blue-400 mb-2">오답 패턴</h4>
+            <ul className="text-sm space-y-2 list-disc pl-4 text-slate-600 dark:text-slate-300">
+              <li>Regression/Clustering/PCA를 분류 모델로 착각</li>
+              <li>설명가능성 요구를 무시하고 정확도만 보는 접근</li>
+              <li>전처리 기법을 최종 해법으로 오해</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </>
   ),
 };
 
