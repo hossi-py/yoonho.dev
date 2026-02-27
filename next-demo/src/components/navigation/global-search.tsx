@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/command';
 import { ALL_NAV_ITEMS } from '@/lib/nav-config';
 import { type Project, searchProjects } from '@/lib/projects';
-import { type SearchablePost, searchPosts } from '@/lib/search-posts';
+import { type SearchablePost, searchPostsByApi } from '@/lib/search-posts';
 import { useSearchStore } from '@/stores/search-store';
 
 export function GlobalSearch() {
@@ -27,8 +27,6 @@ export function GlobalSearch() {
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
-    setPostResults(searchPosts(value));
-    setProjectResults(searchProjects(value));
   };
 
   const runCommand = React.useCallback(
@@ -52,6 +50,30 @@ export function GlobalSearch() {
     document.addEventListener('keydown', down);
     return () => document.removeEventListener('keydown', down);
   }, [open, setOpen]);
+
+  React.useEffect(() => {
+    const keyword = search.trim();
+    if (!keyword) {
+      setPostResults([]);
+      setProjectResults([]);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      const [postItems, projectItems] = await Promise.all([
+        searchPostsByApi(keyword, { signal: controller.signal, limit: 20 }),
+        Promise.resolve(searchProjects(keyword)),
+      ]);
+      setPostResults(postItems);
+      setProjectResults(projectItems);
+    }, 320);
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [search]);
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>

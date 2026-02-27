@@ -4,15 +4,17 @@ import Link from 'next/link';
 
 import { AwsAifPostList } from '@/components/blog/AwsAifPostList';
 import { Badge } from '@/components/ui/badge';
-import { getPostsByCategory } from '@/lib/blog-posts';
+import { getQuestionPostsByCategory } from '@/lib/questions-repository';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'AWS AIF-C01 - AI Practitioner',
   description: 'AWS Certified AI Practitioner (AIF-C01) 문제를 실전형 해설로 정리한 카테고리',
 };
 
-export default function AwsAifPage() {
-  const posts = getPostsByCategory('aws-aif');
+export default async function AwsAifPage() {
+  const posts = await getQuestionPostsByCategory('aws-aif');
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
