@@ -11,6 +11,17 @@
 
 export const allPosts: BlogPost[] = [
   {
+    id: 'aif-c01-q7-transfer-learning-domain-specific-model-adaptation',
+    category: 'aws-aif',
+    number: 7,
+    title: 'AWS AIF-C01 합격으로 가는 길 #7: 도메인 모델 확장과 Transfer Learning',
+    description:
+      '새 모델을 처음부터 만들지 않고 사전학습 모델을 유사한 신규 태스크에 맞게 적응시키는 전이학습 전략을 정리합니다.',
+    tags: ['Transfer Learning', 'Model Adaptation', 'Pre-trained Model'],
+    date: '2026-02-27',
+    frequency: 'High',
+  },
+  {
     id: 'aif-c01-q6-sagemaker-async-inference-large-payload',
     category: 'aws-aif',
     number: 6,
