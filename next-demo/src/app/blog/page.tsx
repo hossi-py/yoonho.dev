@@ -1,14 +1,18 @@
-import { Calendar, Cloud, Code2, Layout, Server, Sparkles } from 'lucide-react';
+﻿import { Calendar, Cloud, Code2, Layout, Server, Sparkles } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getCategoryCount, getRecentPosts } from '@/lib/blog-posts';
+import {
+  getFrontendArticlesByFramework,
+  getFrontendFrameworkCounts,
+} from '@/lib/frontend-articles-repository';
 
 export const metadata: Metadata = {
   title: 'Tech Blog',
-  description: 'AWS, Frontend, Backend 주제를 다루는 기술 블로그',
+  description: 'AWS, Frontend, Backend 주제의 기술 블로그',
 };
 
 const categoryMeta = {
@@ -53,8 +57,49 @@ const categoryIcons = {
   backend: Server,
 } as const;
 
-export default function BlogPage() {
-  const recentPosts = getRecentPosts();
+type BlogCategory = keyof typeof categoryMeta;
+
+type RecentPostItem = {
+  id: string;
+  category: BlogCategory;
+  title: string;
+  description: string;
+  date: string;
+  tags: string[];
+  href: string;
+};
+
+export default async function BlogPage() {
+  const [frontendCounts, reactPosts, vuePosts, nextPosts] = await Promise.all([
+    getFrontendFrameworkCounts(),
+    getFrontendArticlesByFramework('react'),
+    getFrontendArticlesByFramework('vue'),
+    getFrontendArticlesByFramework('nextjs'),
+  ]);
+
+  const staticRecentPosts: RecentPostItem[] = getRecentPosts(50).map((post) => ({
+    id: post.id,
+    category: post.category,
+    title: post.title,
+    description: post.description,
+    date: post.date,
+    tags: post.tags,
+    href: `/blog/${post.category}/${post.id}`,
+  }));
+
+  const frontendRecentPosts: RecentPostItem[] = [...reactPosts, ...vuePosts, ...nextPosts].map((post) => ({
+    id: post.id,
+    category: 'frontend',
+    title: post.title,
+    description: post.description,
+    date: post.date,
+    tags: post.tags,
+    href: `/blog/frontend/${post.framework}/${post.id}`,
+  }));
+
+  const recentPosts = [...staticRecentPosts, ...frontendRecentPosts]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
 
   const categories = [
     {
@@ -74,9 +119,9 @@ export default function BlogPage() {
     {
       id: 'frontend' as const,
       title: 'Frontend',
-      description: 'React, Vue, Next.js 중심의 프론트엔드 정리',
+      description: 'React, Vue, Next.js 프론트엔드 글',
       icon: <Layout className="w-8 h-8" />,
-      posts: getCategoryCount('frontend'),
+      posts: frontendCounts.total,
     },
     {
       id: 'backend' as const,
@@ -163,10 +208,10 @@ export default function BlogPage() {
 
           <div className="grid gap-6">
             {recentPosts.map((post) => {
-              const meta = categoryMeta[post.category as keyof typeof categoryMeta];
-              const IconComponent = categoryIcons[post.category as keyof typeof categoryIcons];
+              const meta = categoryMeta[post.category];
+              const IconComponent = categoryIcons[post.category];
               return (
-                <Link key={post.id} href={`/blog/${post.category}/${post.id}`}>
+                <Link key={`${post.category}-${post.id}`} href={post.href}>
                   <Card className="hover:shadow-lg transition-all duration-300 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 group overflow-hidden">
                     <div className="flex flex-col md:flex-row">
                       <div

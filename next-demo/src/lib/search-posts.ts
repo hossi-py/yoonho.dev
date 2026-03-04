@@ -1,4 +1,4 @@
-type SearchCategory = 'AWS SAA' | 'AWS AIF';
+type SearchCategory = 'AWS SAA' | 'AWS AIF' | 'Frontend';
 
 export interface SearchablePost {
   title: string;

@@ -1,18 +1,58 @@
-import { ChevronLeft, Construction, Layout } from 'lucide-react';
+﻿import { ChevronLeft, Layout } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { FrontendArticleList } from '@/components/blog/frontend/FrontendArticleList';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { getCategoryCount } from '@/lib/blog-posts';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  getFrontendArticlesByFramework,
+  getFrontendFrameworkCounts,
+} from '@/lib/frontend-articles-repository';
 
 export const metadata: Metadata = {
   title: 'Frontend',
-  description: 'React, Vue, Next.js 등 모던 프론트엔드 기술을 다루는 블로그 카테고리',
+  description: 'React, Vue, Next.js를 프레임워크별로 정리한 프론트엔드 학습 블로그',
 };
 
-export default function FrontendPage() {
-  const count = getCategoryCount('frontend');
+const TRACKS: Array<{
+  id: 'react' | 'vue' | 'nextjs';
+  title: string;
+  description: string;
+  href: string;
+}> = [
+  {
+    id: 'react',
+    title: 'React',
+    description: 'UI 모델과 렌더링 사고법을 문서 기반으로 깊이 있게 정리합니다.',
+    href: '/blog/frontend/react',
+  },
+  {
+    id: 'vue',
+    title: 'Vue',
+    description: 'Composition API 중심의 실전 패턴을 단계적으로 누적합니다.',
+    href: '/blog/frontend/vue',
+  },
+  {
+    id: 'nextjs',
+    title: 'Next.js',
+    description: 'App Router, 서버 컴포넌트, 캐싱 전략을 실무 기준으로 다룹니다.',
+    href: '/blog/frontend/nextjs',
+  },
+];
+
+
+export default async function FrontendPage() {
+  const [{ total, react, vue, nextjs }, reactPosts] = await Promise.all([
+    getFrontendFrameworkCounts(),
+    getFrontendArticlesByFramework('react'),
+  ]);
+
+  const trackCountMap: Record<'react' | 'vue' | 'nextjs', number> = {
+    react,
+    vue,
+    nextjs,
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
@@ -36,31 +76,44 @@ export default function FrontendPage() {
                   Frontend
                 </h1>
                 <Badge className="bg-blue-500 hover:bg-blue-600 text-white border-0 text-xs md:text-sm">
-                  {count} Posts
+                  {total} Posts
                 </Badge>
               </div>
               <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
-                React, Vue, Next.js 등 모던 프론트엔드 기술을 다룹니다.
+                React, Vue, Next.js를 트랙별로 분리해 문서 기반 학습 글을 누적합니다.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Coming Soon */}
-      <div className="max-w-5xl mx-auto px-4 md:px-6 py-16 md:py-24">
-        <Card className="border-2 border-dashed border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-950/20">
-          <CardContent className="p-8 md:p-12 flex flex-col items-center text-center gap-4">
-            <Construction className="w-12 h-12 text-blue-400" />
-            <h2 className="text-xl md:text-2xl font-bold text-slate-700 dark:text-slate-200">
-              콘텐츠 준비 중입니다
-            </h2>
-            <p className="text-slate-500 dark:text-slate-400 max-w-md">
-              프론트엔드 관련 글이 곧 업데이트될 예정입니다. 기대해 주세요! 🚀
-            </p>
-          </CardContent>
-        </Card>
+      <div className="max-w-5xl mx-auto px-4 md:px-6 py-12 md:py-16 space-y-10">
+        <section className="grid md:grid-cols-3 gap-4">
+          {TRACKS.map((track) => (
+            <Link key={track.id} href={track.href}>
+              <Card className="h-full hover:shadow-md transition-shadow border-slate-200 dark:border-slate-700">
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    {track.title}
+                    <Badge variant="outline">{trackCountMap[track.id]}</Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-slate-600 dark:text-slate-300">
+                  {track.description}
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-slate-100">
+            React 최신 글
+          </h2>
+          <FrontendArticleList framework="react" posts={reactPosts.slice(0, 3)} />
+        </section>
       </div>
     </div>
   );
 }
+

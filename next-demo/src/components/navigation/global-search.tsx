@@ -60,16 +60,26 @@ export function GlobalSearch() {
     }
 
     const controller = new AbortController();
+    let disposed = false;
     const timer = setTimeout(async () => {
-      const [postItems, projectItems] = await Promise.all([
-        searchPostsByApi(keyword, { signal: controller.signal, limit: 20 }),
-        Promise.resolve(searchProjects(keyword)),
-      ]);
-      setPostResults(postItems);
-      setProjectResults(projectItems);
+      try {
+        const [postItems, projectItems] = await Promise.all([
+          searchPostsByApi(keyword, { signal: controller.signal, limit: 20 }),
+          Promise.resolve(searchProjects(keyword)),
+        ]);
+
+        if (disposed) return;
+        setPostResults(postItems);
+        setProjectResults(projectItems);
+      } catch (error) {
+        if (disposed) return;
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+        console.error('[global-search] search failed', error);
+      }
     }, 320);
 
     return () => {
+      disposed = true;
       clearTimeout(timer);
       controller.abort();
     };
