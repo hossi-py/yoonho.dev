@@ -1,4 +1,4 @@
-﻿export type FrontendFramework = 'react' | 'vue' | 'nextjs';
+export type FrontendFramework = 'react' | 'vue' | 'nextjs';
 
 export type ArticleDifficulty = 'Beginner' | 'Intermediate' | 'Advanced';
 

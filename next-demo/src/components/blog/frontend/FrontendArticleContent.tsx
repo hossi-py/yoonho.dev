@@ -1,4 +1,4 @@
-﻿import { Clock3, SignalHigh, SignalLow, SignalMedium } from 'lucide-react';
+import { Clock3, SignalHigh, SignalLow, SignalMedium } from 'lucide-react';
 
 import { InlineCodeText } from '@/components/blog/frontend/InlineCodeText';
 import { LearningCheckpoint } from '@/components/blog/frontend/LearningCheckpoint';

@@ -1,4 +1,4 @@
-﻿interface InlineCodeTextProps {
+interface InlineCodeTextProps {
   text: string;
   glossaryTerms?: string[];
   shownTerms?: Set<string>;

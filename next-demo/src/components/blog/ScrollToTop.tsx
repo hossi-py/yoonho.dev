@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { ArrowUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -8,18 +8,13 @@ import { Button } from '@/components/ui/button';
 export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
 
-  // 스크롤 감지
+  // Show button after the user scrolls down in the main container.
   useEffect(() => {
     const mainElement = document.querySelector('main');
     if (!mainElement) return;
 
     const toggleVisibility = () => {
-      // 300px 이상 내려갔을 때 표시
-      if (mainElement.scrollTop > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      setIsVisible(mainElement.scrollTop > 300);
     };
 
     mainElement.addEventListener('scroll', toggleVisibility);
@@ -38,21 +33,19 @@ export function ScrollToTop() {
   };
 
   return (
-    <>
-      <div
-        className={`fixed bottom-8 right-8 z-50 transition-all duration-300 transform ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-        }`}
+    <div
+      className={`fixed bottom-8 right-8 z-50 transform transition-all duration-300 ${
+        isVisible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'
+      }`}
+    >
+      <Button
+        onClick={scrollToTop}
+        size="icon"
+        className="h-12 w-12 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/20 transition-all duration-300 hover:-translate-y-1 hover:bg-blue-700 dark:shadow-blue-900/40"
+        aria-label="맨 위로 스크롤"
       >
-        <Button
-          onClick={scrollToTop}
-          size="icon"
-          className="rounded-full w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20 dark:shadow-blue-900/40 hover:-translate-y-1 transition-all duration-300"
-          aria-label="맨 위로 스크롤"
-        >
-          <ArrowUp className="w-6 h-6" />
-        </Button>
-      </div>
-    </>
+        <ArrowUp className="h-6 w-6" />
+      </Button>
+    </div>
   );
 }

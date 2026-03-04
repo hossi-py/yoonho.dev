@@ -1,4 +1,4 @@
-﻿export interface BlogPost {
+export interface BlogPost {
   id: string;
   category: 'aws-saa' | 'aws-aif' | 'frontend' | 'backend';
   title: string;

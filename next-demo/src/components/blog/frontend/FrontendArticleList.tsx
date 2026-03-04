@@ -1,4 +1,4 @@
-﻿import { ArrowUpRight, CalendarDays, Clock3 } from 'lucide-react';
+import { ArrowUpRight, CalendarDays, Clock3 } from 'lucide-react';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';

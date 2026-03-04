@@ -1,4 +1,4 @@
-﻿import { Calendar, Cloud, Code2, Layout, Server, Sparkles } from 'lucide-react';
+import { Calendar, Cloud, Code2, Layout, Server, Sparkles } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 

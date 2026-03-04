@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { FileText, FolderGit2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';

@@ -20,7 +20,7 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 
 /**
- * ##  Prisma Client ʲˢ
+ * ##  Prisma Client 痂岬
  *
  * Type-safe database client for TypeScript & Node.js
  * @example
@@ -41,7 +41,7 @@ export class PrismaClient<
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
 
     /**
-   * ##  Prisma Client ʲˢ
+   * ##  Prisma Client 痂岬
    *
    * Type-safe database client for TypeScript & Node.js
    * @example
@@ -969,7 +969,7 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Users from the position of the cursor.
+     * Take `짹n` Users from the position of the cursor.
      */
     take?: number
     /**
@@ -1590,7 +1590,7 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Users from the position of the cursor.
+     * Take `짹n` Users from the position of the cursor.
      */
     take?: number
     /**
@@ -1638,7 +1638,7 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Users from the position of the cursor.
+     * Take `짹n` Users from the position of the cursor.
      */
     take?: number
     /**
@@ -1686,7 +1686,7 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Users from the position of the cursor.
+     * Take `짹n` Users from the position of the cursor.
      */
     take?: number
     /**

@@ -1,4 +1,4 @@
-﻿import { FrontendArticle, FrontendArticleListItem, FrontendArticleSection, FrontendFramework } from "./frontend-article-types";
+import { FrontendArticle, FrontendArticleListItem, FrontendArticleSection, FrontendFramework } from "./frontend-article-types";
 import getPrismaClient from "./prisma";
 
 const FALLBACK_ARTICLE: FrontendArticle = {

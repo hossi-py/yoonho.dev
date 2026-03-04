@@ -1,4 +1,4 @@
-﻿import { ChevronLeft, Component, Sparkles } from 'lucide-react';
+import { ChevronLeft, Component, Sparkles } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 

@@ -1,4 +1,4 @@
-﻿import getPrismaClient from './prisma';
+import getPrismaClient from './prisma';
 
 const STATE_KEY = 'frontend-latest-board';
 let ensureTablePromise: Promise<void> | null = null;

@@ -68,7 +68,7 @@ function toQuestionContent(q: DbQuestionRow): QuestionContent {
     choices: parseArray<QuestionChoice>(q.choices),
     answerId: q.answerId,
     serviceMain: parseObject<QuestionServiceMain>(q.serviceMain, {
-      icon: '📘',
+      icon: '?뱲',
       title: 'Solution',
       desc: [],
     }),
