@@ -137,6 +137,111 @@ const FRONTEND_ARTICLES: FrontendArticleSeed[] = [
       },
     ],
   },
+  {
+    id: 'react-your-first-component',
+    category: 'frontend',
+    framework: 'react',
+    title: 'React Your First Component: 첫 컴포넌트부터 설계 감각 만들기',
+    description:
+      '컴포넌트 이름 규칙, JSX 반환 구조, 조합 패턴을 중심으로 React 첫 컴포넌트를 실무 기준으로 정리합니다.',
+    summary:
+      'ko.react.dev/learn/your-first-component를 바탕으로, PascalCase/Fragment/export 전략/컴포지션 분리 기준을 실제 코드 흐름으로 연결합니다.',
+    publishedAt: new Date('2026-03-04'),
+    readTimeMinutes: 18,
+    difficulty: 'Beginner',
+    tags: ['React', 'Your First Component', 'PascalCase', 'Fragment', 'Component Composition'],
+    sections: [
+      {
+        type: 'intro',
+        heading: '프롤로그 - 첫 컴포넌트는 문법 시작점이 아니라 설계 시작점',
+        paragraphs: [
+          '첫 컴포넌트에서 배우는 규칙은 문법이 아니라 이후 구조 설계의 기본값이 됩니다.',
+          '이 글은 공식 문서 내용을 실무에서 바로 쓰는 형태로 확장해 정리합니다.',
+        ],
+      },
+      {
+        type: 'concept',
+        heading: '01. 컴포넌트의 정체 - UI를 반환하는 함수',
+        body: 'React 컴포넌트는 입력에 따라 JSX를 반환하는 함수입니다. 이 관점으로 보면 규칙이 일관되게 이해됩니다.',
+        bullets: [
+          '컴포넌트 이름은 대문자로 시작합니다.',
+          '컴포넌트는 하나의 Root Element를 반환합니다.',
+          '역할을 한 문장으로 설명할 수 있어야 합니다.',
+        ],
+      },
+      {
+        type: 'concept',
+        heading: '02. PascalCase 규칙 - 네이밍이 런타임 동작을 결정한다',
+        body: '소문자 태그는 DOM 요소, 대문자 식별자는 컴포넌트로 해석됩니다. Root Element 규칙은 반환 구조 안정성의 핵심입니다.',
+        misconceptions: ['규칙은 스타일 가이드가 아니라 런타임 해석 규칙입니다.'],
+      },
+      {
+        type: 'concept',
+        heading: '03. Root Element와 Fragment - 반환 구조를 안정적으로 잡기',
+        body: '불필요한 래퍼 div 대신 Fragment를 활용하면 DOM 구조를 깔끔하게 유지할 수 있습니다.',
+      },
+      {
+        type: 'concept',
+        heading: '04. default export vs named export - 첫 파일부터 API를 설계하기',
+        body: 'default/named export를 파일 역할에 맞게 선택해야 유지보수가 쉬워집니다.',
+        bullets: [
+          '대표 컴포넌트 하나면 default export가 간결합니다.',
+          '보조 컴포넌트가 많으면 named export가 의존성을 명확히 보여줍니다.',
+        ],
+      },
+      {
+        type: 'concept',
+        heading: '05. Component Composition - 큰 화면은 조합으로 만든다',
+        body: '상위 컴포넌트는 조합, 하위 컴포넌트는 표현 역할을 맡기면 코드가 빠르게 안정됩니다.',
+      },
+      {
+        type: 'concept',
+        heading: '06. 첫 컴포넌트에서 자주 나는 오류 패턴',
+        body: '초기 단계에서 반복되는 오류를 미리 알고 있으면 디버깅 시간이 크게 줄어듭니다.',
+        bullets: [
+          '소문자 컴포넌트명 사용 (profile)',
+          'return 누락으로 undefined 반환',
+          '루트 미묶음으로 JSX 구문 오류',
+          '컴포넌트/DOM 태그 역할 혼동 (<Button> vs <button>)',
+        ],
+      },
+      {
+        type: 'checkpoint',
+        heading: 'Self Check - 첫 컴포넌트 핵심 규칙 점검',
+        questions: [
+          {
+            q: '컴포넌트 이름을 소문자로 작성하면 어떻게 되나요?',
+            a: '사용자 정의 컴포넌트가 아니라 HTML 태그처럼 해석될 수 있습니다.',
+          },
+          {
+            q: '여러 JSX 요소를 반환하려면?',
+            a: 'Root Element로 감싸거나 Fragment를 사용해 하나로 묶어 반환합니다.',
+          },
+          {
+            q: '컴포넌트 분리 기준을 한 줄로 말하면?',
+            a: '반복되는 UI, 독립적으로 변하는 영역, 책임 혼합 여부를 기준으로 분리합니다.',
+          },
+        ],
+      },
+      {
+        type: 'animation',
+        heading: 'Visual Map - key, purity, tree를 한눈에',
+        body: '첫 컴포넌트 규칙이 이후 key, purity, tree 개념과 어떻게 연결되는지 함께 확인하세요.',
+        animationKey: 'react-describing-ui-core',
+      },
+      {
+        type: 'checklist',
+        heading: 'PR Review Kit - Your First Component 점검표',
+        items: [
+          '컴포넌트 이름이 대문자로 시작하는가?',
+          'JSX 반환이 명확한가?',
+          'Root Element/Fragment 규칙을 지켰는가?',
+          'export 전략이 파일 역할과 일치하는가?',
+          '상위(조합)와 하위(표현) 책임이 분리되었는가?',
+        ],
+      },
+    ],
+  },
 ];
 
 export async function seedFrontendArticles() {
@@ -148,3 +253,5 @@ export async function seedFrontendArticles() {
     });
   }
 }
+
+

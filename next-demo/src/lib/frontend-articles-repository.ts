@@ -190,6 +190,158 @@ const FALLBACK_ARTICLE: FrontendArticle = {
   ],
 };
 
+const FALLBACK_ARTICLE_YOUR_FIRST_COMPONENT: FrontendArticle = {
+  id: 'react-your-first-component',
+  category: 'frontend',
+  framework: 'react',
+  title: 'React "Your First Component" 심화 가이드 — 첫 컴포넌트에서 설계 습관 만들기',
+  description:
+    'ko.react.dev/learn/your-first-component를 실무 관점으로 확장해, 네이밍 규칙부터 컴포넌트 분리 기준까지 한 번에 정리합니다.',
+  summary:
+    '첫 컴포넌트를 만드는 법을 단순 문법이 아니라 팀 개발 기준으로 풀어냅니다. PascalCase 규칙이 왜 필요한지, Root Element/Fragment를 언제 쓰는지, default export와 named export를 어떻게 선택할지, 컴포지션으로 책임을 분리하는 기준까지 실제 코드 중심으로 정리합니다.',
+  date: '2026-03-04',
+  readTimeMinutes: 19,
+  difficulty: 'Beginner',
+  tags: ['React', 'Your First Component', 'PascalCase', 'Fragment', 'Component Composition'],
+  sections: [
+    {
+      type: 'intro',
+      heading: '프롤로그 - 첫 컴포넌트는 문법 시작점이 아니라 설계 시작점',
+      paragraphs: [
+        '처음 컴포넌트를 만들 때는 단순히 화면 한 조각을 띄우는 것처럼 보입니다. 하지만 이 단계에서 만든 선택이 이후 파일 구조, 재사용성, 협업 난이도를 크게 좌우합니다.',
+        '공식 문서의 예제를 바탕으로 "왜 이런 규칙이 필요한지"까지 연결해, 실무에서 바로 적용 가능한 기준으로 정리했습니다.',
+      ],
+    },
+    {
+      type: 'concept',
+      heading: '01. 컴포넌트의 정체 - UI를 반환하는 함수',
+      body: 'React 컴포넌트는 본질적으로 함수입니다. 입력(props)을 받아 출력(JSX)을 반환하는 함수라는 관점이 잡히면, 이후 규칙은 예외가 아니라 일관된 설계로 보입니다.',
+      paragraphs: [
+        '컴포넌트는 "같은 입력이면 같은 출력"을 유지할수록 재사용과 테스트가 쉬워집니다.',
+        '처음부터 데이터 조회, 이벤트, 스타일, 레이아웃 책임을 한 컴포넌트에 몰아넣으면 금방 유지보수 한계가 옵니다.',
+        '따라서 첫 컴포넌트에서도 "이 함수는 무엇을 보여주는가"를 한 문장으로 설명할 수 있어야 합니다.',
+      ],
+      code: "function Profile() {\n  return (\n    <img\n      src=\"https://i.imgur.com/MK3eW3As.jpg\"\n      alt=\"Katherine Johnson\"\n    />\n  );\n}\n\nexport default function Gallery() {\n  return (\n    <section>\n      <h1>Amazing scientists</h1>\n      <Profile />\n      <Profile />\n      <Profile />\n    </section>\n  );\n}",
+      misconceptions: [
+        '"JSX를 반환하면 모두 같은 수준의 컴포넌트"라는 오해가 있습니다. 실제로는 표현 컴포넌트와 조합 컴포넌트를 구분해야 규모가 커져도 구조가 유지됩니다.',
+      ],
+    },
+    {
+      type: 'concept',
+      heading: '02. PascalCase 규칙 - 네이밍이 런타임 동작을 결정한다',
+      body: 'React는 소문자로 시작하는 태그를 내장 DOM 요소로, 대문자로 시작하는 식별자를 컴포넌트로 처리합니다. 즉 네이밍 규칙은 스타일이 아니라 실행 규칙입니다.',
+      paragraphs: [
+        '예를 들어 <profile />는 사용자 컴포넌트가 아니라 미정의 HTML 태그처럼 해석될 수 있습니다.',
+        '반대로 <Profile />는 JavaScript 변수(함수)를 참조해 컴포넌트 호출로 동작합니다.',
+        '팀에서 네이밍 규칙을 통일하지 않으면 리뷰 단계에서 잡기 어려운 UI 누락 버그가 생깁니다.',
+      ],
+      bullets: [
+        '컴포넌트 함수/파일명 모두 PascalCase로 유지합니다.',
+        '도메인 개념이 드러나는 이름을 우선합니다. (UserCard, PriceSummary)',
+        '동사형(renderCard)보다 역할형(Card) 이름이 조합에 유리합니다.',
+      ],
+      misconceptions: [
+        '"이름만 맞추면 된다"는 오해가 있습니다. 이름은 시작일 뿐이고, 그 이름이 가리키는 책임까지 일관돼야 합니다.',
+      ],
+    },
+    {
+      type: 'concept',
+      heading: '03. Root Element와 Fragment - 반환 구조를 안정적으로 잡기',
+      body: '컴포넌트는 하나의 Root Element를 반환해야 합니다. 여러 형제를 반환하려면 Fragment를 사용해 구조를 명시적으로 묶어야 합니다.',
+      paragraphs: [
+        '불필요한 div 래퍼를 남발하면 DOM 깊이가 증가하고 CSS 선택자 복잡도도 함께 늘어납니다.',
+        '레이아웃 목적이 없다면 Fragment를 우선 고려하는 것이 좋습니다.',
+      ],
+      code: "function Toolbar() {\n  return (\n    <>\n      <button>Save</button>\n      <button>Publish</button>\n    </>\n  );\n}\n\nfunction BadToolbar() {\n  return (\n    <div>\n      <button>Save</button>\n      <button>Publish</button>\n    </div>\n  );\n}",
+      misconceptions: [
+        '"Root는 그냥 문법 제약"이라는 오해가 있습니다. 반환 구조를 명시적으로 만드는 규칙이기 때문에 컴포넌트 트리 가독성과 변경 안정성을 올려줍니다.',
+      ],
+    },
+    {
+      type: 'concept',
+      heading: '04. default export vs named export - 첫 파일부터 API를 설계하기',
+      body: '컴포넌트 파일은 팀 내부 API입니다. export 방식 선택은 import 경험과 리팩터링 비용에 직접적인 영향을 줍니다.',
+      bullets: [
+        '페이지 루트처럼 파일당 대표 컴포넌트 하나면 default export가 간결합니다.',
+        '유틸/보조 컴포넌트가 함께 있으면 named export가 의존성을 명확히 드러냅니다.',
+        '프로젝트 전반 규칙이 더 중요합니다. 한 방식으로 통일하세요.',
+      ],
+      code: "// default export\nexport default function ProfileCard() {\n  return <article />;\n}\n\n// named export\nexport function Avatar() {\n  return <img alt=\"avatar\" />;\n}\n\nexport function ProfileMeta() {\n  return <div />;\n}",
+    },
+    {
+      type: 'concept',
+      heading: '05. Component Composition - 큰 화면은 조합으로 만든다',
+      body: '첫 컴포넌트 학습의 핵심은 재사용보다 조합입니다. 큰 UI를 한 파일에서 만들기보다 작은 컴포넌트를 조합해야 변경 비용이 낮아집니다.',
+      paragraphs: [
+        '상위는 데이터/배치, 하위는 표현 역할을 담당하면 테스트와 디버깅이 쉬워집니다.',
+        '반복되는 카드, 버튼, 배지 같은 요소는 작은 컴포넌트로 추출해 같은 규칙을 재사용합니다.',
+      ],
+      code: "function UserAvatar() {\n  return <img className=\"h-10 w-10 rounded-full\" alt=\"user\" />;\n}\n\nfunction UserInfo() {\n  return (\n    <div>\n      <h3>Jane Doe</h3>\n      <p>Frontend Engineer</p>\n    </div>\n  );\n}\n\nexport default function UserCard() {\n  return (\n    <article className=\"flex gap-3\">\n      <UserAvatar />\n      <UserInfo />\n    </article>\n  );\n}",
+      misconceptions: [
+        '"처음에는 한 파일로 빨리 만들고 나중에 분리하면 된다"는 방식은 보통 나중이 오지 않습니다. 첫 버전부터 최소한의 분리 기준을 적용해야 합니다.',
+      ],
+    },
+    {
+      type: 'concept',
+      heading: '06. 첫 컴포넌트에서 자주 나는 오류 패턴',
+      body: '초기 단계에서 반복되는 오류를 미리 알고 있으면 디버깅 시간이 크게 줄어듭니다.',
+      bullets: [
+        '소문자 컴포넌트명 사용 (profile)',
+        'return 누락으로 undefined 반환',
+        '루트 미묶음으로 JSX 구문 오류',
+        '컴포넌트/DOM 태그 역할 혼동 (<Button> vs <button>)',
+      ],
+      misconceptions: [
+        '"에러 메시지만 고치면 끝"이 아니라, 왜 그런 에러가 났는지 컴포넌트 모델 관점에서 복기해야 같은 문제가 반복되지 않습니다.',
+      ],
+    },
+    {
+      type: 'checkpoint',
+      heading: 'Self Check - 첫 컴포넌트 핵심 규칙 점검',
+      questions: [
+        {
+          q: 'React 컴포넌트 이름이 왜 대문자로 시작해야 하나요?',
+          a: '소문자 태그는 HTML 요소로 해석되고, 대문자로 시작해야 사용자 정의 컴포넌트로 인식됩니다.',
+        },
+        {
+          q: '여러 JSX 요소를 반환하려면 어떻게 해야 하나요?',
+          a: '하나의 Root Element로 감싸거나 Fragment(<>...</>)로 묶어 반환해야 합니다.',
+        },
+        {
+          q: 'default export와 named export는 언제 선택하는 게 좋나요?',
+          a: '대표 컴포넌트 하나면 default export가 간결하고, 여러 컴포넌트를 함께 공개하면 named export가 의존성을 명확히 보여줍니다.',
+        },
+        {
+          q: '컴포넌트 분리 기준을 한 줄로 말하면?',
+          a: '반복되는 UI, 독립적으로 변경되는 영역, 책임이 섞이는 지점을 기준으로 분리합니다.',
+        },
+      ],
+    },
+    {
+      type: 'checklist',
+      heading: 'PR Review Kit - Your First Component 점검표',
+      items: [
+        '컴포넌트 이름이 대문자로 시작하는가?',
+        'JSX 반환이 명확한가? (return 누락 없음)',
+        'Root Element/Fragment 규칙을 지켰는가?',
+        'export 방식(default/named)이 파일 역할과 일치하는가?',
+        '한 컴포넌트가 하나의 역할을 수행하는가?',
+        '중복되는 UI를 하위 컴포넌트로 추출했는가?',
+        '상위 컴포넌트는 조합, 하위 컴포넌트는 표현 책임으로 분리됐는가?',
+      ],
+    },
+  ],
+};
+
+const FALLBACK_ARTICLES: FrontendArticle[] = [
+  FALLBACK_ARTICLE_YOUR_FIRST_COMPONENT,
+  FALLBACK_ARTICLE,
+];
+
+function fallbackFindById(id: string): FrontendArticle | null {
+  return FALLBACK_ARTICLES.find((article) => article.id === id) ?? null;
+}
+
 function canUseDb() {
   return Boolean(process.env.DATABASE_URL);
 }
@@ -245,20 +397,24 @@ function toListItem(row: any): FrontendArticleListItem {
 async function fallbackFindByFramework(
   framework: FrontendFramework
 ): Promise<FrontendArticleListItem[]> {
-  if (framework !== 'react') return [];
-  return [
-    {
-      id: FALLBACK_ARTICLE.id,
-      category: FALLBACK_ARTICLE.category,
-      framework: FALLBACK_ARTICLE.framework,
-      title: FALLBACK_ARTICLE.title,
-      description: FALLBACK_ARTICLE.description,
-      date: FALLBACK_ARTICLE.date,
-      readTimeMinutes: FALLBACK_ARTICLE.readTimeMinutes,
-      difficulty: FALLBACK_ARTICLE.difficulty,
-      tags: FALLBACK_ARTICLE.tags,
-    },
-  ];
+  return FALLBACK_ARTICLES
+    .filter((article) => article.framework === framework)
+    .sort((a, b) => {
+      const dateDiff = new Date(b.date).getTime() - new Date(a.date).getTime();
+      if (dateDiff !== 0) return dateDiff;
+      return a.title.localeCompare(b.title);
+    })
+    .map((article) => ({
+      id: article.id,
+      category: article.category,
+      framework: article.framework,
+      title: article.title,
+      description: article.description,
+      date: article.date,
+      readTimeMinutes: article.readTimeMinutes,
+      difficulty: article.difficulty,
+      tags: article.tags,
+    }));
 }
 
 export async function getFrontendArticlesByFramework(
@@ -284,7 +440,7 @@ export async function getFrontendArticlesByFramework(
 
 export async function getFrontendArticleById(id: string): Promise<FrontendArticle | null> {
   if (!canUseDb()) {
-    return FALLBACK_ARTICLE.id === id ? FALLBACK_ARTICLE : null;
+    return fallbackFindById(id);
   }
 
   try {
@@ -299,7 +455,7 @@ export async function getFrontendArticleById(id: string): Promise<FrontendArticl
     if (!isMissingTableError(error)) {
       console.error('[frontend-articles-repository] getFrontendArticleById failed', error);
     }
-    return FALLBACK_ARTICLE.id === id ? FALLBACK_ARTICLE : null;
+    return fallbackFindById(id);
   }
 }
 
@@ -348,3 +504,4 @@ export async function getFrontendFrameworkCounts() {
     total: reactPosts.length + vuePosts.length + nextPosts.length,
   };
 }
+
