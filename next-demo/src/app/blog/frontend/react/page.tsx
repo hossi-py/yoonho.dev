@@ -1,4 +1,4 @@
-import { ChevronLeft, Component, Sparkles } from 'lucide-react';
+﻿import { ChevronLeft, Component, Sparkles } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -26,7 +26,7 @@ export default async function FrontendReactPage() {
             className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 mb-8 transition-colors"
           >
             <ChevronLeft className="w-4 h-4 mr-1" />
-            Frontend 목록
+            {'Frontend 목록'}
           </Link>
 
           <div className="grid gap-7 md:grid-cols-[1.2fr_0.8fr] md:gap-12 items-start">
@@ -38,12 +38,12 @@ export default async function FrontendReactPage() {
                 </Badge>
               </div>
               <h1 className="text-[2.05rem] md:text-[3.2rem] font-semibold tracking-[-0.04em] leading-[1.08] text-slate-900 dark:text-slate-100">
-                React를
+                {'React를'}
                 <br />
-                설계 관점으로 읽는 기록
+                {'설계 관점으로 읽는 기록'}
               </h1>
               <p className="mt-5 max-w-2xl text-[15px] md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-                개념 요약보다 판단 기준을 남깁니다. 컴포넌트 경계, 상태 흐름, 렌더링 모델을 실무 맥락으로 연결합니다.
+                {'개념 요약보다 설계 기준에 집중합니다. 컴포넌트 경계, 상태 흐름, 렌더링 모델을 실무 맥락으로 연결합니다.'}
               </p>
             </div>
 
@@ -51,7 +51,7 @@ export default async function FrontendReactPage() {
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200 font-medium">
                   <Component className="h-4 w-4 text-sky-500" />
-                  Latest
+                  {'최신 글'}
                 </div>
                 {latest ? (
                   <>
@@ -61,7 +61,7 @@ export default async function FrontendReactPage() {
                     <p className="mt-2.5 text-sm text-slate-600 dark:text-slate-300 line-clamp-2">{latest.description}</p>
                   </>
                 ) : (
-                  <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">아직 글이 없습니다.</p>
+                  <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">{'아직 글이 없습니다.'}</p>
                 )}
               </CardContent>
             </Card>
@@ -74,7 +74,7 @@ export default async function FrontendReactPage() {
           <div className="mb-6 flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-sky-500" />
             <h2 className="text-xl md:text-2xl font-semibold tracking-[-0.02em] text-slate-900 dark:text-slate-100">
-              모든 React 글
+              {'모든 React 글'}
             </h2>
           </div>
           <FrontendArticleList framework="react" posts={posts} />

@@ -96,8 +96,8 @@ function reorderIds(ids: string[], fromId: string, toId: string) {
 }
 
 function itemLayoutClass(index: number) {
-  if (index === 0) return 'md:col-span-7 xl:col-span-8';
-  return 'md:col-span-5 md:col-start-8 xl:col-span-4 xl:col-start-9';
+  if (index === 0) return 'md:col-span-12';
+  return 'md:col-span-6 xl:col-span-4';
 }
 
 export function FrontendLatestBoard({
