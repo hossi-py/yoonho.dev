@@ -333,7 +333,182 @@ const FALLBACK_ARTICLE_YOUR_FIRST_COMPONENT: FrontendArticle = {
   ],
 };
 
+const FALLBACK_ARTICLE_IMPORT_EXPORT_COMPONENTS: FrontendArticle = {
+  id: 'react-importing-and-exporting-components',
+  category: 'frontend',
+  framework: 'react',
+  title: 'React "Importing and Exporting Components" 심화 가이드',
+  description:
+    'ko.react.dev/learn/importing-and-exporting-components를 바탕으로, 컴포넌트 모듈 경계를 실무에서 유지보수 가능하게 설계하는 기준을 정리합니다.',
+  summary:
+    'default export와 named export 선택 기준, 파일 분리 전략, barrel(index.ts) 사용 범위, import 실수 점검 체크리스트까지 한 번에 다룹니다.',
+  date: '2026-03-04',
+  readTimeMinutes: 14,
+  difficulty: 'Beginner',
+  tags: ['React', 'Import/Export', 'Module Design', 'Barrel File', 'Code Organization'],
+  sections: [
+    {
+      type: 'intro',
+      heading: '프롤로그 - import/export는 문법이 아니라 경계 설계다',
+      paragraphs: [
+        'import/export는 단순 문법이 아니라 모듈 계약을 정하는 설계 도구입니다. 어떤 컴포넌트를 어디까지 공개할지 정하면, 팀의 변경 속도와 안정성이 같이 결정됩니다.',
+        '공식 문서는 기본 문법을 설명하지만, 실무에서는 같은 개념이 의존성 얽힘을 막는 기준으로 작동합니다. 이번 글은 그 기준을 코드 리뷰 관점까지 연결합니다.',
+      ],
+    },
+    {
+      type: 'concept',
+      heading: '01. 컴포넌트 파일 분리 - 스케일을 위한 기본 규칙',
+      body: '데모 단계에서는 한 파일에 여러 컴포넌트를 넣어도 되지만, 재사용되는 컴포넌트는 파일을 분리해야 변경 범위가 명확해집니다.',
+      bullets: [
+        '탐색성: 컴포넌트/테스트/스토리 위치를 빠르게 찾을 수 있습니다.',
+        '소유권: 코드 리뷰 범위가 명확해집니다.',
+        '리팩터 안정성: 한 컴포넌트 이동이 다른 import를 연쇄 수정시키지 않습니다.',
+      ],
+      code: "export default function Gallery() {\n  return (\n    <section>\n      <h1>Amazing scientists</h1>\n      <Profile />\n    </section>\n  );\n}\n\n// Profile.tsx\nexport default function Profile() {\n  return <img alt=\"Katherine Johnson\" src=\"https://i.imgur.com/MK3eW3As.jpg\" />;\n}",
+      misconceptions: [
+        '파일 분리를 과한 설계로 보는 경우가 많지만, 실제로는 나중의 대규모 정리 비용을 줄이는 가장 저렴한 예방책입니다.',
+      ],
+    },
+    {
+      type: 'concept',
+      heading: '02. default export vs named export',
+      body: '파일의 대표 컴포넌트가 하나면 default export가 간결하고, 모듈이 여러 API를 공개해야 하면 named export가 의존성 경계를 더 명확하게 만듭니다.',
+      paragraphs: [
+        'default export는 import 이름을 자유롭게 정할 수 있어 빠르지만, 큰 코드베이스에서는 이름 일관성이 깨지기 쉽습니다.',
+        'named export는 이름을 고정해 자동 import 정확도와 리팩터 안정성을 높입니다.',
+      ],
+      code: "// default export\nexport default function Button() {\n  return <button type=\"button\">Save</button>;\n}\n\n// named export\nexport function IconButton() {\n  return <button type=\"button\">Icon</button>;\n}\n\n// import examples\nimport Button from './Button';\nimport { IconButton } from './IconButton';",
+      misconceptions: [
+        '정답은 하나가 아닙니다. 팀 규칙을 먼저 정하고 일관되게 유지하는 것이 더 중요합니다.',
+      ],
+    },
+    {
+      type: 'concept',
+      heading: '03. barrel(index.ts) 사용 범위',
+      body: 'barrel 파일은 import를 간결하게 만들지만, 무분별한 재수출은 의존성을 숨기고 결합도를 높일 수 있습니다.',
+      bullets: [
+        '전역 mega-barrel 하나보다 기능 폴더 단위 local barrel이 안전합니다.',
+        '안정적인 public API만 재수출합니다.',
+        '내부 구현 전용 모듈은 재수출하지 않습니다.',
+      ],
+      code: "// good: feature-scoped barrel\n// components/profile/index.ts\nexport { ProfileCard } from './ProfileCard';\nexport { ProfileAvatar } from './ProfileAvatar';\n\n// usage\nimport { ProfileCard } from '@/components/profile';",
+    },
+    {
+      type: 'checkpoint',
+      heading: 'Self Check - 핵심 점검',
+      questions: [
+        {
+          q: 'default export를 우선 고려할 상황은 언제인가요?',
+          a: '파일이 대표 컴포넌트 하나를 중심으로 동작하고, 팀 규칙에서도 해당 패턴을 허용할 때입니다.',
+        },
+        {
+          q: '전역 barrel 파일이 커질 때 가장 큰 위험은 무엇인가요?',
+          a: '숨은 의존성이 늘어나고 모듈 경계가 흐려져 리팩터링 난이도가 급격히 올라갑니다.',
+        },
+        {
+          q: '재사용 컴포넌트를 파일로 분리해야 하는 이유는?',
+          a: '탐색성, 소유권 명확성, 리팩터 안전성이 모두 좋아져 프로젝트 규모가 커져도 유지보수가 가능합니다.',
+        },
+      ],
+    },
+    {
+      type: 'checklist',
+      heading: 'PR Review Kit',
+      items: [
+        '재사용 컴포넌트가 전용 파일 단위로 분리되어 있는가?',
+        'default/named export 선택이 팀 규칙과 일관적인가?',
+        'barrel 파일이 기능 범위로 제한되어 있고 public API만 노출하는가?',
+        '근거 없는 deep private import를 사용하지 않았는가?',
+        '새 팀원이 30초 내 모듈 소유권을 파악할 수 있는 구조인가?',
+      ],
+    },
+  ],
+};
+
+const FALLBACK_ARTICLE_WRITING_MARKUP_WITH_JSX: FrontendArticle = {
+  id: 'react-writing-markup-with-jsx',
+  category: 'frontend',
+  framework: 'react',
+  title: 'React "Writing Markup with JSX" 심화 가이드',
+  description:
+    'ko.react.dev/learn/writing-markup-with-jsx를 기반으로 JSX 문법을 실수 없이 쓰는 규칙과 실무 체크포인트를 정리합니다.',
+  summary:
+    'JSX의 핵심 규칙(단일 루트, 모든 태그 닫기, camelCase 속성명)을 중심으로 자주 나는 오류와 리팩터링 패턴을 빠르게 정리합니다.',
+  date: '2026-03-05',
+  readTimeMinutes: 12,
+  difficulty: 'Beginner',
+  tags: ['React', 'JSX', 'Markup', 'Frontend Basics', 'Code Style'],
+  sections: [
+    {
+      type: 'intro',
+      heading: '프롤로그 - JSX는 보기엔 HTML 같지만 JavaScript 문법입니다',
+      paragraphs: [
+        'JSX는 HTML 문자열이 아니라 JavaScript 안에서 UI를 기술하는 문법 확장입니다.',
+        '그래서 React가 요구하는 문법 규칙을 지키지 않으면 렌더링 이전 단계에서 바로 오류가 발생합니다.',
+      ],
+    },
+    {
+      type: 'concept',
+      heading: '01. 단일 루트 요소 규칙',
+      body: '컴포넌트는 하나의 JSX 루트를 반환해야 합니다. 여러 요소를 반환하려면 Fragment로 감싸야 합니다.',
+      code: "function Toolbar() {\n  return (\n    <>\n      <button>Save</button>\n      <button>Publish</button>\n    </>\n  );\n}",
+      misconceptions: [
+        'JSX는 브라우저가 바로 읽는 HTML이 아니라 `React.createElement(...)` 호출 결과인 JavaScript 객체로 변환됩니다. 함수는 한 번에 하나의 값만 반환할 수 있으므로, 형제 JSX를 그대로 두 개 반환할 수 없습니다. 그래서 상위 태그나 Fragment(`<>...</>`)로 묶어 단일 반환값(하나의 루트 트리)으로 만들어야 합니다.',
+      ],
+    },
+    {
+      type: 'concept',
+      heading: '02. 모든 태그는 닫아야 합니다',
+      body: 'JSX는 XML 스타일 규칙을 따르므로 `<img>`, `<input>` 같은 빈 태그도 반드시 self-closing 형태로 닫아야 합니다.',
+      code: "export default function Avatar() {\n  return <img src=\"/avatar.png\" alt=\"profile\" />;\n}",
+      bullets: [
+        '`<img />`, `<input />`, `<br />`처럼 끝 슬래시를 포함합니다.',
+        '중첩 태그는 열고 닫는 구조가 정확히 맞아야 합니다.',
+      ],
+    },
+    {
+      type: 'concept',
+      heading: '03. JSX 속성은 camelCase를 사용합니다',
+      body: 'JSX 속성은 JavaScript 객체 키와 유사하게 동작하므로 `class` 대신 `className`, `stroke-width` 대신 `strokeWidth`를 사용합니다.',
+      code: "<section className=\"card\">\n  <svg strokeWidth={2} aria-label=\"icon\" />\n</section>",
+      misconceptions: [
+        'HTML 속성명을 그대로 복사하면 동작할 거라 생각하기 쉽지만, JSX에서는 이름 규칙이 다릅니다.',
+      ],
+    },
+    {
+      type: 'checkpoint',
+      heading: 'Self Check - 빠른 점검',
+      questions: [
+        {
+          q: '컴포넌트가 형제 JSX 요소 두 개를 직접 반환하면 왜 오류가 나나요?',
+          a: 'JSX 반환값은 단일 루트여야 하기 때문입니다. Fragment 또는 상위 요소로 묶어야 합니다.',
+        },
+        {
+          q: '`<img>`를 JSX에서 단독으로 쓰면 왜 문제인가요?',
+          a: 'JSX는 태그를 닫아야 하므로 `<img />`처럼 self-closing으로 작성해야 합니다.',
+        },
+        {
+          q: '왜 `class` 대신 `className`을 써야 하나요?',
+          a: 'JSX는 JavaScript 문법 위에서 동작하고 `class`는 JS 예약어이기 때문에 `className`을 사용합니다.',
+        },
+      ],
+    },
+    {
+      type: 'checklist',
+      heading: 'PR Review Kit',
+      items: [
+        '컴포넌트 반환 JSX가 단일 루트(또는 Fragment)인지 확인했는가?',
+        '빈 태그가 모두 self-closing(`/>`) 형태인지 확인했는가?',
+        '속성명이 JSX 규칙(camelCase, className, htmlFor)에 맞는가?',
+        '복잡한 마크업은 작은 컴포넌트로 분리해 가독성을 확보했는가?',
+      ],
+    },
+  ],
+};
+
 const FALLBACK_ARTICLES: FrontendArticle[] = [
+  FALLBACK_ARTICLE_WRITING_MARKUP_WITH_JSX,
+  FALLBACK_ARTICLE_IMPORT_EXPORT_COMPONENTS,
   FALLBACK_ARTICLE_YOUR_FIRST_COMPONENT,
   FALLBACK_ARTICLE,
 ];

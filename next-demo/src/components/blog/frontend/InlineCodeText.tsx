@@ -1,4 +1,4 @@
-interface InlineCodeTextProps {
+﻿interface InlineCodeTextProps {
   text: string;
   glossaryTerms?: string[];
   shownTerms?: Set<string>;
@@ -27,8 +27,8 @@ function renderRefBadge(key: string) {
   return (
     <span
       key={key}
-      className="ml-1 inline-flex items-center rounded border border-amber-300 bg-amber-100 px-1 py-0 text-[10px] font-semibold leading-none text-amber-800 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-200"
-      title="아래 참고 용어에서 설명"
+      className="ml-1 inline-flex items-center rounded border border-emerald-300 bg-emerald-100 px-1 py-0 text-[10px] font-semibold leading-none text-emerald-800 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200"
+      title={'\uC544\uB798 \uCC38\uACE0 \uC6A9\uC5B4\uC5D0\uC11C \uC124\uBA85'}
     >
       ref
     </span>
@@ -84,8 +84,8 @@ function renderGlossaryText(
     return (
       <span
         key={`${seed}-term-${index}`}
-        className="underline decoration-dotted decoration-amber-500 underline-offset-4"
-        title="아래 참고 용어에서 설명"
+        className="underline decoration-dotted decoration-emerald-500 underline-offset-4"
+        title={'\uC544\uB798 \uCC38\uACE0 \uC6A9\uC5B4\uC5D0\uC11C \uC124\uBA85'}
       >
         {piece}
         {renderRefBadge(`${seed}-term-${index}-ref`)}
