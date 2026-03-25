@@ -1,0 +1,62 @@
+{
+  "active_plan": "C:\\Users\\hyh_k\\Desktop\\workspace\\yoonho.dev\\.sisyphus\\plans\\fe-portfolio-enterprise-roadmap.md",
+  "started_at": "2026-03-25T00:52:06.122Z",
+  "session_ids": [
+    "ses_2e113d116ffex0Lqgnaxmsxzk7",
+    "ses_2dd82d1b3ffe0dDUPU5aCRp65L",
+    "ses_2dd82d1fbffe8QO35L3iyfZGxq",
+    "ses_2dd82d1caffex36uhNkT4IYOsJ",
+    "ses_2dd82d200ffeohrWNzaGAl5OTQ",
+    "ses_2dd774db3ffeSUOseyPR0C1620",
+    "ses_2dd727e29ffe52CYq2hgcF4YAZ",
+    "ses_2dd708904ffetE66isX9sOo3OE",
+    "ses_2dd6fd319ffewtcWRZHu5mPl2q",
+    "ses_2dd6fd33bffeleHLZNS28UD0JG",
+    "ses_2dd6fd3a4ffe9B42D8OdbwNoK0",
+    "ses_2dd6fd316ffeTF48f2Gtx8ZMxH",
+    "ses_2dd5b9210ffertTSVWWmQNpIUh",
+    "ses_2dd546d1bffeVwQDoW6Aos7a1H",
+    "ses_2dd28a832ffeeZXh0n7ocxV3zz",
+    "ses_2dc984ea3ffeHafZq2FLv9PRad"
+  ],
+  "plan_name": "fe-portfolio-enterprise-roadmap",
+  "agent": "atlas",
+  "task_sessions": {
+    "todo:1": {
+      "task_key": "todo:1",
+      "task_label": "1",
+      "task_title": "Wave 0 자산 감사 및 베이스 레포 결정",
+      "session_id": "ses_2dd774db3ffeSUOseyPR0C1620",
+      "agent": "Sisyphus-Junior",
+      "category": "deep",
+      "updated_at": "2026-03-25T01:11:05.180Z"
+    },
+    "todo:2": {
+      "task_key": "todo:2",
+      "task_label": "2",
+      "task_title": "케이스 스터디 콘텐츠 계약(스키마) 및 익명화 정책 고정",
+      "session_id": "ses_2dd727e29ffe52CYq2hgcF4YAZ",
+      "agent": "Sisyphus-Junior",
+      "category": "writing",
+      "updated_at": "2026-03-25T01:13:59.631Z"
+    },
+    "todo:3": {
+      "task_key": "todo:3",
+      "task_label": "3",
+      "task_title": "검증 커맨드 베이스라인(링크/콘텐츠/품질 게이트) 정의",
+      "session_id": "ses_2dd708904ffetE66isX9sOo3OE",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-03-25T01:17:07.116Z"
+    },
+    "todo:4": {
+      "task_key": "todo:4",
+      "task_label": "4",
+      "task_title": "GitHub 공개면(프로필/핀드 저장소) 신뢰성 정리",
+      "session_id": "ses_2dd28a832ffeeZXh0n7ocxV3zz",
+      "agent": "Sisyphus-Junior",
+      "category": "writing",
+      "updated_at": "2026-03-25T02:40:14.634Z"
+    }
+  }
+}

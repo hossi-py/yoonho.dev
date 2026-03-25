@@ -1,24 +1,25 @@
 # vue2-demo
 
-## Project setup
-```
-yarn install
-```
+Legacy support demonstration using Vue 2.6.
 
-### Compiles and hot-reloads for development
-```
+## Problem
+In many enterprises, maintainability of legacy codebases is as important as new development. This demo shows the ability to manage and maintain Vue 2 ecosystems.
+
+## Role
+**Developer**
+- Maintained a stable Vue 2 ecosystem with TypeScript support.
+- Configured build pipelines for legacy framework versioning.
+
+## Tech
+- **Framework**: Vue 2.6.14 (Composition API support).
+- **Tooling**: Vue CLI 5, TypeScript 4.5.
+- **State Management**: TanStack Vue Query v5.
+
+## Run
+```bash
+yarn install
 yarn serve
 ```
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Result
+Demonstrated ability to bridge modern development practices with established legacy systems, ensuring continuity and stability.
