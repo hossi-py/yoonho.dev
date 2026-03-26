@@ -5,9 +5,20 @@ import {
   useAnimationFrame,
   useReducedMotion,
 } from "framer-motion";
+import { Menu } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import KoreaMap from "@/components/KoreaMap";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { KOREA_VIEW_BOX, koreaPaths } from "@/lib/logo/geometry";
 import {
   buildWordmarkPoints,
@@ -275,6 +286,55 @@ export default function ScrollMorphHero() {
     <main className="relative bg-black text-white">
       <div className="fixed inset-0 z-0 flex h-svh items-center justify-center overflow-hidden bg-black">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_42%),linear-gradient(180deg,_#0a0a0a_0%,_#000_55%,_#000_100%)]" />
+
+        <div className="pointer-events-auto absolute left-3 top-4 z-30 md:left-6 md:top-6 md:translate-y-0">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="size-10 rounded-full border-white/15 bg-black/55 text-white shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl hover:bg-white/8 hover:text-white"
+                aria-label="Open home navigation menu"
+              >
+                <Menu className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              side={isMobileViewport ? "bottom" : "right"}
+              align="start"
+              sideOffset={12}
+              className="w-56 rounded-2xl border border-white/12 bg-black/85 p-2 text-white shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+            >
+              <DropdownMenuLabel className="px-2 py-1.5 text-[11px] uppercase tracking-[0.28em] text-white/45">
+                Portfolio
+              </DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <DropdownMenuItem onSelect={(event) => event.preventDefault()} className="rounded-xl px-2 py-2 text-white/90 focus:bg-white/8 focus:text-white">
+                  Home
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={(event) => event.preventDefault()} className="rounded-xl px-2 py-2 text-white/90 focus:bg-white/8 focus:text-white">
+                  About
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={(event) => event.preventDefault()} className="rounded-xl px-2 py-2 text-white/90 focus:bg-white/8 focus:text-white">
+                  Projects
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+
+              <DropdownMenuSeparator className="bg-white/10" />
+
+              <DropdownMenuItem onSelect={(event) => event.preventDefault()} className="rounded-xl px-2 py-2 text-white/90 focus:bg-white/8 focus:text-white">
+                Lab
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator className="bg-white/10" />
+
+              <DropdownMenuItem onSelect={(event) => event.preventDefault()} className="rounded-xl px-2 py-2 text-white/90 focus:bg-white/8 focus:text-white">
+                Contact
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
 
         <div className="relative flex h-full w-full items-center justify-center px-3 pt-[6svh] md:px-6 md:pt-0">
           <div
