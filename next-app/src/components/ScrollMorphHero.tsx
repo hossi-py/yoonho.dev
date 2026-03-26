@@ -3,9 +3,7 @@
 import {
   motion,
   useAnimationFrame,
-  useMotionValueEvent,
   useReducedMotion,
-  useScroll,
 } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -47,17 +45,33 @@ export default function ScrollMorphHero() {
   const effectiveParticleCount = isFirefox ? 360 : 520;
   const seeds = useMemo(() => createParticleSeeds(effectiveParticleCount), [effectiveParticleCount]);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
+  useEffect(() => {
+    const updateProgress = () => {
+      const section = sectionRef.current;
+      if (!section) {
+        return;
+      }
 
-  useMotionValueEvent(scrollYProgress, "change", (value) => {
-    progressRef.current = value;
+      const start = section.offsetTop;
+      const end = start + section.offsetHeight - window.innerHeight;
+      const raw = end <= start ? 0 : (window.scrollY - start) / (end - start);
+      const value = Math.min(1, Math.max(0, raw));
 
-    const bucket = Math.round(value * PROGRESS_BUCKETS) / PROGRESS_BUCKETS;
-    setDisplayProgress((current) => (current === bucket ? current : bucket));
-  });
+      progressRef.current = value;
+
+      const bucket = Math.round(value * PROGRESS_BUCKETS) / PROGRESS_BUCKETS;
+      setDisplayProgress((current) => (current === bucket ? current : bucket));
+    };
+
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+
+    return () => {
+      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("resize", updateProgress);
+    };
+  }, []);
 
   useEffect(() => {
     const node = morphFrameRef.current;

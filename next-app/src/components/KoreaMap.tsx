@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Popover,
@@ -68,6 +68,22 @@ function OutlinePath({
 export default function KoreaMap({ className = "" }: KoreaMapProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const handleScroll = () => {
+      setIsOpen(false);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isOpen]);
+
   return (
     <div
       className={`pointer-events-none relative flex h-full min-h-[400px] w-full items-center justify-center overflow-hidden bg-transparent p-8 ${className}`}
@@ -104,7 +120,7 @@ export default function KoreaMap({ className = "" }: KoreaMapProps) {
                 type="button"
                 aria-label="근무지 정보 보기"
                 aria-expanded={isOpen}
-                className="pointer-events-auto relative -translate-x-1/2 -translate-y-full rounded-full [perspective:900px] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                className="pointer-events-auto group relative -translate-x-1/2 -translate-y-full rounded-full [perspective:900px] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               >
                 <motion.span
                   className="relative block [transform-style:preserve-3d]"
@@ -118,7 +134,14 @@ export default function KoreaMap({ className = "" }: KoreaMapProps) {
                 >
                   <motion.span
                     className="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/8 blur-xl"
-                    animate={{ opacity: [0.12, 0.22, 0.16, 0.22, 0.16, 0.12] }}
+                    animate={
+                      isOpen
+                        ? { opacity: 0.1, scale: 1 }
+                        : {
+                            opacity: [0.08, 0.16, 0.11, 0.16, 0.11, 0.08],
+                            scale: [0.96, 1.04, 0.98, 1.04, 0.98, 0.96],
+                          }
+                    }
                     transition={{
                       duration: 5.8,
                       times: [0, 0.24, 0.38, 0.52, 0.66, 1],
@@ -136,14 +159,14 @@ export default function KoreaMap({ className = "" }: KoreaMapProps) {
                       repeat: Infinity,
                       ease: "easeInOut",
                     }}
-                  >
-                    <svg
-                      width="24"
-                      height="34"
-                      viewBox="0 0 30 42"
-                      className="drop-shadow-[0_0_12px_rgba(255,255,255,0.1)]"
-                      aria-hidden="true"
                     >
+                      <svg
+                        width="24"
+                        height="34"
+                        viewBox="0 0 30 42"
+                        className="drop-shadow-[0_0_12px_rgba(255,255,255,0.1)] transition-[filter] duration-300 group-hover:drop-shadow-[0_0_16px_rgba(255,255,255,0.16)]"
+                        aria-hidden="true"
+                      >
                       <path
                         d="M15 40C15 40 27.5 26.1 27.5 14.4C27.5 7.55 21.9 2 15 2C8.1 2 2.5 7.55 2.5 14.4C2.5 26.1 15 40 15 40Z"
                         fill="rgba(0,0,0,0.86)"
@@ -162,26 +185,27 @@ export default function KoreaMap({ className = "" }: KoreaMapProps) {
               side="right"
               align="center"
               sideOffset={16}
-              className="pointer-events-auto w-64 rounded-2xl border border-white/15 bg-black/85 p-4 text-left text-white shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+              className="pointer-events-auto w-[30rem] rounded-2xl border border-white/15 bg-black/85 p-5 text-left text-white shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl"
             >
-              <div className="space-y-4">
-                <PopoverHeader className="gap-2">
+              <div className="grid grid-cols-2 gap-6">
+                <PopoverHeader className="gap-3 border-r border-white/10 pr-6">
                   <PopoverTitle className="text-[11px] uppercase tracking-[0.3em] text-white/45">
                     근무지
                   </PopoverTitle>
-                  <PopoverDescription className="text-sm font-medium leading-6 text-white/90">
-                    2026.03.09 ~ 현재 서울 영등포구 국제금융로 39 (앵커원 빌딩)
+                  <PopoverDescription className="text-sm leading-6 text-white/92">
+                    <span className="block font-medium text-white">서울 영등포구</span>
+                    <span className="mt-1 block text-white/72">국제금융로 39</span>
+                    <span className="mt-1 block text-white/72">앵커원 빌딩</span>
                   </PopoverDescription>
                 </PopoverHeader>
 
-                <div className="h-px bg-white/10" />
-
-                <PopoverHeader className="gap-2">
+                <PopoverHeader className="gap-3 pl-1">
                   <PopoverTitle className="text-[11px] uppercase tracking-[0.3em] text-white/45">
                     거주지
                   </PopoverTitle>
-                  <PopoverDescription className="text-sm font-medium leading-6 text-white/90">
-                    서울 노원구 상계동
+                  <PopoverDescription className="text-sm leading-6 text-white/92">
+                    <span className="block font-medium text-white">서울 노원구</span>
+                    <span className="mt-1 block text-white/72">상계동</span>
                   </PopoverDescription>
                 </PopoverHeader>
               </div>
