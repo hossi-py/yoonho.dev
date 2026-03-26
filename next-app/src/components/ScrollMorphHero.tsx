@@ -38,14 +38,24 @@ export default function ScrollMorphHero() {
   );
 
   const [displayProgress, setDisplayProgress] = useState(0);
+  const [viewportWidth, setViewportWidth] = useState(0);
   const [stageSize, setStageSize] = useState<StageSize>({ width: 0, height: 0 });
   const [sourcePoints, setSourcePoints] = useState<{ x: number; y: number }[]>([]);
   const [targetPoints, setTargetPoints] = useState<{ x: number; y: number }[]>([]);
 
-  const effectiveParticleCount = isFirefox ? 360 : 520;
+  const isMobileViewport = viewportWidth > 0 && viewportWidth < 768;
+  const effectiveParticleCount = isMobileViewport
+    ? isFirefox
+      ? 140
+      : 220
+    : isFirefox
+      ? 360
+      : 520;
   const seeds = useMemo(() => createParticleSeeds(effectiveParticleCount), [effectiveParticleCount]);
 
   useEffect(() => {
+    let frame = 0;
+
     const updateProgress = () => {
       const section = sectionRef.current;
       if (!section) {
@@ -63,13 +73,33 @@ export default function ScrollMorphHero() {
       setDisplayProgress((current) => (current === bucket ? current : bucket));
     };
 
-    updateProgress();
-    window.addEventListener("scroll", updateProgress, { passive: true });
-    window.addEventListener("resize", updateProgress);
+    const onScroll = () => {
+      if (frame) {
+        return;
+      }
+
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        updateProgress();
+      });
+    };
+
+    const updateViewportWidth = () => {
+      setViewportWidth(window.innerWidth);
+      updateProgress();
+    };
+
+    updateViewportWidth();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", updateViewportWidth);
 
     return () => {
-      window.removeEventListener("scroll", updateProgress);
-      window.removeEventListener("resize", updateProgress);
+      if (frame) {
+        window.cancelAnimationFrame(frame);
+      }
+
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", updateViewportWidth);
     };
   }, []);
 
@@ -121,7 +151,7 @@ export default function ScrollMorphHero() {
     }
 
     const sprite = document.createElement("canvas");
-    const size = isFirefox ? 24 : 32;
+    const size = isMobileViewport ? 20 : isFirefox ? 24 : 32;
     sprite.width = size;
     sprite.height = size;
 
@@ -138,7 +168,7 @@ export default function ScrollMorphHero() {
     context.fillRect(0, 0, size, size);
 
     spriteRef.current = sprite;
-  }, [isFirefox, reduceMotion]);
+  }, [isFirefox, isMobileViewport, reduceMotion]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -152,7 +182,7 @@ export default function ScrollMorphHero() {
     }
 
     const rawDpr = window.devicePixelRatio || 1;
-    const effectiveDpr = Math.min(rawDpr, isFirefox ? 1 : 1.5);
+    const effectiveDpr = Math.min(rawDpr, isMobileViewport ? 1 : isFirefox ? 1 : 1.5);
     const width = Math.max(1, Math.floor(stageSize.width));
     const height = Math.max(1, Math.floor(stageSize.height));
 
@@ -164,7 +194,7 @@ export default function ScrollMorphHero() {
     context.setTransform(effectiveDpr, 0, 0, effectiveDpr, 0, 0);
     context.imageSmoothingEnabled = true;
     contextRef.current = context;
-  }, [isFirefox, reduceMotion, stageSize]);
+  }, [isFirefox, isMobileViewport, reduceMotion, stageSize]);
 
   useAnimationFrame(() => {
     const context = contextRef.current;
@@ -246,10 +276,10 @@ export default function ScrollMorphHero() {
       <div className="fixed inset-0 z-0 flex h-svh items-center justify-center overflow-hidden bg-black">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_42%),linear-gradient(180deg,_#0a0a0a_0%,_#000_55%,_#000_100%)]" />
 
-        <div className="relative flex h-full w-full items-center justify-center px-6">
+        <div className="relative flex h-full w-full items-center justify-center px-3 pt-[6svh] md:px-6 md:pt-0">
           <div
             ref={morphFrameRef}
-            className="relative flex aspect-[9/16] w-full max-w-[min(20rem,46vw)] items-center justify-center"
+            className="relative flex aspect-[9/16] w-full max-w-[min(25rem,84vw)] min-h-[62svh] items-center justify-center md:min-h-0 md:max-w-[min(20rem,46vw)]"
           >
             <div
               className="pointer-events-none absolute inset-0 transition-opacity duration-300"
@@ -270,7 +300,7 @@ export default function ScrollMorphHero() {
 
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <div
-              className="translate-y-[6svh] text-center font-sans text-[clamp(2.5rem,8vw,6rem)] font-bold lowercase tracking-[-0.08em] text-white transition-opacity duration-300"
+              className="translate-y-[16svh] text-center font-sans text-[clamp(2.15rem,10vw,6rem)] font-bold lowercase tracking-[-0.08em] text-white transition-opacity duration-300 md:translate-y-[6svh] md:text-[clamp(2.5rem,8vw,6rem)]"
               style={{ opacity: reduceMotion ? 1 : wordmarkOpacity, textShadow: reduceMotion ? "none" : "none" }}
             >
               yoonho.dev
@@ -278,7 +308,7 @@ export default function ScrollMorphHero() {
           </div>
 
           <div
-            className="pointer-events-none absolute bottom-[8svh] left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 transition-opacity duration-300"
+            className="pointer-events-none absolute bottom-[6svh] left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 transition-opacity duration-300 md:bottom-[8svh] md:gap-3"
             style={{ opacity: reduceMotion ? 0 : hintOpacity }}
           >
             <div className="flex h-8 w-5 justify-center rounded-full border border-white/30 p-1">
@@ -303,7 +333,10 @@ export default function ScrollMorphHero() {
         </div>
       </div>
 
-      <section ref={sectionRef} className="pointer-events-none relative z-10 h-[300svh] bg-transparent" />
+      <section
+        ref={sectionRef}
+        className="pointer-events-none relative z-10 h-[220svh] bg-transparent md:h-[300svh]"
+      />
     </main>
   );
 }

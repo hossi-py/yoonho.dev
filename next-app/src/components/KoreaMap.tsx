@@ -86,9 +86,9 @@ export default function KoreaMap({ className = "" }: KoreaMapProps) {
 
   return (
     <div
-      className={`pointer-events-none relative flex h-full min-h-[400px] w-full items-center justify-center overflow-hidden bg-transparent p-8 ${className}`}
+      className={`pointer-events-none relative flex h-full min-h-[240px] w-full items-center justify-center overflow-hidden bg-transparent p-3 md:min-h-[400px] md:p-8 ${className}`}
     >
-      <div className="relative z-10 aspect-9/16 w-full max-w-sm">
+      <div className="relative z-10 aspect-9/16 w-full max-w-full md:max-w-sm">
         <svg
           viewBox={`${KOREA_VIEW_BOX.minX} ${KOREA_VIEW_BOX.minY} ${KOREA_VIEW_BOX.width} ${KOREA_VIEW_BOX.height}`}
           className="h-full w-full drop-shadow-[0_0_8px_rgba(255,255,255,0.12)]"
@@ -185,10 +185,10 @@ export default function KoreaMap({ className = "" }: KoreaMapProps) {
               side="right"
               align="center"
               sideOffset={16}
-              className="pointer-events-auto w-[30rem] rounded-2xl border border-white/15 bg-black/85 p-5 text-left text-white shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+              className="pointer-events-auto w-[min(92vw,30rem)] rounded-2xl border border-white/15 bg-black/85 p-4 text-left text-white shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl md:p-5"
             >
-              <div className="grid grid-cols-2 gap-6">
-                <PopoverHeader className="gap-3 border-r border-white/10 pr-6">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
+                <PopoverHeader className="gap-3 border-b border-white/10 pb-5 md:border-b-0 md:border-r md:pb-0 md:pr-6">
                   <PopoverTitle className="text-[11px] uppercase tracking-[0.3em] text-white/45">
                     근무지
                   </PopoverTitle>
@@ -199,7 +199,7 @@ export default function KoreaMap({ className = "" }: KoreaMapProps) {
                   </PopoverDescription>
                 </PopoverHeader>
 
-                <PopoverHeader className="gap-3 pl-1">
+                <PopoverHeader className="gap-3 md:pl-1">
                   <PopoverTitle className="text-[11px] uppercase tracking-[0.3em] text-white/45">
                     거주지
                   </PopoverTitle>
