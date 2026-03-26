@@ -67,6 +67,20 @@ function OutlinePath({
 
 export default function KoreaMap({ className = "" }: KoreaMapProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const updateViewport = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    updateViewport();
+    window.addEventListener("resize", updateViewport);
+
+    return () => {
+      window.removeEventListener("resize", updateViewport);
+    };
+  }, []);
 
   useEffect(() => {
     if (!isOpen) {
@@ -182,10 +196,10 @@ export default function KoreaMap({ className = "" }: KoreaMapProps) {
             </PopoverTrigger>
 
             <PopoverContent
-              side="right"
+              side={isMobile ? "bottom" : "right"}
               align="center"
-              sideOffset={16}
-              className="pointer-events-auto w-[min(92vw,30rem)] rounded-2xl border border-white/15 bg-black/85 p-4 text-left text-white shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl md:p-5"
+              sideOffset={isMobile ? 12 : 16}
+              className="pointer-events-auto w-[min(88vw,24rem)] rounded-2xl border border-white/15 bg-black/85 p-4 text-left text-white shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl md:w-[30rem] md:p-5"
             >
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
                 <PopoverHeader className="gap-3 border-b border-white/10 pb-5 md:border-b-0 md:border-r md:pb-0 md:pr-6">
