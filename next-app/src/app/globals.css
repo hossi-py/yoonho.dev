@@ -51,6 +51,8 @@
 html,
 body {
   overflow-x: hidden;
+  background: #000;
+  overscroll-behavior-y: none;
 }
 
 :root {
@@ -127,7 +129,8 @@ body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background-color: #000;
   }
   html {
     @apply font-sans;

@@ -187,7 +187,7 @@ export default function ScrollMorphHero() {
       return;
     }
 
-    const context = canvas.getContext("2d", { alpha: false });
+    const context = canvas.getContext("2d");
     if (!context) {
       return;
     }
@@ -223,8 +223,6 @@ export default function ScrollMorphHero() {
     const width = Math.max(1, Math.floor(stageSize.width));
     const height = Math.max(1, Math.floor(stageSize.height));
     context.clearRect(0, 0, width, height);
-    context.fillStyle = "#000000";
-    context.fillRect(0, 0, width, height);
 
     const frame = getParticleFrame(progressRef.current, sourcePoints, targetPoints, seeds, {
       width,
@@ -270,6 +268,9 @@ export default function ScrollMorphHero() {
       : displayProgress < 0.3
         ? 1 - (displayProgress - 0.08) / 0.22
         : 0;
+  const mobileWordmarkTranslate = isMobileViewport
+    ? Math.max(0, 16 * (1 - Math.min(1, Math.max(0, (displayProgress - 0.56) / 0.44))))
+    : 0;
 
   if (reduceMotion) {
     return (
@@ -360,8 +361,12 @@ export default function ScrollMorphHero() {
 
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <div
-              className="translate-y-[16svh] text-center font-sans text-[clamp(2.15rem,10vw,6rem)] font-bold lowercase tracking-[-0.08em] text-white transition-opacity duration-300 md:translate-y-[6svh] md:text-[clamp(2.5rem,8vw,6rem)]"
-              style={{ opacity: reduceMotion ? 1 : wordmarkOpacity, textShadow: reduceMotion ? "none" : "none" }}
+              className="text-center font-sans text-[clamp(2.15rem,10vw,6rem)] font-bold lowercase tracking-[-0.08em] text-white transition-opacity duration-300 md:translate-y-[6svh] md:text-[clamp(2.5rem,8vw,6rem)]"
+              style={{
+                opacity: reduceMotion ? 1 : wordmarkOpacity,
+                textShadow: reduceMotion ? "none" : "none",
+                transform: isMobileViewport ? `translateY(${mobileWordmarkTranslate}svh)` : undefined,
+              }}
             >
               yoonho.dev
             </div>
