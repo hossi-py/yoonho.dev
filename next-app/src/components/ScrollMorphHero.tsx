@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  motion,
   useAnimationFrame,
   useMotionValueEvent,
   useReducedMotion,
@@ -263,15 +264,32 @@ export default function ScrollMorphHero() {
           </div>
 
           <div
-            className="pointer-events-none absolute bottom-[12svh] left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.5em] text-white/45 transition-opacity duration-300"
+            className="pointer-events-none absolute bottom-[8svh] left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 transition-opacity duration-300"
             style={{ opacity: reduceMotion ? 0 : hintOpacity }}
           >
-            Scroll
+            <div className="flex h-8 w-5 justify-center rounded-full border border-white/30 p-1">
+              <motion.div
+                className="h-1.5 w-1.5 rounded-full bg-white/70"
+                animate={
+                  reduceMotion
+                    ? { y: 0, opacity: 1 }
+                    : { y: [0, 12], opacity: [1, 0] }
+                }
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                }}
+              />
+            </div>
+            <div className="text-[10px] uppercase tracking-[0.5em] text-white/45">
+              Scroll
+            </div>
           </div>
         </div>
       </div>
 
-      <section ref={sectionRef} className="relative z-10 h-[300svh] bg-transparent" />
+      <section ref={sectionRef} className="pointer-events-none relative z-10 h-[300svh] bg-transparent" />
     </main>
   );
 }
