@@ -219,7 +219,6 @@ export default function KoreaMap({ className = "" }: KoreaMapProps) {
                   </PopoverTitle>
                   <PopoverDescription className="text-sm leading-6 text-white/92">
                     <span className="block font-medium text-white">서울 노원구</span>
-                    <span className="mt-1 block text-white/72">상계동</span>
                   </PopoverDescription>
                 </PopoverHeader>
               </div>
